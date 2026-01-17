@@ -85,17 +85,28 @@
         .day-nav { display: flex; overflow-x: auto; padding: 0 16px; gap: 10px; -ms-overflow-style: none; scrollbar-width: none; }
         .day-nav::-webkit-scrollbar { display: none; }
         .day-tab {
-            flex: 0 0 auto; background: white; padding: 8px 16px; border-radius: 20px;
-            font-size: 0.85rem; color: var(--text-sub); border: 1px solid #eee;
-            cursor: pointer; transition: all 0.2s; text-align: center; min-width: 80px;
+            flex: 0 0 auto; 
+            background: white; 
+            padding: 8px 0;
+            border-radius: 20px;
+            font-size: 0.85rem; 
+            color: var(--text-sub); 
+            border: 1px solid #eee;
+            cursor: pointer; 
+            transition: all 0.2s; 
+            text-align: center;
+            width: 72px; 
+            min-width: 72px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+            white-space: nowrap;
+            overflow: hidden;
         }
         .day-tab.active {
             background: var(--primary); color: white; border-color: var(--primary);
             font-weight: 600; box-shadow: 0 4px 8px rgba(84, 110, 122, 0.3);
             transform: translateY(-1px);
         }
-        .day-tab small { display: block; font-size: 0.7rem; opacity: 0.8; }
+        .day-tab small { display: block; font-size: 0.7rem; opacity: 0.8; margin-top: 2px; }
 
         /* ----------------
            Weather Cards
@@ -165,10 +176,10 @@
         /* 隱藏圓點 */
         .timeline-dot { display: none; }
         
-        /* 線條：調整為直線 */
+        /* 線條 */
         .timeline-line { 
             position: absolute; 
-            top: -10px; /* 從上方連下來 */
+            top: -10px;
             bottom: -36px; 
             width: 2px; 
             background: #E0E0E0; 
@@ -311,6 +322,7 @@
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">13:30</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
+                            <!-- 長榮圖片 (更新) -->
                             <img src="https://img.freepik.com/free-photo/airplane_74190-463.jpg?semt=ais_hybrid&w=740&q=80" class="spot-image" alt="EVA Air" onerror="this.src='https://placehold.co/800x400?text=EVA+Air'">
                             <div class="spot-body">
                                 <h3 class="spot-title">長榮航空 BR130 | 桃園 -> 關西</h3>
@@ -333,6 +345,7 @@
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">16:55</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
+                            <!-- 機場圖片 (更新) -->
                             <img src="https://images.unsplash.com/photo-1589452271712-64b8a66c7b71?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="spot-image" alt="KIX" onerror="this.src='https://placehold.co/800x400?text=KIX+Airport'">
                             <div class="spot-body">
                                 <h3 class="spot-title">抵達關西機場 T1</h3>
@@ -347,6 +360,7 @@
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">18:15</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
+                            <!-- HARUKA 圖片 (更新) -->
                             <img src="https://www.jr-hellokittyharuka.jp/assets/images/ogp.jpg" class="spot-image" alt="HARUKA" onerror="this.src='https://placehold.co/800x400?text=HARUKA'">
                             <div class="spot-body">
                                 <h3 class="spot-title">HARUKA 特急列車 | 關西機場 -> 京都車站</h3>
@@ -378,15 +392,21 @@
                                     Hotel Androoms Kyoto Shichijo<br>
                                     京都站步行約 8-10 分鐘。<br>
                                     飯店設有大浴場 (1F)。
-                                    <div style="margin-top:6px; padding:8px 10px; background:#f5f5f5; border-radius:8px; font-size:0.85rem; color:#555;">
-                                        <i class="fas fa-bed" style="margin-right:6px;"></i> 共預訂 3 間「標準雙床房」，每間可供 2 位成人和 1 位孩童入住。<br>
-                                        訂房不含早餐。
+                                    <div style="margin-top:8px; padding:10px; background:#f5f5f5; border-radius:8px; font-size:0.85rem; color:#555; line-height: 1.6;">
+                                        <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px; font-weight:600; color:var(--primary);">
+                                            <i class="fas fa-bed"></i> 訂房資訊
+                                        </div>
+                                        <div style="padding-left:4px;">
+                                            • 共預訂 3 間「標準雙床房」<br>
+                                            • 每間房間可供 2 位成人和 1 位孩童入住。<br>
+                                            • 訂房不含早餐。
+                                        </div>
                                     </div>
                                 </div>
                                 <div style="display:flex; gap:8px; flex-wrap:wrap;">
                                     <a href="https://maps.google.com/?q=Hotel+Androoms+Kyoto+Shichijo" class="spot-nav-btn"><i class="fas fa-location-dot"></i> 導航</a>
-                                    <a href="https://www.hotel-androoms.com/aks/guestrooms/" class="spot-nav-btn" target="_blank"><i class="fas fa-hotel"></i> 飯店官網</a>
-                                    <a href="https://www.bigfang.tw/blog/post/androoms-kyoto-shichijo" class="spot-nav-btn" target="_blank"><i class="fas fa-comment-dots"></i> 網友介紹</a>
+                                    <a href="https://www.hotel-androoms.com/aks/guestrooms/" class="spot-nav-btn" target="_blank"><i class="fas fa-hotel"></i> 官網</a>
+                                    <a href="https://www.bigfang.tw/blog/post/androoms-kyoto-shichijo" class="spot-nav-btn" target="_blank"><i class="fas fa-comment-dots"></i> 評價</a>
                                 </div>
                             </div>
                         </div>
@@ -570,9 +590,14 @@
                                 <h3 class="spot-title">接駁車 | 飯店 -> 關西機場T1</h3>
                                 <div class="tags-row"><span class="mini-tag">交通</span><span class="mini-tag warn">準時</span></div>
                                 <div class="spot-desc">
-                                    <div style="margin-top:8px; padding:8px 10px; background:#f5f5f5; border-radius:8px; font-size:0.85rem; color:#555; display:flex; align-items:center; gap:6px;">
-                                        <i class="fas fa-info-circle" style="color:var(--primary);"></i>
-                                        <span>預訂 10 人，請於 07:50 於飯店一樓集合</span>
+                                    <div style="margin-top:8px; padding:10px; background:#f5f5f5; border-radius:8px; font-size:0.85rem; color:#555; line-height: 1.6;">
+                                        <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px; font-weight:600; color:var(--primary);">
+                                            <i class="fas fa-info-circle"></i> 預訂資訊
+                                        </div>
+                                        <div style="padding-left:4px;">
+                                            • 預訂 10 人。<br>
+                                            • 請於 07:50 於飯店一樓集合。
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -645,8 +670,8 @@
         <div id="view-info" class="tab-content">
             <div class="info-section">
                 <div class="info-header"><i class="fas fa-plane"></i> 航班資訊</div>
-                <div class="info-list-item"><span class="info-label">去程 (JX820)</span><span class="info-value">08:30 TPE -> 12:00 KIX</span></div>
-                <div class="info-list-item"><span class="info-label">回程 (JX821)</span><span class="info-value">13:00 KIX -> 15:30 TPE</span></div>
+                <div class="info-list-item"><span class="info-label">去程 (2/08)</span><div style="text-align:right"><div>BR130</div><div>13:30 TPE -> 16:55 KIX</div></div></div>
+                <div class="info-list-item"><span class="info-label">回程 (2/14)</span><div style="text-align:right"><div>BR177</div><div>10:55 KIX -> 13:10 TPE</div></div></div>
             </div>
             <div class="info-section">
                 <div class="info-header"><i class="fas fa-phone-volume"></i> 緊急聯絡</div>
