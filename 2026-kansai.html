@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>KANSAI 2026</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            /* 日式極簡配色 */
+            --primary: #546E7A;       
+            --primary-light: #819CA9;
+            --accent: #D4A373;        
+            --bg: #F5F5F7;            
+            --card-bg: #FFFFFF;
+            --text-main: #2C3E50;
+            --text-sub: #7F8C8D;
+            --danger: #E74C3C;
+            --success: #27AE60;
+            
+            --shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --radius: 16px;
+            --bottom-nav-height: 60px;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans TC", sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding-bottom: calc(var(--bottom-nav-height) + 20px);
+            line-height: 1.5;
+        }
+
+        /* ----------------
+           Hero & Header
+           ---------------- */
+        .hero {
+            position: relative;
+            height: 380px;
+            width: 100%;
+            background-color: var(--primary);
+            background-image: url('https://raw.githubusercontent.com/lycapei/travel/49b0899d56157d7b0816cee3d5e44d2b50d176b5/image/kansai_home_4x3.png');
+            background-size: cover;
+            background-position: center; 
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 60%, rgba(245,245,247,1) 100%);
+        }
+
+        .header {
+            position: fixed; top: 0; left: 0; right: 0; height: 60px;
+            padding: 0 20px; display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000; transition: all 0.3s ease; background: transparent; color: white;
+        }
+        .header-title { font-size: 1.2rem; font-weight: 800; letter-spacing: 1px; text-shadow: 0 2px 8px rgba(0,0,0,0.6); font-family: 'Futura', sans-serif; }
+        
+        .header.scrolled { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); color: var(--primary); box-shadow: 0 1px 10px rgba(0,0,0,0.1); }
+        .header.scrolled .header-title { text-shadow: none; }
+        .header.scrolled .rate-badge { background: #F0F2F5; color: var(--primary); border: none; }
+
+        .rate-badge {
+            background: rgba(0,0,0,0.3); backdrop-filter: blur(4px); color: white;
+            padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;
+            cursor: pointer; border: 1px solid rgba(255,255,255,0.3);
+            display: flex; align-items: center; gap: 5px; transition: all 0.3s;
+        }
+
+        /* ----------------
+           Layout
+           ---------------- */
+        .container { position: relative; z-index: 10; margin-top: -50px; padding: 0; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+        .day-nav-container {
+            background: var(--bg); position: sticky; top: 60px; z-index: 90;
+            padding: 10px 0; margin-bottom: 10px;
+            border-top-left-radius: 24px; border-top-right-radius: 24px;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.03);
+        }
+        .day-nav { display: flex; overflow-x: auto; padding: 0 16px; gap: 10px; -ms-overflow-style: none; scrollbar-width: none; }
+        .day-nav::-webkit-scrollbar { display: none; }
+        .day-tab {
+            flex: 0 0 auto; background: white; padding: 8px 16px; border-radius: 20px;
+            font-size: 0.85rem; color: var(--text-sub); border: 1px solid #eee;
+            cursor: pointer; transition: all 0.2s; text-align: center; min-width: 80px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+        }
+        .day-tab.active {
+            background: var(--primary); color: white; border-color: var(--primary);
+            font-weight: 600; box-shadow: 0 4px 8px rgba(84, 110, 122, 0.3);
+            transform: translateY(-1px);
+        }
+        .day-tab small { display: block; font-size: 0.7rem; opacity: 0.8; }
+
+        /* ----------------
+           Weather Cards
+           ---------------- */
+        a.weather-card {
+            display: flex !important;
+            text-decoration: none !important;
+            color: white !important;
+            background: linear-gradient(135deg, #a8c0ff 0%, #3f2b96 100%);
+            border-radius: var(--radius);
+            padding: 20px 24px;   
+            margin: 0 16px 24px; 
+            align-items: center;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+            position: relative;
+            z-index: 1;
+        }
+        a.weather-card:active { transform: scale(0.98); }
+        a.weather-card.sunny { background: linear-gradient(135deg, #fce38a 0%, #f38181 100%); }
+        a.weather-card.cloudy { background: linear-gradient(135deg, #93a5cf 0%, #e4efe9 100%); color: #333 !important; }
+        a.weather-card.rain { background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%); }
+        a.weather-card.snow { background: linear-gradient(135deg, #83a4d4 0%, #b6fbff 100%); color: #2C3E50 !important; }
+
+        .weather-icon-box { font-size: 2.2rem; margin-right: 16px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); width: 40px; text-align: center; }
+        .weather-temp-box { font-size: 2rem; font-weight: 700; line-height: 1; margin-right: auto; }
+        .weather-metrics-box { display: flex; align-items: center; gap: 16px; font-size: 0.95rem; font-weight: 500; margin-right: 12px; }
+        .metric-item { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+        .metric-item i { opacity: 0.8; font-size: 0.9rem; }
+        .weather-arrow { opacity: 0.6; font-size: 1rem; }
+
+        /* ----------------
+           Timeline Layout
+           ---------------- */
+        .timeline-container { padding: 0 16px 20px; }
+        .day-detail { display: none; }
+        .day-detail.active { display: block; animation: fadeIn 0.3s ease; }
+        
+        .timeline-item { display: flex; align-items: stretch; margin-bottom: 24px; gap: 16px; }
+        
+        .timeline-marker { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            width: 45px; 
+            flex-shrink: 0; 
+            padding-top: 2px;
+            position: relative; 
+        }
+        
+        /* 時間文字 */
+        .timeline-time { 
+            font-size: 0.9rem; 
+            font-weight: 700; 
+            color: var(--primary); 
+            margin-bottom: 8px; 
+            font-family: monospace, sans-serif; 
+            letter-spacing: -0.5px;
+            position: relative;
+            z-index: 10; 
+            background-color: var(--bg); 
+            padding: 2px 0;
+        }
+        
+        .timeline-visual { position: relative; flex-grow: 1; width: 100%; display: flex; justify-content: center; }
+        
+        /* 隱藏圓點 */
+        .timeline-dot { display: none; }
+        
+        /* 線條：調整為直線 */
+        .timeline-line { 
+            position: absolute; 
+            top: -10px; /* 從上方連下來 */
+            bottom: -36px; 
+            width: 2px; 
+            background: #E0E0E0; 
+            z-index: 1; 
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .timeline-item:first-child .timeline-line { top: 0; }
+        .timeline-item:last-child .timeline-line { display: none; }
+
+        .content-col { flex-grow: 1; background: white; border-radius: var(--radius); box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden; }
+        .spot-image { width: 100%; height: 160px; object-fit: cover; background-color: #eee; }
+        .spot-body { padding: 16px; }
+        .spot-title { margin: 0 0 8px 0; font-size: 1.15rem; color: var(--text-main); font-weight: 700; }
+        .spot-desc { font-size: 0.95rem; color: var(--text-sub); margin-bottom: 12px; line-height: 1.6; }
+        .tags-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+        .mini-tag { font-size: 0.75rem; padding: 4px 10px; border-radius: 6px; background: #f0f0f0; color: #555; font-weight: 600; }
+        .mini-tag.must-eat { background: #FFF3E0; color: #E67E22; border: 1px solid #FFE0B2; }
+        .mini-tag.must-see { background: #E8F5E9; color: #27AE60; border: 1px solid #C8E6C9; }
+        .mini-tag.warn { background: #FFEBEE; color: #C0392B; border: 1px solid #FFCDD2; }
+        .mini-tag.buy { background: #E3F2FD; color: #1976D2; border: 1px solid #BBDEFB; }
+        .mini-tag.success { background: #E8F5E9; color: #27AE60; border: 1px solid #C8E6C9; }
+
+        /* Navigation Button Style */
+        .spot-nav-btn { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            background: #E3F2FD; 
+            color: var(--primary); 
+            padding: 12px; 
+            border-radius: 8px; 
+            font-size: 0.9rem; 
+            font-weight: 600; 
+            text-decoration: none; 
+            margin-top: 10px; 
+            transition: background 0.2s; 
+            flex: 1; 
+        }
+        .spot-nav-btn:active { background: #BBDEFB; }
+        .spot-nav-btn i { margin-right: 6px; }
+
+        .spot-nav-btn.pending { background: #F0F0F0; color: #555; cursor: pointer; }
+        .spot-nav-btn.pending:active { background: #E0E0E0; }
+        .spot-nav-btn.disabled { background: #EEEEEE; color: #999; cursor: default; pointer-events: none; }
+
+        /* ----------------
+           Layout Utils & Modal
+           ---------------- */
+        .tab-content { display: none; padding-top:10px; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+        #view-itinerary { padding: 0; }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 2000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.2s; }
+        .modal-overlay.show { display: flex; opacity: 1; }
+        .calc-card { background: white; width: 85%; max-width: 320px; border-radius: 16px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); transform: scale(0.9); transition: transform 0.2s; }
+        .modal-overlay.show .calc-card { transform: scale(1); }
+        .calc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-weight: 700; color: var(--primary); }
+        .close-btn { background: none; border: none; font-size: 1.2rem; color: #999; cursor: pointer; }
+        .calc-input-group { margin-bottom: 15px; position: relative; }
+        .calc-label { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-sub); font-weight: 600; font-size: 0.9rem; }
+        .calc-input { width: 100%; padding: 12px 12px 12px 50px; border: 2px solid #eee; border-radius: 10px; font-size: 1.2rem; text-align: right; outline: none; font-family: monospace; }
+        .calc-input:focus { border-color: var(--primary); }
+        .rate-info { text-align: center; font-size: 0.8rem; color: #aaa; margin-top: 10px; }
+
+        .info-section { background: white; border-radius: var(--radius); padding: 20px; margin: 0 16px 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .info-header { font-weight: 700; font-size: 1.1rem; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid #eee; color: var(--primary); }
+        .info-list-item { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.95rem; }
+
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: var(--bottom-nav-height); background: rgba(255, 255, 255, 0.98); border-top: 1px solid rgba(0,0,0,0.05); display: flex; justify-content: space-around; align-items: center; z-index: 1000; padding-bottom: env(safe-area-inset-bottom); }
+        .nav-item { flex: 1; text-align: center; color: #BDC3C7; font-size: 0.8rem; cursor: pointer; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .nav-item.active { color: var(--primary); }
+        .nav-item i { font-size: 1.2rem; margin-bottom: 4px; }
+        .hidden { display: none; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header" id="app-header">
+        <div class="header-title">KANSAI 2026</div>
+        <div class="rate-badge" onclick="toggleCalculator()" id="rate-badge">
+            <i class="fas fa-coins"></i> <span id="rate-text">0.218</span>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <div class="hero"></div>
+
+    <main class="container">
+        <!-- Itinerary -->
+        <div id="view-itinerary" class="tab-content active">
+            
+            <!-- Day Nav -->
+            <div class="day-nav-container">
+                <div class="day-nav">
+                    <div class="day-tab active" onclick="switchDay('d1', this)">Day 1<small>2/8 出發</small></div>
+                    <div class="day-tab" onclick="switchDay('d2', this)">Day 2<small>2/9 京都</small></div>
+                    <div class="day-tab" onclick="switchDay('d3', this)">Day 3<small>2/10 琵琶湖</small></div>
+                    <div class="day-tab" onclick="switchDay('d4', this)">Day 4<small>2/11 奈良</small></div>
+                    <div class="day-tab" onclick="switchDay('d5', this)">Day 5<small>2/12 大阪</small></div>
+                    <div class="day-tab" onclick="switchDay('d6', this)">Day 6<small>2/13 神戶</small></div>
+                    <div class="day-tab" onclick="switchDay('d7', this)">Day 7<small>2/14 返程</small></div>
+                </div>
+            </div>
+
+            <!-- Day 1 -->
+            <div id="day-d1" class="day-detail active">
+                <a href="#" target="_blank" class="weather-card" id="weather-d1">
+                    <div class="weather-icon-box"><i class="fas fa-cloud-sun weather-icon"></i></div>
+                    <div class="weather-temp-box">--°</div>
+                    <div class="weather-metrics-box">
+                        <div class="metric-item"><i class="fas fa-umbrella"></i> <span class="val-rain">--%</span></div>
+                        <div class="metric-item"><i class="fas fa-temperature-high"></i> <span class="val-feels">--°</span></div>
+                    </div>
+                    <div class="weather-arrow"><i class="fas fa-chevron-right"></i></div>
+                </a>
+
+                <div class="timeline-container">
+                    <!-- 新增：集合時間 -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">11:30</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
+                        <div class="content-col">
+                            <div class="spot-body">
+                                <h3 class="spot-title">桃園機場第二航廈集合</h3>
+                                <div class="spot-desc">
+                                    請務必準時抵達，辦理登機手續與行李托運。<br>
+                                    <div style="margin-top:12px; padding:12px 14px; background:#f8f9fa; border-radius:8px; font-size:0.9rem; line-height:2.4; letter-spacing:0.5px; color:#444;">
+                                        <div style="border-bottom:1px dashed #e0e0e0;"><strong>訂位代號 DZXXZ2</strong> <span style="color:#777; font-size:0.85rem;">(新竹五人)</span></div>
+                                        <div style="border-bottom:1px dashed #e0e0e0;"><strong>訂位代號 E2DW7H</strong> <span style="color:#777; font-size:0.85rem;">(冠佩軒)</span></div>
+                                        <div><strong>訂位代號 E2NV2N</strong> <span style="color:#777; font-size:0.85rem;">(爸媽)</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">13:30</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
+                        <div class="content-col">
+                            <img src="https://img.freepik.com/free-photo/airplane_74190-463.jpg?semt=ais_hybrid&w=740&q=80" class="spot-image" alt="EVA Air" onerror="this.src='https://placehold.co/800x400?text=EVA+Air'">
+                            <div class="spot-body">
+                                <h3 class="spot-title">長榮航空 BR130 | 桃園 -> 關西</h3>
+                                <div class="tags-row"><span class="mini-tag">航班</span><span class="mini-tag">TPE T2 -> KIX T1</span></div>
+                                <div class="spot-desc">
+                                    準時起飛，預計飛行時間 2h 25m。<br>
+                                    <div style="margin-top:8px; padding:8px 10px; background:#f5f5f5; border-radius:8px; font-size:0.85rem; line-height:1.6; color:#444;">
+                                        <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px;">
+                                            <i class="fas fa-utensils" style="color:var(--primary);"></i> <strong>餐點預訂</strong>
+                                        </div>
+                                        <div style="padding-left:22px;">
+                                            • 軒仔：兒童餐<br>
+                                            • 肉鬆：斷奶餐
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">16:55</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
+                        <div class="content-col">
+                            <img src="https://images.unsplash.com/photo-1589452271712-64b8a66c7b71?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="spot-image" alt="KIX" onerror="this.src='https://placehold.co/800x400?text=KIX+Airport'">
+                            <div class="spot-body">
+                                <h3 class="spot-title">抵達關西機場 T1</h3>
+                                <div class="tags-row"><span class="mini-tag warn">入境</span><span class="mini-tag">領取票券</span></div>
+                                <div class="spot-desc">辦理入境手續、領取行李。</div>
+                                <a href="https://services.digital.go.jp/zh-cmn-hant/visit-japan-web/" target="_blank" class="spot-nav-btn pending">
+                                    <i class="fas fa-clipboard-check"></i> Visit Japan Web (尚未填寫)
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">18:15</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
+                        <div class="content-col">
+                            <img src="https://www.jr-hellokittyharuka.jp/assets/images/ogp.jpg" class="spot-image" alt="HARUKA" onerror="this.src='https://placehold.co/800x400?text=HARUKA'">
+                            <div class="spot-body">
+                                <h3 class="spot-title">HARUKA 特急列車 | 關西機場 -> 京都車站</h3>
+                                <div class="tags-row"><span class="mini-tag">交通</span><span class="mini-tag">往京都</span></div>
+                                <div class="spot-desc">
+                                    車程約 80 分鐘，自由席或指定席請確認票券。
+                                    <div style="margin-top:8px; padding:8px 10px; background:#f5f5f5; border-radius:8px; font-size:0.85rem; color:#555; display:flex; align-items:center; gap:6px;">
+                                        <i class="fas fa-info-circle" style="color:var(--primary);"></i>
+                                        <span>6 歲以下孩童不需購票，但無座位。</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top:10px;">
+                                    <span class="spot-nav-btn disabled">
+                                        <i class="fas fa-ticket-alt"></i> 車票連結 (尚未購買)
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">19:40</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
+                        <div class="content-col">
+                            <!-- 住宿圖片 -->
+                            <img src="https://www.hotel-androoms.com/aks/assets/pc/img/room_st_p1.jpg" class="spot-image" alt="Hotel" onerror="this.src='https://placehold.co/800x400?text=Hotel+Kyoto'">
+                            <div class="spot-body">
+                                <h3 class="spot-title">Check-in: 京都七條安住睦世酒店</h3>
+                                <div class="tags-row"><span class="mini-tag">住宿</span><span class="mini-tag must-see">大浴場</span></div>
+                                <div class="spot-desc">
+                                    Hotel Androoms Kyoto Shichijo<br>
+                                    京都站步行約 8-10 分鐘。<br>
+                                    飯店設有大浴場 (1F)。
+                                    <div style="margin-top:6px; padding:8px 10px; background:#f5f5f5; border-radius:8px; font-size:0.85rem; color:#555;">
+                                        <i class="fas fa-bed" style="margin-right:6px;"></i> 共預訂 3 間「標準雙床房」，每間可供 2 位成人和 1 位孩童入住。<br>
+                                        訂房不含早餐。
+                                    </div>
+                                </div>
+                                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                                    <a href="https://maps.google.com/?q=Hotel+Androoms+Kyoto+Shichijo" class="spot-nav-btn"><i class="fas fa-location-dot"></i> 導航</a>
+                                    <a href="https://www.hotel-androoms.com/aks/guestrooms/" class="spot-nav-btn" target="_blank"><i class="fas fa-hotel"></i> 飯店官網</a>
+                                    <a href="https://www.bigfang.tw/blog/post/androoms-kyoto-shichijo" class="spot-nav-btn" target="_blank"><i class="fas fa-comment-dots"></i> 網友介紹</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 2 -->
+            <div id="day-d2" class="day-detail">
+                <a href="#" target="_blank" class="weather-card" id="weather-d2">
+                    <div class="weather-icon-box"><i class="fas fa-cloud-sun weather-icon"></i></div>
+                    <div class="weather-temp-box">--°</div>
+                    <div class="weather-metrics-box"><div class="metric-item"><i class="fas fa-umbrella"></i> <span class="val-rain">--%</span></div><div class="metric-item"><i class="fas fa-temperature-high"></i> <span class="val-feels">--°</span></div></div>
+                    <div class="weather-arrow"><i class="fas fa-chevron-right"></i></div>
+                </a>
+                <div class="timeline-container">
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">09:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
+                        <div class="content-col">
+                            <img src="https://images.unsplash.com/photo-1624253321171-1be53e12f5f4?auto=format&fit=crop&w=800&q=80" class="spot-image" alt="Shimogamo" onerror="this.src='https://placehold.co/800x400?text=Shimogamo+Shrine'">
+                            <div class="spot-body">
+                                <h3 class="spot-title">下鴨神社 & 糺之森</h3>
+                                <div class="tags-row"><span class="mini-tag must-see">必看</span><span class="mini-tag must-eat">醬油糰子</span></div>
+                                <div class="spot-desc">京都最古老神社，森林步道平緩，非常適合長輩晨間散步。<br><strong>必吃：</strong> 加茂みたらし茶屋的醬油糰子。</div>
+                                <a href="https://maps.google.com/?q=Shimogamo+Shrine" class="spot-nav-btn"><i class="fas fa-location-dot"></i> 導航</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">13:30</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
+                        <div class="content-col">
+                            <img src="https://images.unsplash.com/photo-1515165592879-0d3132cae3b8?auto=format&fit=crop&w=800&q=80" class="spot-image" alt="Railway" onerror="this.src='https://placehold.co/800x400?text=Kyoto+Railway+Museum'">
+                            <div class="spot-body">
+                                <h3 class="spot-title">京都鐵道博物館</h3>
+                                <div class="tags-row"><span class="mini-tag must-see">親子首選</span><span class="mini-tag">戶外火車</span></div>
+                                <div class="spot-desc">有真實蒸汽火車搭乘體驗（需購票）。<br>二樓有大型 Plarail 遊戲區，適合軒仔放電。</div>
+                                <a href="https://maps.google.com/?q=Kyoto+Railway+Museum" class="spot-nav-btn"><i class="fas fa-location-dot"></i> 導航</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 3 -->
+            <div id="day-d3" class="day-detail">
+                <a href="#" target="_blank" class="weather-card" id="weather-d3">
+                    <div class="weather-icon-box"><i class="fas fa-snowflake weather-icon"></i></div>
+                    <div class="weather-temp-box">--°</div>
+                    <div class="weather-metrics-box"><div class="metric-item"><i class="fas fa-umbrella"></i> <span class="val-rain">--%</span></div><div class="metric-item"><i class="fas fa-temperature-high"></i> <span class="val-feels">--°</span></div></div>
+                    <div class="weather-arrow"><i class="fas fa-chevron-right"></i></div>
+                </a>
+                <div class="timeline-container">
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">08:30</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
+                        <div class="content-col">
+                            <img src="https://images.unsplash.com/photo-1518182170546-0766ac6f5a14?auto=format&fit=crop&w=800&q=80" class="spot-image" alt="Snow" onerror="this.src='https://placehold.co/800x400?text=Biwako+Valley'">
+                            <div class="spot-body">
+                                <h3 class="spot-title">出發：琵琶湖 Valley</h3>
+                                <div class="tags-row"><span class="mini-tag warn">保暖</span><span class="mini-tag">JR+巴士</span></div>
+                                <div class="spot-desc">搭乘 JR 至「志賀站」，轉乘 68 號巴士（約 10 分鐘）抵達纜車站。</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">10:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
+                        <div class="content-col">
+                            <img src="https://images.unsplash.com/photo-1612450637682-6289b5327293?auto=format&fit=crop&w=800&q=80" class="spot-image" alt="Snow Play" onerror="this.src='https://placehold.co/800x400?text=Snow+Play'">
+                            <div class="spot-body">
+                                <h3 class="spot-title">Snow Land 親子玩雪</h3>
+                                <div class="tags-row"><span class="mini-tag must-see">雪盆</span><span class="mini-tag">電動步道</span></div>
+                                <div class="spot-desc">專為兒童設計的戲雪區。<br><strong>設施：</strong> 有免費雪盆、鏟子，以及「魔毯」不用爬坡。</div>
+                                <a href="https://maps.google.com/?q=Biwako+Valley" class="spot-nav-btn"><i class="fas fa-location-dot"></i> 導航</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 4 -->
+            <div id="day-d4" class="day-detail">
+                <a href="#" target="_blank" class="weather-card" id="weather-d4">
+                    <div class="weather-icon-box"><i class="fas fa-cloud-sun weather-icon"></i></div>
+                    <div class="weather-temp-box">--°</div>
+                    <div class="weather-metrics-box"><div class="metric-item"><i class="fas fa-umbrella"></i> <span class="val-rain">--%</span></div><div class="metric-item"><i class="fas fa-temperature-high"></i> <span class="val-feels">--°</span></div></div>
+                    <div class="weather-arrow"><i class="fas fa-chevron-right"></i></div>
+                </a>
+                <div class="timeline-container">
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">10:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
+                        <div class="content-col">
+                            <img src="https://images.unsplash.com/photo-1505926526978-75c1a4b4970a?auto=format&fit=crop&w=800&q=80" class="spot-image" alt="Nara" onerror="this.src='https://placehold.co/800x400?text=Nara+Deer'">
+                            <div class="spot-body">
+                                <h3 class="spot-title">奈良公園餵鹿</h3>
+                                <div class="tags-row"><span class="mini-tag warn">注意安全</span><span class="mini-tag must-see">東大寺</span></div>
+                                <div class="spot-desc">請購買鹿仙貝。<br><strong>警告：</strong> 鹿群看到仙貝會包圍，請抱好小孩。</div>
+                                <a href="https://maps.google.com/?q=Nara+Park" class="spot-nav-btn"><i class="fas fa-location-dot"></i> 導航</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">12:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
+                        <div class="content-col">
+                            <img src="https://images.unsplash.com/photo-1557018225-b46187216a7f?auto=format&fit=crop&w=800&q=80" class="spot-image" alt="Lunch" onerror="this.src='https://placehold.co/800x400?text=Kamameshi+Lunch'">
+                            <div class="spot-body">
+                                <h3 class="spot-title">午餐：志津香釜飯</h3>
+                                <div class="tags-row"><span class="mini-tag must-eat">排隊名店</span></div>
+                                <div class="spot-desc">建議 11:00 開門前先去排隊。<br>口感較軟爛，適合長輩與小孩。</div>
+                                <a href="https://maps.google.com/?q=Shizuka+Park+Store" class="spot-nav-btn"><i class="fas fa-utensils"></i> 導航</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 5 -->
+            <div id="day-d5" class="day-detail">
+                 <a href="#" target="_blank" class="weather-card" id="weather-d5">
+                    <div class="weather-icon-box"><i class="fas fa-sun weather-icon"></i></div>
+                    <div class="weather-temp-box">--°</div>
+                    <div class="weather-metrics-box"><div class="metric-item"><i class="fas fa-umbrella"></i> <span class="val-rain">--%</span></div><div class="metric-item"><i class="fas fa-temperature-high"></i> <span class="val-feels">--°</span></div></div>
+                    <div class="weather-arrow"><i class="fas fa-chevron-right"></i></div>
+                </a>
+                <div class="timeline-container">
+                    <div class="timeline-item">
+                         <div class="timeline-marker"><div class="timeline-time">10:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
+                         <div class="content-col">
+                            <img src="https://images.unsplash.com/photo-1535591273668-578e31182c4f?auto=format&fit=crop&w=800&q=80" class="spot-image" alt="Osaka" onerror="this.src='https://placehold.co/800x400?text=Osaka+Aquarium'">
+                             <div class="spot-body">
+                                 <h3 class="spot-title">大阪海遊館</h3>
+                                 <div class="tags-row"><span class="mini-tag must-see">鯨鯊</span><span class="mini-tag">室內</span></div>
+                                 <div class="spot-desc">世界最大級別的水族館，必看巨大鯨鯊。參觀時間約 2.5 小時。</div>
+                                 <a href="https://maps.google.com/?q=Osaka+Aquarium+Kaiyukan" class="spot-nav-btn"><i class="fas fa-location-dot"></i> 導航</a>
+                             </div>
+                         </div>
+                    </div>
+                </div>
+            </div>
+
+             <!-- Day 6 -->
+             <div id="day-d6" class="day-detail">
+                <a href="#" target="_blank" class="weather-card" id="weather-d6">
+                    <div class="weather-icon-box"><i class="fas fa-smile-beam weather-icon"></i></div>
+                    <div class="weather-temp-box">--°</div>
+                    <div class="weather-metrics-box"><div class="metric-item"><i class="fas fa-umbrella"></i> <span class="val-rain">--%</span></div><div class="metric-item"><i class="fas fa-temperature-high"></i> <span class="val-feels">--°</span></div></div>
+                    <div class="weather-arrow"><i class="fas fa-chevron-right"></i></div>
+                </a>
+                <div class="timeline-container">
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">10:30</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
+                        <div class="content-col">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Kobe_Anpanman_Children%27s_Museum_%26_Mall.jpg/800px-Kobe_Anpanman_Children%27s_Museum_%26_Mall.jpg" 
+                                 class="spot-image" 
+                                 alt="Anpanman"
+                                 onerror="this.src='https://placehold.co/800x400?text=Anpanman+Museum'">
+                            <div class="spot-body">
+                                <h3 class="spot-title">神戶麵包超人博物館</h3>
+                                <div class="tags-row"><span class="mini-tag must-buy">限定麵包</span><span class="mini-tag must-see">室內</span></div>
+                                <div class="spot-desc">位於 Mosaic 廣場旁。博物館在二樓（需門票）。<br><strong>必買：</strong> 果醬爺爺麵包工廠現烤麵包。</div>
+                                <a href="https://maps.google.com/?q=Kobe+Anpanman+Children's+Museum" class="spot-nav-btn"><i class="fas fa-location-dot"></i> 導航</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Day 7 -->
+             <div id="day-d7" class="day-detail">
+                 <a href="#" target="_blank" class="weather-card cloudy" id="weather-d7">
+                    <div class="weather-icon-box"><i class="fas fa-plane weather-icon"></i></div>
+                    <div class="weather-temp-box">--°</div>
+                    <div class="weather-metrics-box"><div class="metric-item"><i class="fas fa-umbrella"></i> <span class="val-rain">--%</span></div><div class="metric-item"><i class="fas fa-temperature-high"></i> <span class="val-feels">--°</span></div></div>
+                    <div class="weather-arrow"><i class="fas fa-chevron-right"></i></div>
+                </a>
+                <div class="timeline-container">
+                    
+                    <!-- 08:00 接駁車 -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">08:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
+                        <div class="content-col">
+                            <div class="spot-body">
+                                <h3 class="spot-title">接駁車 | 飯店 -> 關西機場T1</h3>
+                                <div class="tags-row"><span class="mini-tag">交通</span><span class="mini-tag warn">準時</span></div>
+                                <div class="spot-desc">
+                                    <div style="margin-top:8px; padding:8px 10px; background:#f5f5f5; border-radius:8px; font-size:0.85rem; color:#555; display:flex; align-items:center; gap:6px;">
+                                        <i class="fas fa-info-circle" style="color:var(--primary);"></i>
+                                        <span>預訂 10 人，請於 07:50 於飯店一樓集合</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 08:15 抵達機場 -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">08:15</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
+                        <div class="content-col">
+                             <img src="https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?auto=format&fit=crop&w=800&q=80" class="spot-image" alt="KIX" onerror="this.src='https://placehold.co/800x400?text=KIX+Airport'">
+                            <div class="spot-body">
+                                <h3 class="spot-title">抵達 KIX 機場</h3>
+                                <div class="tags-row"><span class="mini-tag">出境</span><span class="mini-tag">伴手禮</span></div>
+                                <div class="spot-desc">
+                                    辦理登機手續，最後伴手禮採買。<br>
+                                    <div style="margin-top:12px; padding:12px 14px; background:#f8f9fa; border-radius:8px; font-size:0.9rem; line-height:2.4; letter-spacing:0.5px; color:#444;">
+                                        <div style="border-bottom:1px dashed #e0e0e0;"><strong>訂位代號 DZXXZ2</strong> <span style="color:#777; font-size:0.85rem;">(新竹五人)</span></div>
+                                        <div style="border-bottom:1px dashed #e0e0e0;"><strong>訂位代號 E2DW7H</strong> <span style="color:#777; font-size:0.85rem;">(冠佩軒)</span></div>
+                                        <div><strong>訂位代號 E2NV2N</strong> <span style="color:#777; font-size:0.85rem;">(爸媽)</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 10:55 長榮航空 -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">10:55</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
+                        <div class="content-col">
+                            <img src="https://img.freepik.com/free-photo/airplane_74190-463.jpg?semt=ais_hybrid&w=740&q=80" class="spot-image" alt="EVA Air" onerror="this.src='https://placehold.co/800x400?text=EVA+Air'">
+                            <div class="spot-body">
+                                <h3 class="spot-title">長榮航空 BR177 | 關西 -> 桃園</h3>
+                                <div class="tags-row"><span class="mini-tag">航班</span><span class="mini-tag">KIX T1 -> TPE T2</span></div>
+                                <div class="spot-desc">
+                                    預計飛行時間 3h 15m。<br>
+                                    <div style="margin-top:8px; padding:8px 10px; background:#f5f5f5; border-radius:8px; font-size:0.85rem; line-height:1.6; color:#444;">
+                                        <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px;">
+                                            <i class="fas fa-utensils" style="color:var(--primary);"></i> <strong>餐點預訂</strong>
+                                        </div>
+                                        <div style="padding-left:22px;">
+                                            • 軒仔：兒童餐<br>
+                                            • 肉鬆：斷奶餐
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 13:10 抵達桃園 -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">13:10</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
+                        <div class="content-col">
+                            <img src="https://plus.unsplash.com/premium_photo-1661955975506-04d3812be312?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="spot-image" alt="TPE Airport" onerror="this.src='https://placehold.co/800x400?text=TPE+Airport'">
+                            <div class="spot-body">
+                                <h3 class="spot-title">抵達桃園機場 T2</h3>
+                                <div class="tags-row"><span class="mini-tag success">回家</span></div>
+                                <div class="spot-desc">領取行李，平安返家。</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Info -->
+        <div id="view-info" class="tab-content">
+            <div class="info-section">
+                <div class="info-header"><i class="fas fa-plane"></i> 航班資訊</div>
+                <div class="info-list-item"><span class="info-label">去程 (JX820)</span><span class="info-value">08:30 TPE -> 12:00 KIX</span></div>
+                <div class="info-list-item"><span class="info-label">回程 (JX821)</span><span class="info-value">13:00 KIX -> 15:30 TPE</span></div>
+            </div>
+            <div class="info-section">
+                <div class="info-header"><i class="fas fa-phone-volume"></i> 緊急聯絡</div>
+                <div class="info-list-item"><span class="info-label">日本報警</span><span class="info-value">110</span></div>
+                <div class="info-list-item"><span class="info-label">救護車</span><span class="info-value">119</span></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Nav -->
+    <nav class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('itinerary', this)"><i class="fas fa-map-marked-alt"></i><span>行程</span></div>
+        <div class="nav-item" onclick="switchTab('info', this)"><i class="fas fa-info-circle"></i><span>資訊</span></div>
+    </nav>
+
+    <!-- Rate Modal -->
+    <div id="rate-modal" class="modal-overlay">
+        <div class="calc-card">
+            <div class="calc-header">
+                <span><i class="fas fa-exchange-alt"></i> 即時換算</span>
+                <button class="close-btn" onclick="toggleCalculator()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="calc-input-group">
+                <span class="calc-label">JPY 日幣</span>
+                <input type="number" id="input-jpy" class="calc-input" placeholder="0" oninput="calculate('jpy')">
+            </div>
+            <div class="calc-input-group">
+                <span class="calc-label">TWD 台幣</span>
+                <input type="number" id="input-twd" class="calc-input" placeholder="0" oninput="calculate('twd')">
+            </div>
+            <div class="rate-info">
+                目前匯率: 1 JPY ≈ <span id="modal-rate">0.218</span> TWD
+                <div style="margin-top:5px; font-size:0.7rem;">
+                    資料來源: <a href="https://www.google.com/finance/quote/JPY-TWD" target="_blank" style="color:#aaa;">Google Finance (via API)</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentRate = 0.218;
+
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('app-header');
+            if (window.scrollY > 200) { header.classList.add('scrolled'); } else { header.classList.remove('scrolled'); }
+        });
+
+        function switchTab(viewId, navEl) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.getElementById('view-' + viewId).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            navEl.classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        function switchDay(dayId, tabEl) {
+            document.querySelectorAll('.day-detail').forEach(el => el.classList.remove('active'));
+            document.getElementById('day-' + dayId).classList.add('active');
+            document.querySelectorAll('.day-tab').forEach(el => el.classList.remove('active'));
+            tabEl.classList.add('active');
+            tabEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+
+        function toggleCalculator() {
+            const modal = document.getElementById('rate-modal');
+            if (modal.classList.contains('show')) {
+                modal.classList.remove('show');
+                setTimeout(() => { modal.style.display = 'none'; }, 200); 
+            } else {
+                modal.style.display = 'flex';
+                setTimeout(() => { modal.classList.add('show'); }, 10);
+                document.getElementById('input-jpy').value = '';
+                document.getElementById('input-twd').value = '';
+                document.getElementById('input-jpy').focus();
+            }
+        }
+
+        document.getElementById('rate-modal').addEventListener('click', function(e) {
+            if (e.target === this) toggleCalculator();
+        });
+
+        function calculate(source) {
+            const jpyInput = document.getElementById('input-jpy');
+            const twdInput = document.getElementById('input-twd');
+            if (source === 'jpy') {
+                const jpy = parseFloat(jpyInput.value);
+                if (!isNaN(jpy)) { twdInput.value = (jpy * currentRate).toFixed(0); } else { twdInput.value = ''; }
+            } else {
+                const twd = parseFloat(twdInput.value);
+                if (!isNaN(twd)) { jpyInput.value = (twd / currentRate).toFixed(0); } else { jpyInput.value = ''; }
+            }
+        }
+
+        async function fetchRate() {
+            try {
+                const response = await fetch('https://open.er-api.com/v6/latest/JPY');
+                const data = await response.json();
+                if (data && data.rates && data.rates.TWD) {
+                    currentRate = data.rates.TWD;
+                    document.getElementById('rate-text').innerText = currentRate.toFixed(3);
+                    document.getElementById('modal-rate').innerText = currentRate.toFixed(3);
+                }
+            } catch (e) { console.log('Using default rate'); }
+        }
+
+        async function fetchWeather() {
+            const locations = [
+                { id: 'weather-d1', lat: 35.01, lon: 135.76, date: '2026-02-08', accuUrl: 'https://www.accuweather.com/zh/jp/kyoto-shi/224436/daily-weather-forecast/224436' },
+                { id: 'weather-d2', lat: 35.01, lon: 135.76, date: '2026-02-09', accuUrl: 'https://www.accuweather.com/zh/jp/kyoto-shi/224436/daily-weather-forecast/224436' },
+                { id: 'weather-d3', lat: 35.19, lon: 135.90, date: '2026-02-10', accuUrl: 'https://www.accuweather.com/zh/jp/otsu-shi/220939/daily-weather-forecast/220939' },
+                { id: 'weather-d4', lat: 34.68, lon: 135.80, date: '2026-02-11', accuUrl: 'https://www.accuweather.com/zh/jp/nijoojiminami/2354547/daily-weather-forecast/2354547' },
+                { id: 'weather-d5', lat: 34.69, lon: 135.50, date: '2026-02-12', accuUrl: 'https://www.accuweather.com/zh/jp/umeda/2351574/daily-weather-forecast/2351574' },
+                { id: 'weather-d6', lat: 34.69, lon: 135.19, date: '2026-02-13', accuUrl: 'https://www.accuweather.com/zh/jp/shimoyamatedori/2346212/daily-weather-forecast/2346212' },
+                { id: 'weather-d7', lat: 34.40, lon: 135.29, date: '2026-02-14', accuUrl: 'https://www.accuweather.com/zh/jp/osaka-shi/225007/daily-weather-forecast/225007' }
+            ];
+
+            const weatherCodes = {
+                0: { text: "晴朗", icon: "fa-sun", css: "sunny" },
+                1: { text: "多雲", icon: "fa-cloud-sun", css: "cloudy" },
+                2: { text: "多雲", icon: "fa-cloud-sun", css: "cloudy" },
+                3: { text: "陰天", icon: "fa-cloud", css: "cloudy" },
+                45: { text: "有霧", icon: "fa-smog", css: "cloudy" },
+                48: { text: "有霧", icon: "fa-smog", css: "cloudy" },
+                51: { text: "毛毛雨", icon: "fa-cloud-rain", css: "rain" },
+                53: { text: "毛毛雨", icon: "fa-cloud-rain", css: "rain" },
+                55: { text: "毛毛雨", icon: "fa-cloud-rain", css: "rain" },
+                61: { text: "下雨", icon: "fa-umbrella", css: "rain" },
+                63: { text: "下雨", icon: "fa-umbrella", css: "rain" },
+                65: { text: "大雨", icon: "fa-umbrella", css: "rain" },
+                71: { text: "下雪", icon: "fa-snowflake", css: "snow" },
+                73: { text: "下雪", icon: "fa-snowflake", css: "snow" },
+                75: { text: "大雪", icon: "fa-snowflake", css: "snow" },
+            };
+
+            const today = new Date();
+            today.setHours(0,0,0,0);
+
+            for (let loc of locations) {
+                const targetDate = new Date(loc.date);
+                targetDate.setHours(0,0,0,0);
+                const diffTime = targetDate - today;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+                let dayParam = diffDays + 1;
+                if (dayParam < 1) dayParam = 1; 
+
+                const linkEl = document.getElementById(loc.id);
+                if (linkEl) { linkEl.href = `${loc.accuUrl}?day=${dayParam}`; }
+
+                try {
+                    // Added daily=precipitation_probability_max to API call
+                    const url = `https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lon}&current=temperature_2m,apparent_temperature,weather_code&daily=precipitation_probability_max&timezone=Asia%2FTokyo`;
+                    const res = await fetch(url);
+                    const data = await res.json();
+                    
+                    if (data && data.current) {
+                        const w = data.current;
+                        if (!linkEl) continue;
+
+                        const code = w.weather_code;
+                        const info = weatherCodes[code] || { text: "多雲", icon: "fa-cloud", css: "cloudy" };
+                        
+                        // Rain Prob (Max of the day, as current hourly prob might be 0)
+                        let rainProb = 0;
+                        if (data.daily && data.daily.precipitation_probability_max && data.daily.precipitation_probability_max.length > 0) {
+                            rainProb = data.daily.precipitation_probability_max[0];
+                        }
+
+                        linkEl.classList.add(info.css);
+                        linkEl.querySelector('.weather-temp-box').innerText = `${Math.round(w.temperature_2m)}°`;
+                        linkEl.querySelector('.val-feels').innerText = `${Math.round(w.apparent_temperature)}°`;
+                        linkEl.querySelector('.val-rain').innerText = `${rainProb}%`;
+                        
+                        const iconEl = linkEl.querySelector('.weather-icon');
+                        iconEl.className = `fas ${info.icon} weather-icon`;
+                    }
+                } catch (e) { console.log('Weather fetch failed', loc.id); }
+            }
+        }
+
+        fetchRate();
+        fetchWeather();
+    </script>
+</body>
+</html>
