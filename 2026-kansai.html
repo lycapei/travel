@@ -20,7 +20,7 @@
     <style>
         :root {
             /* 日式極簡配色 */
-            --primary: #546E7A;       
+            --primary: #546E7A;        
             --primary-light: #819CA9;
             --accent: #D4A373;        
             --bg: #F5F5F7;            
@@ -335,12 +335,40 @@
         .lightbox {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0,0,0,0.95);
-            display: none; justify-content: center; align-items: center;
+            display: none; flex-direction: column; justify-content: center; align-items: center;
             z-index: 3000; opacity: 0; transition: opacity 0.3s;
         }
         .lightbox.active { display: flex; opacity: 1; }
-        .lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; }
-        .lightbox-close { position: absolute; top: 20px; right: 20px; color: white; font-size: 2rem; cursor: pointer; padding: 10px; }
+        .lightbox-content-wrapper {
+            position: relative;
+            width: 100%;
+            height: 80%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; transition: opacity 0.2s; }
+        .lightbox-close { position: absolute; top: 20px; right: 20px; color: white; font-size: 2rem; cursor: pointer; padding: 10px; z-index: 3001; }
+        
+        /* Lightbox Dots */
+        .lightbox-dots {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            z-index: 3001;
+            padding-bottom: 20px;
+        }
+        .lightbox-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            transition: all 0.2s;
+        }
+        .lightbox-dot.active {
+            background: white;
+            transform: scale(1.3);
+        }
 
         /* Checklist Styles (New) */
         .checklist-group { margin-bottom: 15px; }
@@ -574,7 +602,7 @@
                             <div class="spot-body">
                                 <h3 class="spot-title">京都鐵道博物館</h3>
                                 <div class="tags-row"><span class="mini-tag must-see">親子首選</span><span class="mini-tag">戶外火車</span></div>
-                                <div class="spot-desc">鐵道迷天堂！展示真實蒸汽火車與新幹線。有戶外扇形車庫與蒸汽火車搭乘體驗。<br>二樓有大型 Plarail 遊戲區，適合小朋友放電。</div>
+                                <div class="spot-desc">鐵道迷天堂！展示真實蒸汽火車與新幹線。有戶外扇形車庫與蒸汽火車搭乘體驗。<br>二樓有大型 Plarail 遊戲區，適合小朋友玩雪盆、堆雪人。</div>
                                 <a href="https://maps.google.com/?q=Kyoto+Railway+Museum" class="spot-nav-btn"><i class="fas fa-location-dot"></i> 導航</a>
                             </div>
                         </div>
@@ -582,7 +610,22 @@
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">17:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
-                            <img src="https://www.hotel-androoms.com/aks/assets/pc/img/room_st_p1.jpg" class="spot-image" alt="Hotel" onerror="this.src='https://placehold.co/800x400?text=Hotel+Kyoto'">
+                            <!-- Day 2 Hotel Carousel (Updated) -->
+                            <div class="carousel-container">
+                                <div class="carousel-track">
+                                    <div class="carousel-slide"><img src="https://www.hotel-androoms.com/aks/assets/pc/img/room_st_p1.jpg" alt="Room 1"></div>
+                                    <div class="carousel-slide"><img src="https://www.hotel-androoms.com/aks/assets/pc/img/room_st_p2.jpg" alt="Room 2"></div>
+                                    <div class="carousel-slide"><img src="https://www.hotel-androoms.com/aks/assets/pc/img/figure_st_p1.jpg" alt="Figure"></div>
+                                    <div class="carousel-slide"><img src="https://www.hotel-androoms.com/aks/assets/pc/img/sento_pc.jpg" alt="Sento"></div>
+                                </div>
+                                <div class="carousel-dots">
+                                    <div class="carousel-dot active" data-index="0"></div>
+                                    <div class="carousel-dot" data-index="1"></div>
+                                    <div class="carousel-dot" data-index="2"></div>
+                                    <div class="carousel-dot" data-index="3"></div>
+                                </div>
+                            </div>
+
                             <div class="spot-body">
                                 <h3 class="spot-title">住宿: 京都七條安住睦世酒店</h3>
                                 <div class="tags-row"><span class="mini-tag">連泊</span><span class="mini-tag">大浴場</span></div>
@@ -653,7 +696,22 @@
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">18:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
-                            <img src="https://www.hotel-androoms.com/aks/assets/pc/img/room_st_p1.jpg" class="spot-image" alt="Hotel" onerror="this.src='https://placehold.co/800x400?text=Hotel+Kyoto'">
+                            <!-- Day 3 Hotel Carousel (Updated) -->
+                            <div class="carousel-container">
+                                <div class="carousel-track">
+                                    <div class="carousel-slide"><img src="https://www.hotel-androoms.com/aks/assets/pc/img/room_st_p1.jpg" alt="Room 1"></div>
+                                    <div class="carousel-slide"><img src="https://www.hotel-androoms.com/aks/assets/pc/img/room_st_p2.jpg" alt="Room 2"></div>
+                                    <div class="carousel-slide"><img src="https://www.hotel-androoms.com/aks/assets/pc/img/figure_st_p1.jpg" alt="Figure"></div>
+                                    <div class="carousel-slide"><img src="https://www.hotel-androoms.com/aks/assets/pc/img/sento_pc.jpg" alt="Sento"></div>
+                                </div>
+                                <div class="carousel-dots">
+                                    <div class="carousel-dot active" data-index="0"></div>
+                                    <div class="carousel-dot" data-index="1"></div>
+                                    <div class="carousel-dot" data-index="2"></div>
+                                    <div class="carousel-dot" data-index="3"></div>
+                                </div>
+                            </div>
+
                             <div class="spot-body">
                                 <h3 class="spot-title">住宿: 京都七條安住睦世酒店</h3>
                                 <div class="tags-row"><span class="mini-tag">連泊</span><span class="mini-tag must-see">大浴場</span></div>
@@ -802,7 +860,7 @@
                                  <div class="spot-desc">世界最大級別的水族館之一，必看巨大鯨鯊與環太平洋火山帶生態展示。參觀時間約 2.5 小時。</div>
                                  <a href="https://maps.google.com/?q=Osaka+Aquarium+Kaiyukan" class="spot-nav-btn"><i class="fas fa-location-dot"></i> 導航</a>
                              </div>
-                         </div>
+                          </div>
                     </div>
                     <div class="timeline-item">
                          <div class="timeline-marker"><div class="timeline-time">13:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
@@ -814,7 +872,7 @@
                                  <div class="spot-desc">位於海遊館旁。有室內樂高樂園 (需預約) 與天保山大摩天輪。購物中心內有美食街可解決午餐。</div>
                                  <a href="https://maps.google.com/?q=Legoland+Discovery+Center+Osaka" class="spot-nav-btn"><i class="fas fa-location-dot"></i> 導航</a>
                              </div>
-                         </div>
+                          </div>
                     </div>
                     <div class="timeline-item">
                          <div class="timeline-marker"><div class="timeline-time">16:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
@@ -826,12 +884,23 @@
                                  <div class="spot-desc">大阪最熱鬧的區域。必拍固力果跑跑人看板。心齋橋商店街藥妝、服飾齊全。</div>
                                  <a href="https://maps.google.com/?q=Dotonbori" class="spot-nav-btn"><i class="fas fa-location-dot"></i> 導航</a>
                              </div>
-                         </div>
+                          </div>
                     </div>
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">20:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
-                            <img src="https://www.viewhotels.jp/osaka/wp-content/uploads/sites/12/2020/01/12-4-1240x860.jpg" class="spot-image" alt="Osaka Hotel" onerror="this.src='https://placehold.co/800x400?text=Osaka+View+Hotel'">
+                            <!-- Carousel for Osaka Hotel (Day 5 Updated) -->
+                            <div class="carousel-container">
+                                <div class="carousel-track">
+                                    <div class="carousel-slide"><img src="https://www.viewhotels.jp/osaka/wp-content/uploads/sites/12/2020/01/12-4-1240x860.jpg" alt="Exterior"></div>
+                                    <div class="carousel-slide"><img src="https://photo.settour.com.tw/900x600/https://i.travelapi.com/lodging/24000000/23130000/23127700/23127660/f9a8ee70_z.jpg" alt="Room"></div>
+                                </div>
+                                <div class="carousel-dots">
+                                    <div class="carousel-dot active" data-index="0"></div>
+                                    <div class="carousel-dot" data-index="1"></div>
+                                </div>
+                            </div>
+
                             <div class="spot-body">
                                 <h3 class="spot-title">住宿: 大阪本町豪景飯店</h3>
                                 <div class="tags-row"><span class="mini-tag">連泊</span></div>
@@ -1290,10 +1359,17 @@
         </div>
     </div>
 
-    <!-- Lightbox -->
+    <!-- Lightbox (Updated Structure) -->
     <div id="lightbox" class="lightbox">
         <div class="lightbox-close" onclick="closeLightbox()">&times;</div>
-        <img id="lightbox-img" src="" alt="Full view">
+        
+        <!-- Wrap image to detect swipe more easily -->
+        <div class="lightbox-content-wrapper">
+             <img id="lightbox-img" src="" alt="Full view">
+        </div>
+        
+        <!-- Add dots container -->
+        <div class="lightbox-dots" id="lightbox-dots"></div>
     </div>
 
     <script>
@@ -1528,11 +1604,16 @@
                     });
                 });
 
-                // Lightbox
-                images.forEach(img => {
+                // Lightbox Trigger (Modified for Carousel)
+                // Use slides array to find index relative to the track
+                images.forEach((img) => {
                     img.addEventListener('click', (e) => {
                         if (!isDraggingChanged) {
-                            openLightbox(e.target.src);
+                            // Collect all image sources from this specific carousel track
+                            const allImagesInGroup = Array.from(images).map(i => i.src);
+                            // Find the index of the clicked image in this group
+                            // Note: We use the index relative to the carousel logic
+                            openLightbox(allImagesInGroup, currentIndex); 
                         }
                     });
                 });
@@ -1540,20 +1621,94 @@
                 // Init resize handler for this specific carousel
                 window.addEventListener('resize', updateCarousel);
             });
+
+            // Also handle standalone spot images (single image lightboxes)
+            const spotImages = document.querySelectorAll('.spot-image:not(.carousel-slide img)');
+            spotImages.forEach(img => {
+                img.addEventListener('click', (e) => {
+                    openLightbox([e.target.src], 0);
+                });
+            });
         }
 
-        // Lightbox Functions
+        // --- Lightbox Functions (Enhanced) ---
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxDotsContainer = document.getElementById('lightbox-dots');
 
-        function openLightbox(src) {
-            lightboxImg.src = src;
+        // State for Lightbox
+        let lbImages = [];
+        let lbIndex = 0;
+        let lbStartX = 0;
+        let lbIsDragging = false;
+
+        function openLightbox(imagesArray, startIndex) {
+            lbImages = imagesArray;
+            lbIndex = startIndex;
+            
+            updateLightboxUI();
             lightbox.classList.add('active');
         }
 
         function closeLightbox() {
             lightbox.classList.remove('active');
         }
+
+        function updateLightboxUI() {
+            // Update Image
+            lightboxImg.style.opacity = '0.5'; // Simple fade effect
+            setTimeout(() => {
+                lightboxImg.src = lbImages[lbIndex];
+                lightboxImg.style.opacity = '1';
+            }, 150);
+
+            // Update Dots
+            lightboxDotsContainer.innerHTML = '';
+            if (lbImages.length > 1) {
+                lbImages.forEach((_, i) => {
+                    const dot = document.createElement('div');
+                    dot.classList.add('lightbox-dot');
+                    if (i === lbIndex) dot.classList.add('active');
+                    lightboxDotsContainer.appendChild(dot);
+                });
+            }
+        }
+
+        // Lightbox Swipe Logic
+        lightbox.addEventListener('touchstart', (e) => {
+            lbStartX = e.touches[0].clientX;
+            lbIsDragging = true;
+        });
+
+        lightbox.addEventListener('touchmove', (e) => {
+            if (!lbIsDragging) return;
+            // Prevent default to stop scrolling background (if needed)
+            // e.preventDefault(); 
+        });
+
+        lightbox.addEventListener('touchend', (e) => {
+            if (!lbIsDragging) return;
+            const endX = e.changedTouches[0].clientX;
+            const diff = endX - lbStartX;
+            
+            // Threshold for swipe
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) {
+                    // Swipe Right (Prev)
+                    if (lbIndex > 0) {
+                        lbIndex--;
+                        updateLightboxUI();
+                    }
+                } else {
+                    // Swipe Left (Next)
+                    if (lbIndex < lbImages.length - 1) {
+                        lbIndex++;
+                        updateLightboxUI();
+                    }
+                }
+            }
+            lbIsDragging = false;
+        });
 
         // Init all
         fetchRate();
