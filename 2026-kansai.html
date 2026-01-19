@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="robots" content="noindex">
     
     <!-- iOS Web App 設定 -->
@@ -32,7 +32,8 @@
             
             --shadow: 0 4px 12px rgba(0,0,0,0.08);
             --radius: 16px;
-            --bottom-nav-height: 60px;
+            --bottom-nav-height: 80px; /* 預估高度，用於計算 body padding */
+            --header-base-height: 60px;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -42,7 +43,8 @@
             background-color: var(--bg);
             color: var(--text-main);
             margin: 0;
-            padding-bottom: calc(var(--bottom-nav-height) + 20px);
+            /* 增加底部空間，確保內容不被加高的導航列遮擋 (120px 足夠容納各種機型) */
+            padding-bottom: 120px;
             line-height: 1.5;
         }
 
@@ -65,10 +67,23 @@
             background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 60%, rgba(245,245,247,1) 100%);
         }
 
+        /* Header 適配 iPhone 瀏海/動態島 */
         .header {
-            position: fixed; top: 0; left: 0; right: 0; height: 60px;
-            padding: 0 20px; display: flex; justify-content: space-between; align-items: center;
-            z-index: 1000; transition: all 0.3s ease; background: transparent; color: white;
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            /* 高度 = 基本高度 + 頂部安全區域 */
+            height: calc(var(--header-base-height) + env(safe-area-inset-top));
+            /* 內距增加頂部安全區域，讓內容往下移，避開瀏海 */
+            padding: env(safe-area-inset-top) 20px 0 20px;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            z-index: 1000; 
+            transition: all 0.3s ease; 
+            background: transparent; 
+            color: white;
         }
         .header-title { font-size: 1.2rem; font-weight: 800; letter-spacing: 1px; text-shadow: 0 2px 8px rgba(0,0,0,0.6); font-family: 'Futura', sans-serif; }
         
@@ -88,8 +103,13 @@
            ---------------- */
         .container { position: relative; z-index: 10; margin-top: -50px; padding: 0; max-width: 600px; margin-left: auto; margin-right: auto; }
 
+        /* Day Nav 適配 Header 高度 */
         .day-nav-container {
-            background: var(--bg); position: sticky; top: 60px; z-index: 90;
+            background: var(--bg); 
+            position: sticky; 
+            /* 黏住的位置 = Header 的高度 (含安全區域) */
+            top: calc(var(--header-base-height) + env(safe-area-inset-top)); 
+            z-index: 90;
             padding: 10px 0; margin-bottom: 10px;
             border-top-left-radius: 24px; border-top-right-radius: 24px;
             box-shadow: 0 -4px 10px rgba(0,0,0,0.03);
@@ -332,13 +352,29 @@
         .info-section { background: white; border-radius: var(--radius); padding: 20px; margin: 0 16px 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .info-header { font-weight: 700; font-size: 1.1rem; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid #eee; color: var(--primary); }
         .info-list-item { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.95rem; }
-
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: var(--bottom-nav-height); background: rgba(255, 255, 255, 0.98); border-top: 1px solid rgba(0,0,0,0.05); display: flex; justify-content: space-around; align-items: center; z-index: 1000; padding-bottom: env(safe-area-inset-bottom); }
-        .nav-item { flex: 1; text-align: center; color: #BDC3C7; font-size: 0.8rem; cursor: pointer; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        
+        /* Bottom Nav Optimized */
+        .bottom-nav { 
+            position: fixed; bottom: 0; left: 0; right: 0; 
+            /* 移除固定高度，改用 padding 撐開 */
+            height: auto; 
+            background: rgba(255, 255, 255, 0.98); 
+            border-top: 1px solid rgba(0,0,0,0.05); 
+            display: flex; justify-content: space-around; 
+            align-items: center; 
+            z-index: 1000; 
+            /* 上方留白 12px */
+            padding-top: 12px;
+            /* 下方留白：安全區域 + 16px 緩衝，讓手指好點擊，不會卡到 Home Bar */
+            padding-bottom: calc(env(safe-area-inset-bottom) + 16px);
+        }
+        .nav-item { 
+            flex: 1; text-align: center; color: #BDC3C7; font-size: 0.8rem; cursor: pointer; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+        }
         .nav-item.active { color: var(--primary); }
         .nav-item i { font-size: 1.2rem; margin-bottom: 4px; }
         .hidden { display: none; }
-        
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -795,17 +831,7 @@
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">20:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
-                            <!-- Carousel for Osaka Hotel (Day 5) -->
-                            <div class="carousel-container">
-                                <div class="carousel-track">
-                                    <div class="carousel-slide"><img src="https://www.viewhotels.jp/osaka/wp-content/uploads/sites/12/2020/01/12-4-1240x860.jpg" alt="Exterior"></div>
-                                    <div class="carousel-slide"><img src="https://photo.settour.com.tw/900x600/https://i.travelapi.com/lodging/24000000/23130000/23127700/23127660/f9a8ee70_z.jpg" alt="Room"></div>
-                                </div>
-                                <div class="carousel-dots">
-                                    <div class="carousel-dot active" data-index="0"></div>
-                                    <div class="carousel-dot" data-index="1"></div>
-                                </div>
-                            </div>
+                            <img src="https://www.viewhotels.jp/osaka/wp-content/uploads/sites/12/2020/01/12-4-1240x860.jpg" class="spot-image" alt="Osaka Hotel" onerror="this.src='https://placehold.co/800x400?text=Osaka+View+Hotel'">
                             <div class="spot-body">
                                 <h3 class="spot-title">住宿: 大阪本町豪景飯店</h3>
                                 <div class="tags-row"><span class="mini-tag">連泊</span></div>
