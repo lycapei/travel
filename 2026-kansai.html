@@ -16,7 +16,12 @@
     <link rel="apple-touch-icon" href="image/favicon-2026-kansai.png">
     <link rel="icon" type="image/png" href="image/favicon-2026-kansai.png">
 
+    <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Leaflet Map CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
     <style>
         :root {
             /* 日式極簡配色 */
@@ -169,6 +174,82 @@
         .metric-item { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
         .metric-item i { opacity: 0.8; font-size: 0.9rem; }
         .weather-arrow { opacity: 0.6; font-size: 1rem; }
+
+        /* ----------------
+           Route Map (Timeline Style)
+           ---------------- */
+        .route-map-container {
+            padding: 0 16px 20px;
+            overflow-x: auto;
+            display: flex;
+            gap: 0;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .route-map-container::-webkit-scrollbar { display: none; }
+
+        .route-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 85px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .route-circle {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .route-label {
+            font-size: 0.75rem;
+            color: var(--text-main);
+            text-align: center;
+            line-height: 1.3;
+            font-weight: 600;
+            padding: 0 4px;
+        }
+
+        .route-line {
+            position: absolute;
+            top: 14px;
+            left: 50%;
+            width: 100%;
+            height: 0;
+            border-top: 2px dashed #ddd;
+            z-index: 1;
+        }
+
+        .route-step:last-child .route-line {
+            display: none;
+        }
+
+        /* ----------------
+           Interactive Map (Leaflet)
+           ---------------- */
+        .leaflet-map-container {
+            height: 300px;
+            width: calc(100% - 32px);
+            margin: 0 16px 24px 16px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 5;
+        }
 
         /* ----------------
            Timeline Layout
@@ -404,6 +485,37 @@
         .nav-item i { font-size: 1.2rem; margin-bottom: 4px; }
         .hidden { display: none; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 90px; /* Above bottom nav */
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            background: white;
+            color: var(--primary);
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 900;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s, transform 0.3s;
+        }
+        .back-to-top.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .back-to-top:active {
+            transform: scale(0.9);
+            background: #f8f9fa;
+        }
     </style>
 </head>
 <body>
@@ -447,6 +559,16 @@
                     </div>
                     <div class="weather-arrow"><i class="fas fa-chevron-right"></i></div>
                 </a>
+
+                <!-- Day 1 Route Map & Interactive Map -->
+                <div class="route-map-container">
+                    <div class="route-step"><div class="route-circle">1</div><div class="route-label">機場<br>16:55</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">2</div><div class="route-label">京都站<br>19:34</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">3</div><div class="route-label">飯店<br>19:40</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">4</div><div class="route-label">晚餐<br>20:30</div><div class="route-line"></div></div>
+                </div>
+                <!-- FIXED ID: d1-map -->
+                <div id="d1-map" class="leaflet-map-container"></div>
 
                 <div class="timeline-container">
                     <!-- 新增：集合時間 -->
@@ -516,6 +638,24 @@
                                 <div class="spot-desc">
                                     • 車程約 80 分鐘<br>
                                     • 6 歲以下孩童不需購票，但無座位
+                                    <div style="margin-top:12px; padding:12px 14px; background:#f8f9fa; border-radius:8px; font-size:0.9rem; line-height:2.4; letter-spacing:0.5px; color:#444;">
+                                        <div style="border-bottom:1px dashed #e0e0e0; display:flex; align-items:center;">
+                                            <i class="fas fa-train" style="color:var(--primary); margin-right:8px; width:20px; text-align:center;"></i> 
+                                            <strong>18:15 → 19:34</strong>
+                                        </div>
+                                        <div style="border-bottom:1px dashed #e0e0e0; display:flex; align-items:center;">
+                                            <i class="fas fa-train" style="color:var(--primary); margin-right:8px; width:20px; text-align:center;"></i> 
+                                            <strong>18:45 → 20:04</strong>
+                                        </div>
+                                        <div style="border-bottom:1px dashed #e0e0e0; display:flex; align-items:center;">
+                                            <i class="fas fa-train" style="color:var(--primary); margin-right:8px; width:20px; text-align:center;"></i> 
+                                            <strong>19:16 → 20:32</strong>
+                                        </div>
+                                        <div style="display:flex; align-items:center;">
+                                            <i class="fas fa-train" style="color:var(--primary); margin-right:8px; width:20px; text-align:center;"></i> 
+                                            <strong>19:45 → 21:03</strong>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div style="margin-top:10px;">
                                     <a href="https://drive.google.com/drive/folders/1mx-v7M8NXtpr_N_f54wK6gYC8xgeLukc?usp=drive_link" class="spot-nav-btn pending" target="_blank">
@@ -571,6 +711,29 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- 20:30 晚餐 (新增實驗功能) -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">20:30</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
+                        <div class="content-col">
+                            <img src="https://lh3.googleusercontent.com/p/AF1QipO3T8RwtsZhoXICvKJLWKu-3ytKAoctYcs_Mlh5=w203-h287-k-no" class="spot-image" alt="Okonomiyaki" onerror="this.src='https://placehold.co/800x400?text=Okonomiyaki'">
+                            <div class="spot-body">
+                                <h3 class="spot-title">晚餐：京ちゃばな 南新町</h3>
+                                <div class="tags-row"><span class="mini-tag must-eat">番茄御好燒</span><span class="mini-tag">鐵板燒</span></div>
+                                <div class="spot-desc">
+                                    這家店以創意大阪燒聞名，必點「番茄御好燒」，將新鮮番茄與傳統醬汁結合，口感清爽獨特。店內氛圍輕鬆，非常適合第一晚的聚餐。
+                                </div>
+                                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                                    <a href="https://maps.app.goo.gl/wJq5qZ8z8z8z8z8z8" class="spot-nav-btn" onclick="window.open('https://maps.google.com/?q=京茶花+南新町', '_blank'); return false;"><i class="fas fa-location-dot"></i> 導航</a>
+                                    <!-- 實驗功能按鈕 -->
+                                    <button class="spot-nav-btn" onclick="toggleMenu()" style="background:#FFF3E0; color:#E67E22; border:1px solid #FFE0B2;">
+                                        <i class="fas fa-book-open"></i> 點餐小幫手
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -582,6 +745,19 @@
                     <div class="weather-metrics-box"><div class="metric-item"><i class="fas fa-umbrella"></i> <span class="val-rain">--%</span></div><div class="metric-item"><i class="fas fa-temperature-high"></i> <span class="val-feels">--°</span></div></div>
                     <div class="weather-arrow"><i class="fas fa-chevron-right"></i></div>
                 </a>
+
+                <!-- Day 2 Route Map & Interactive Map -->
+                <div class="route-map-container">
+                    <div class="route-step"><div class="route-circle">1</div><div class="route-label">飯店<br>08:20</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">2</div><div class="route-label">嵐山<br>09:00</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">3</div><div class="route-label">午餐<br>12:00</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">4</div><div class="route-label">鐵道<br>14:00</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">5</div><div class="route-label">晚餐<br>18:00</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">6</div><div class="route-label">飯店<br>19:30</div><div class="route-line"></div></div>
+                </div>
+                <!-- FIXED ID: d2-map -->
+                <div id="d2-map" class="leaflet-map-container"></div>
+
                 <div class="timeline-container">
                     
                     <!-- 09:00 嵐山小火車 -->
@@ -719,6 +895,24 @@
                     <div class="weather-metrics-box"><div class="metric-item"><i class="fas fa-umbrella"></i> <span class="val-rain">--%</span></div><div class="metric-item"><i class="fas fa-temperature-high"></i> <span class="val-feels">--°</span></div></div>
                     <div class="weather-arrow"><i class="fas fa-chevron-right"></i></div>
                 </a>
+
+                <!-- Day 3 Route Map (Timeline Style) -->
+                <div class="route-map-container">
+                    <div class="route-step"><div class="route-circle">1</div><div class="route-label">飯店<br>07:30</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">2</div><div class="route-label">租車<br>08:00</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">3</div><div class="route-label">河合神社<br>10:00</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">4</div><div class="route-label">糺之森<br>散步</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">5</div><div class="route-label">下鴨神社<br>參拜</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">6</div><div class="route-label">琵琶湖<br>12:00</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">7</div><div class="route-label">近江牛<br>午餐</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">8</div><div class="route-label">滑雪場<br>14:30</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">9</div><div class="route-label">返回<br>17:00</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">10</div><div class="route-label">飯店<br>18:00</div><div class="route-line"></div></div>
+                </div>
+
+                <!-- FIXED ID: d3-map -->
+                <div id="d3-map" class="leaflet-map-container"></div>
+
                 <div class="timeline-container">
                     
                     <!-- 08:00 領取租車 -->
@@ -748,7 +942,6 @@
                     </div>
 
                     <!-- 09:00 全體上車 -->
-                    <!-- 09:00 移動：飯店 -> 河合神社 -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">09:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
@@ -847,6 +1040,7 @@
                             </div>
                         </div>
                     </div>
+
                     <!-- 12:00 移動：下鴨神社 -> 琵琶湖 -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">12:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
@@ -970,43 +1164,53 @@
                     <div class="weather-metrics-box"><div class="metric-item"><i class="fas fa-umbrella"></i> <span class="val-rain">--%</span></div><div class="metric-item"><i class="fas fa-temperature-high"></i> <span class="val-feels">--°</span></div></div>
                     <div class="weather-arrow"><i class="fas fa-chevron-right"></i></div>
                 </a>
+
+                <!-- Day 4 Route Map & Interactive Map -->
+                <div class="route-map-container">
+                    <div class="route-step"><div class="route-circle">1</div><div class="route-label">飯店<br>09:00</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">2</div><div class="route-label">宇治<br>10:00</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">3</div><div class="route-label">奈良<br>13:30</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">4</div><div class="route-label">大阪<br>16:30</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">5</div><div class="route-label">飯店<br>18:00</div><div class="route-line"></div></div>
+                </div>
+                <!-- FIXED ID: d4-map -->
+                <div id="d4-map" class="leaflet-map-container"></div>
+
                 <div class="timeline-container">
+                    
+                    <!-- 10:00 宇治 (Moved to Morning) -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">10:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
-                        <div class="content-col">
-                            <img src="https://img.cooljapan-videos.com/files/member_posts/image/c4da68612c32e98b658535a692d6c7a090309cc8.jpg" class="spot-image" alt="Nara" onerror="this.src='https://placehold.co/800x400?text=Nara+Deer'">
-                            <div class="spot-body">
-                                <h3 class="spot-title">奈良公園</h3>
-                                <div class="tags-row"><span class="mini-tag warn">注意安全</span><span class="mini-tag must-see">東大寺</span></div>
-                                <div class="spot-desc">與可愛的小鹿近距離接觸。參觀著名的東大寺與大佛。<br><strong>警告：</strong> 鹿群看到仙貝會非常熱情甚至包圍，請保護好小孩與手上的食物。</div>
-                                <a href="https://maps.google.com/?q=Nara+Park" class="spot-nav-btn"><i class="fas fa-location-dot"></i> 導航</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-marker"><div class="timeline-time">12:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
-                        <div class="content-col">
-                            <img src="https://images.unsplash.com/photo-1557018225-b46187216a7f?auto=format&fit=crop&w=800&q=80" class="spot-image" alt="Lunch" onerror="this.src='https://placehold.co/800x400?text=Kamameshi+Lunch'">
-                            <div class="spot-body">
-                                <h3 class="spot-title">午餐：志津香釜飯</h3>
-                                <div class="tags-row"><span class="mini-tag must-eat">排隊名店</span></div>
-                                <div class="spot-desc">奈良必吃美食，建議 11:00 開門前就先去排隊。<br>口感較軟爛，非常適合長輩與小孩食用。</div>
-                                <a href="https://maps.google.com/?q=Shizuka+Park+Store" class="spot-nav-btn"><i class="fas fa-utensils"></i> 導航</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-marker"><div class="timeline-time">14:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
                             <img src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?auto=format&fit=crop&w=800&q=80" class="spot-image" alt="Uji" onerror="this.src='https://placehold.co/800x400?text=Uji'">
                             <div class="spot-body">
                                 <h3 class="spot-title">宇治</h3>
                                 <div class="tags-row"><span class="mini-tag must-eat">抹茶</span><span class="mini-tag">平等院</span></div>
-                                <div class="spot-desc">漫步於宇治川邊，參觀世界遺產「平等院」（10元硬幣圖案）。<br><strong>必吃：</strong> 中村藤吉的抹茶甜點。</div>
+                                <div class="spot-desc">
+                                    漫步於宇治川邊，參觀世界遺產「平等院」（10元硬幣圖案）。宇治是日本茶的故鄉，街道上瀰漫著茶香。<br><strong>必吃：</strong> 中村藤吉或伊藤久右衛門的抹茶甜點。
+                                </div>
                                 <a href="https://maps.google.com/?q=Uji+Bridge" class="spot-nav-btn"><i class="fas fa-location-dot"></i> 導航</a>
                             </div>
                         </div>
                     </div>
+
+                    <!-- 13:30 奈良公園 (Moved to Afternoon) -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">13:30</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
+                        <div class="content-col">
+                            <img src="https://img.cooljapan-videos.com/files/member_posts/image/c4da68612c32e98b658535a692d6c7a090309cc8.jpg" class="spot-image" alt="Nara" onerror="this.src='https://placehold.co/800x400?text=Nara+Deer'">
+                            <div class="spot-body">
+                                <h3 class="spot-title">奈良公園</h3>
+                                <div class="tags-row"><span class="mini-tag warn">注意安全</span><span class="mini-tag must-see">東大寺</span></div>
+                                <div class="spot-desc">
+                                    與可愛的小鹿近距離接觸。參觀著名的東大寺與大佛。<br><strong>警告：</strong> 鹿群看到仙貝會非常熱情甚至包圍，請保護好小孩與手上的食物。
+                                </div>
+                                <a href="https://maps.google.com/?q=Nara+Park" class="spot-nav-btn"><i class="fas fa-location-dot"></i> 導航</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 16:30 前往大阪 -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">16:30</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
@@ -1017,6 +1221,8 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- 18:00 飯店 -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">18:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
@@ -1069,6 +1275,18 @@
                     <div class="weather-metrics-box"><div class="metric-item"><i class="fas fa-umbrella"></i> <span class="val-rain">--%</span></div><div class="metric-item"><i class="fas fa-temperature-high"></i> <span class="val-feels">--°</span></div></div>
                     <div class="weather-arrow"><i class="fas fa-chevron-right"></i></div>
                 </a>
+
+                <!-- Day 5 Route Map & Interactive Map -->
+                <div class="route-map-container">
+                    <div class="route-step"><div class="route-circle">1</div><div class="route-label">飯店<br>09:15</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">2</div><div class="route-label">海遊館<br>10:00</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">3</div><div class="route-label">樂高<br>13:00</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">4</div><div class="route-label">心齋橋<br>16:00</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">5</div><div class="route-label">飯店<br>20:00</div><div class="route-line"></div></div>
+                </div>
+                <!-- FIXED ID: d5-map -->
+                <div id="d5-map" class="leaflet-map-container"></div>
+
                 <div class="timeline-container">
                     <div class="timeline-item">
                          <div class="timeline-marker"><div class="timeline-time">10:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
@@ -1157,6 +1375,18 @@
                     <div class="weather-metrics-box"><div class="metric-item"><i class="fas fa-umbrella"></i> <span class="val-rain">--%</span></div><div class="metric-item"><i class="fas fa-temperature-high"></i> <span class="val-feels">--°</span></div></div>
                     <div class="weather-arrow"><i class="fas fa-chevron-right"></i></div>
                 </a>
+
+                <!-- Day 6 Route Map & Interactive Map -->
+                <div class="route-map-container">
+                    <div class="route-step"><div class="route-circle">1</div><div class="route-label">飯店<br>09:30</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">2</div><div class="route-label">麵包超人<br>10:30</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">3</div><div class="route-label">動物王國<br>13:30</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">4</div><div class="route-label">Outlet<br>16:30</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">5</div><div class="route-label">機場飯店<br>19:00</div><div class="route-line"></div></div>
+                </div>
+                <!-- FIXED ID: d6-map -->
+                <div id="d6-map" class="leaflet-map-container"></div>
+
                 <div class="timeline-container">
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">10:30</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
@@ -1252,6 +1482,17 @@
                     <div class="weather-metrics-box"><div class="metric-item"><i class="fas fa-umbrella"></i> <span class="val-rain">--%</span></div><div class="metric-item"><i class="fas fa-temperature-high"></i> <span class="val-feels">--°</span></div></div>
                     <div class="weather-arrow"><i class="fas fa-chevron-right"></i></div>
                 </a>
+
+                <!-- Day 7 Route Map & Interactive Map -->
+                <div class="route-map-container">
+                    <div class="route-step"><div class="route-circle">1</div><div class="route-label">飯店<br>07:50</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">2</div><div class="route-label">接駁車<br>08:00</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">3</div><div class="route-label">機場<br>08:15</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">4</div><div class="route-label">起飛<br>10:55</div><div class="route-line"></div></div>
+                </div>
+                <!-- FIXED ID: d7-map -->
+                <div id="d7-map" class="leaflet-map-container"></div>
+
                 <div class="timeline-container">
                     
                     <!-- 08:00 接駁車 -->
@@ -1554,6 +1795,11 @@
         <div class="nav-item" onclick="switchTab('prep', this)"><i class="fas fa-clipboard-list"></i><span>準備</span></div>
     </nav>
 
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="back-to-top" onclick="window.scrollTo({ top: 0, behavior: 'smooth' });">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
     <!-- Rate Modal -->
     <div id="rate-modal" class="modal-overlay">
         <div class="calc-card">
@@ -1579,6 +1825,75 @@
         </div>
     </div>
 
+    <!-- Menu Modal (實驗功能) -->
+    <div id="menu-modal" class="modal-overlay">
+        <div class="calc-card" style="max-width: 350px;">
+            <div class="calc-header" style="border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 10px;">
+                <span><i class="fas fa-utensils"></i> 點餐小幫手</span>
+                <button class="close-btn" onclick="toggleMenu()"><i class="fas fa-times"></i></button>
+            </div>
+            <div style="font-size: 0.85rem; color: #666; margin-bottom: 15px; text-align: center;">
+                點擊喇叭圖示 <i class="fas fa-volume-up"></i> 手機就會幫你唸出日文喔！
+            </div>
+            
+            <div class="menu-list" style="max-height: 400px; overflow-y: auto;">
+                <!-- 菜單項目 1 -->
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f5f5f5;">
+                    <div>
+                        <div style="font-weight: 700; color: var(--text-main); font-size: 1rem;">番茄御好燒</div>
+                        <div style="font-size: 0.85rem; color: var(--text-sub);">トマトお好み焼き</div>
+                    </div>
+                    <button onclick="speakJapanese('トマトお好み焼き')" style="background: var(--primary); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                </div>
+
+                <!-- 菜單項目 2 -->
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f5f5f5;">
+                    <div>
+                        <div style="font-weight: 700; color: var(--text-main); font-size: 1rem;">酪梨炒麵</div>
+                        <div style="font-size: 0.85rem; color: var(--text-sub);">アボカド焼きそば</div>
+                    </div>
+                    <button onclick="speakJapanese('アボカド焼きそば')" style="background: var(--primary); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                </div>
+
+                <!-- 菜單項目 3 -->
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f5f5f5;">
+                    <div>
+                        <div style="font-weight: 700; color: var(--text-main); font-size: 1rem;">豚平燒 (蛋包豬肉)</div>
+                        <div style="font-size: 0.85rem; color: var(--text-sub);">とん平焼き</div>
+                    </div>
+                    <button onclick="speakJapanese('とん平焼き')" style="background: var(--primary); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                </div>
+
+                <!-- 菜單項目 4 -->
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f5f5f5;">
+                    <div>
+                        <div style="font-weight: 700; color: var(--text-main); font-size: 1rem;">生啤酒</div>
+                        <div style="font-size: 0.85rem; color: var(--text-sub);">生ビール</div>
+                    </div>
+                    <button onclick="speakJapanese('生ビール')" style="background: var(--primary); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                </div>
+                 <!-- 菜單項目 5 -->
+                 <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f5f5f5;">
+                    <div>
+                        <div style="font-weight: 700; color: var(--text-main); font-size: 1rem;">可樂</div>
+                        <div style="font-size: 0.85rem; color: var(--text-sub);">コーラ</div>
+                    </div>
+                    <button onclick="speakJapanese('コーラ')" style="background: var(--primary); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Lightbox (Updated Structure) -->
     <div id="lightbox" class="lightbox">
         <div class="lightbox-close" onclick="closeLightbox()">&times;</div>
@@ -1592,12 +1907,75 @@
         <div class="lightbox-dots" id="lightbox-dots"></div>
     </div>
 
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
     <script>
         let currentRate = 0.218;
+        
+        // --- Map Data for All Days ---
+        const mapInstances = {}; // Store map instances by id
+        const tourData = {
+            'd1': [
+                { lat: 34.4320, lng: 135.2304, title: "1. 關西機場" },
+                { lat: 34.9858, lng: 135.7588, title: "2. 京都車站" },
+                { lat: 34.98917, lng: 135.75710, title: "3. 飯店" },
+                { lat: 34.98916, lng: 135.75704, title: "4. 晚餐" }
+            ],
+            'd2': [
+                { lat: 34.98917, lng: 135.75710, title: "1. 飯店" },
+                { lat: 35.0094, lng: 135.6668, title: "2. 嵐山" },
+                { lat: 35.0116, lng: 135.6760, title: "3. 午餐" },
+                { lat: 34.9863, lng: 135.7419, title: "4. 鐵道博物館" },
+                { lat: 34.9858, lng: 135.7588, title: "5. 晚餐" },
+                { lat: 34.98917, lng: 135.75710, title: "6. 飯店" }
+            ],
+            'd3': [
+                { lat: 34.98917, lng: 135.75710, title: "1. 飯店" },
+                { lat: 34.9837, lng: 135.7587, title: "2. 租車 (京都站)" },
+                { lat: 35.0340, lng: 135.7690, title: "3. 河合神社" },
+                { lat: 35.0392, lng: 135.7730, title: "4. 下鴨神社" },
+                { lat: 35.0050, lng: 135.8670, title: "5. 琵琶湖/午餐" }, 
+                { lat: 35.2132, lng: 135.9042, title: "6. 琵琶湖山谷" },
+                { lat: 34.98917, lng: 135.75710, title: "7. 飯店" }
+            ],
+            'd4': [
+                { lat: 34.98917, lng: 135.75710, title: "1. 飯店" },
+                { lat: 34.8893, lng: 135.8077, title: "2. 宇治平等院" },
+                { lat: 34.6850, lng: 135.8430, title: "3. 奈良公園" },
+                { lat: 34.6823, lng: 135.5005, title: "4. 大阪飯店" }
+            ],
+            'd5': [
+                { lat: 34.6823, lng: 135.5005, title: "1. 飯店" },
+                { lat: 34.6545, lng: 135.4289, title: "2. 海遊館" },
+                { lat: 34.6560, lng: 135.4310, title: "3. 樂高/摩天輪" },
+                { lat: 34.6687, lng: 135.5013, title: "4. 心齋橋/道頓堀" },
+                { lat: 34.6823, lng: 135.5005, title: "5. 飯店" }
+            ],
+            'd6': [
+                { lat: 34.6823, lng: 135.5005, title: "1. 飯店" },
+                { lat: 34.6806, lng: 135.1864, title: "2. 麵包超人館" },
+                { lat: 34.6378, lng: 135.2236, title: "3. 神戶動物王國" },
+                { lat: 34.4067, lng: 135.2952, title: "4. 泉佐野Outlet" },
+                { lat: 34.4105, lng: 135.3005, title: "5. 機場飯店" }
+            ],
+            'd7': [
+                { lat: 34.4105, lng: 135.3005, title: "1. 飯店" },
+                { lat: 34.4320, lng: 135.2304, title: "2. 關西機場" }
+            ]
+        };
 
         window.addEventListener('scroll', () => {
             const header = document.getElementById('app-header');
             if (window.scrollY > 200) { header.classList.add('scrolled'); } else { header.classList.remove('scrolled'); }
+            
+            // Back to Top Button Logic
+            const backToTopBtn = document.getElementById('backToTop');
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('show');
+            } else {
+                backToTopBtn.classList.remove('show');
+            }
         });
 
         function switchTab(viewId, navEl) {
@@ -1614,6 +1992,58 @@
             document.querySelectorAll('.day-tab').forEach(el => el.classList.remove('active'));
             tabEl.classList.add('active');
             tabEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+
+            // Initialize Map for selected day
+            setTimeout(() => {
+                initDayMap(dayId);
+            }, 300); // Slight delay for animation
+        }
+
+        function initDayMap(dayId) {
+            // Check if data exists for this day
+            if (!tourData[dayId]) return;
+
+            const mapId = dayId + '-map';
+            const mapContainer = document.getElementById(mapId);
+            
+            if (!mapContainer) return;
+
+            // If map already initialized, just fix layout
+            if (mapInstances[dayId]) {
+                mapInstances[dayId].invalidateSize();
+                return;
+            }
+
+            const locations = tourData[dayId];
+            
+            // Calculate center
+            const centerLat = locations[0].lat;
+            const centerLng = locations[0].lng;
+
+            // Initialize map
+            const map = L.map(mapId).setView([centerLat, centerLng], 10);
+            mapInstances[dayId] = map;
+
+            // Add OpenStreetMap tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap'
+            }).addTo(map);
+
+            // Add markers & lines
+            const latlngs = [];
+            locations.forEach((loc) => {
+                const marker = L.marker([loc.lat, loc.lng]).addTo(map);
+                marker.bindPopup(`<b>${loc.title}</b>`);
+                latlngs.push([loc.lat, loc.lng]);
+            });
+
+            // Draw polyline
+            const polyline = L.polyline(latlngs, {color: '#546E7A', weight: 3, opacity: 0.7, dashArray: '5, 10'}).addTo(map);
+
+            // Fit bounds
+            if (latlngs.length > 0) {
+                map.fitBounds(polyline.getBounds(), { padding: [30, 30] });
+            }
         }
 
         function toggleCalculator() {
@@ -1633,6 +2063,33 @@
         document.getElementById('rate-modal').addEventListener('click', function(e) {
             if (e.target === this) toggleCalculator();
         });
+
+        // Menu Modal Logic
+        function toggleMenu() {
+            const modal = document.getElementById('menu-modal');
+            if (modal.classList.contains('show')) {
+                modal.classList.remove('show');
+                setTimeout(() => { modal.style.display = 'none'; }, 200); 
+            } else {
+                modal.style.display = 'flex';
+                setTimeout(() => { modal.classList.add('show'); }, 10);
+            }
+        }
+
+        document.getElementById('menu-modal').addEventListener('click', function(e) {
+            if (e.target === this) toggleMenu();
+        });
+
+        function speakJapanese(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'ja-JP'; // 設定為日文
+                utterance.rate = 0.8; // 稍微放慢語速，方便模仿
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert('您的瀏覽器不支援語音功能');
+            }
+        }
 
         function calculate(source) {
             const jpyInput = document.getElementById('input-jpy');
@@ -1675,14 +2132,36 @@
         }
 
         async function fetchWeather() {
+            // 定義地點與「預設天氣」
             const locations = [
-                { id: 'weather-d1', lat: 35.01, lon: 135.76, date: '2026-02-08', accuUrl: 'https://www.accuweather.com/zh/jp/kyoto-shi/224436/daily-weather-forecast/224436' },
-                { id: 'weather-d2', lat: 35.01, lon: 135.76, date: '2026-02-09', accuUrl: 'https://www.accuweather.com/zh/jp/kyoto-shi/224436/daily-weather-forecast/224436' },
-                { id: 'weather-d3', lat: 35.19, lon: 135.90, date: '2026-02-10', accuUrl: 'https://www.accuweather.com/zh/jp/otsu-shi/220939/daily-weather-forecast/220939' },
-                { id: 'weather-d4', lat: 34.68, lon: 135.80, date: '2026-02-11', accuUrl: 'https://www.accuweather.com/zh/jp/nijoojiminami/2354547/daily-weather-forecast/2354547' },
-                { id: 'weather-d5', lat: 34.69, lon: 135.50, date: '2026-02-12', accuUrl: 'https://www.accuweather.com/zh/jp/umeda/2351574/daily-weather-forecast/2351574' },
-                { id: 'weather-d6', lat: 34.69, lon: 135.19, date: '2026-02-13', accuUrl: 'https://www.accuweather.com/zh/jp/shimoyamatedori/2346212/daily-weather-forecast/2346212' },
-                { id: 'weather-d7', lat: 34.40, lon: 135.29, date: '2026-02-14', accuUrl: 'https://www.accuweather.com/zh/jp/osaka-shi/225007/daily-weather-forecast/225007' }
+                { 
+                    id: 'weather-d1', lat: 35.01, lon: 135.76, date: '2026-02-08', 
+                    accuUrl: 'https://www.accuweather.com/zh/jp/kyoto-shi/224436/daily-weather-forecast/224436',
+                },
+                { 
+                    id: 'weather-d2', lat: 35.01, lon: 135.76, date: '2026-02-09', 
+                    accuUrl: 'https://www.accuweather.com/zh/jp/kyoto-shi/224436/daily-weather-forecast/224436',
+                },
+                { 
+                    id: 'weather-d3', lat: 35.21, lon: 135.90, date: '2026-02-10', 
+                    accuUrl: 'https://www.accuweather.com/zh/jp/otsu-shi/220939/daily-weather-forecast/220939',
+                },
+                { 
+                    id: 'weather-d4', lat: 34.68, lon: 135.80, date: '2026-02-11', 
+                    accuUrl: 'https://www.accuweather.com/zh/jp/nijoojiminami/2354547/daily-weather-forecast/2354547',
+                },
+                { 
+                    id: 'weather-d5', lat: 34.655, lon: 135.43, date: '2026-02-12', 
+                    accuUrl: 'https://www.accuweather.com/zh/jp/umeda/2351574/daily-weather-forecast/2351574',
+                },
+                { 
+                    id: 'weather-d6', lat: 34.69, lon: 135.19, date: '2026-02-13', 
+                    accuUrl: 'https://www.accuweather.com/zh/jp/shimoyamatedori/2346212/daily-weather-forecast/2346212',
+                },
+                { 
+                    id: 'weather-d7', lat: 34.40, lon: 135.29, date: '2026-02-14', 
+                    accuUrl: 'https://www.accuweather.com/zh/jp/osaka-shi/225007/daily-weather-forecast/225007',
+                }
             ];
 
             const weatherCodes = {
@@ -1707,45 +2186,109 @@
             today.setHours(0,0,0,0);
 
             for (let loc of locations) {
+                const linkEl = document.getElementById(loc.id);
+                if (!linkEl) continue;
+
+                // 設定 AccuWeather 連結參數
                 const targetDate = new Date(loc.date);
                 targetDate.setHours(0,0,0,0);
                 const diffTime = targetDate - today;
                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
                 let dayParam = diffDays + 1;
                 if (dayParam < 1) dayParam = 1; 
+                linkEl.href = `${loc.accuUrl}?day=${dayParam}`;
 
-                const linkEl = document.getElementById(loc.id);
-                if (linkEl) { linkEl.href = `${loc.accuUrl}?day=${dayParam}`; }
-
-                try {
-                    // Added daily=precipitation_probability_max to API call
-                    const url = `https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lon}&current=temperature_2m,apparent_temperature,weather_code&daily=precipitation_probability_max&timezone=Asia%2FTokyo`;
-                    const res = await fetch(url);
-                    const data = await res.json();
-                    
-                    if (data && data.current) {
-                        const w = data.current;
-                        if (!linkEl) continue;
-
-                        const code = w.weather_code;
-                        const info = weatherCodes[code] || { text: "多雲", icon: "fa-cloud", css: "cloudy" };
+                // 2. 決定要顯示的數據 (API 邏輯優化)
+                // Open-Meteo 免費版預測 16 天。如果旅遊日期在 14 天內，嘗試抓 API
+                if (diffDays >= 0 && diffDays < 14) {
+                    try {
+                        const url = `https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lon}&daily=weather_code,temperature_2m_max,precipitation_probability_max&forecast_days=16&timezone=Asia%2FTokyo`;
+                        const res = await fetch(url);
+                        const data = await res.json();
                         
-                        // Rain Prob (Max of the day, as current hourly prob might be 0)
-                        let rainProb = 0;
-                        if (data.daily && data.daily.precipitation_probability_max && data.daily.precipitation_probability_max.length > 0) {
-                            rainProb = data.daily.precipitation_probability_max[0];
+                        // 【優化重點】不使用 diffDays 索引，而是直接尋找「日期字串」
+                        // 這能避免時區計算錯誤導致抓到隔天的天氣
+                        if (data && data.daily && data.daily.time) {
+                            const targetIndex = data.daily.time.indexOf(loc.date);
+
+                            if (targetIndex !== -1 && data.daily.weather_code[targetIndex] !== undefined) {
+                                // 找到對應日期的資料了
+                                const code = data.daily.weather_code[targetIndex];
+                                const temp = data.daily.temperature_2m_max[targetIndex];
+                                const rain = data.daily.precipitation_probability_max[targetIndex];
+                                
+                                updateCard(linkEl, code, temp, rain, weatherCodes);
+                            } else {
+                                // 日期超出 API 範圍
+                                showNoDataState(linkEl);
+                            }
+                        } else {
+                            showNoDataState(linkEl);
                         }
-
-                        linkEl.classList.add(info.css);
-                        linkEl.querySelector('.weather-temp-box').innerText = `${Math.round(w.temperature_2m)}°`;
-                        linkEl.querySelector('.val-feels').innerText = `${Math.round(w.apparent_temperature)}°`;
-                        linkEl.querySelector('.val-rain').innerText = `${rainProb}%`;
-                        
-                        const iconEl = linkEl.querySelector('.weather-icon');
-                        iconEl.className = `fas ${info.icon} weather-icon`;
+                    } catch (e) {
+                        console.log('Weather API fetch failed.', e);
+                        showNoDataState(linkEl);
                     }
-                } catch (e) { console.log('Weather fetch failed', loc.id); }
+                } else {
+                    // 超過 14 天，顯示無資料狀態
+                    showNoDataState(linkEl);
+                }
             }
+        }
+
+        // 輔助函式：更新卡片 UI
+        function updateCard(linkEl, code, temp, rain, codesMap) {
+            const info = codesMap[code] || { text: "多雲", icon: "fa-cloud", css: "cloudy" };
+            
+            // 移除舊的 class 並加入新的
+            linkEl.className = `weather-card ${info.css}`;
+
+            // 重置可能被 showNoDataState 隱藏的樣式
+            const tempBox = linkEl.querySelector('.weather-temp-box');
+            tempBox.style.display = 'block';
+            tempBox.innerText = `${Math.round(temp)}°`;
+
+            const iconBox = linkEl.querySelector('.weather-icon-box');
+            iconBox.innerHTML = '<i class="fas weather-icon"></i>'; // Reset to icon structure
+            const iconEl = iconBox.querySelector('.weather-icon');
+            iconEl.className = `fas ${info.icon} weather-icon`;
+
+            const metricsBox = linkEl.querySelector('.weather-metrics-box');
+            // Reset metrics box style
+            metricsBox.style.marginRight = '12px';
+            metricsBox.style.flexDirection = 'row';
+            metricsBox.style.alignItems = 'center';
+            metricsBox.innerHTML = `
+                <div class="metric-item"><i class="fas fa-umbrella"></i> <span class="val-rain">--%</span></div>
+                <div class="metric-item"><i class="fas fa-temperature-high"></i> <span class="val-feels">--°</span></div>
+            `;
+
+            linkEl.querySelector('.val-feels').innerText = `${Math.round(temp)}°`; // 簡化：用氣溫代替體感
+            
+            // 如果 rain 有值顯示，沒有顯示 --%
+            if (rain !== undefined) {
+                linkEl.querySelector('.val-rain').innerText = `${rain}%`;
+            }
+        }
+
+        function showNoDataState(linkEl) {
+            // Clear specific forecast classes, add default
+            linkEl.className = 'weather-card cloudy'; 
+            
+            // Icon: Calendar
+            const iconBox = linkEl.querySelector('.weather-icon-box');
+            iconBox.innerHTML = '<i class="fas fa-calendar-alt"></i>';
+            
+            // Temp Box: Hide
+            const tempBox = linkEl.querySelector('.weather-temp-box');
+            tempBox.style.display = 'none'; 
+            
+            // Metrics Box: Show message
+            const metricsBox = linkEl.querySelector('.weather-metrics-box');
+            metricsBox.style.marginRight = 'auto'; // Push arrow to right
+            metricsBox.style.flexDirection = 'column';
+            metricsBox.style.alignItems = 'flex-start';
+            metricsBox.innerHTML = '<div style="font-size:0.9rem; font-weight:700;">尚無預報資料</div><div style="font-size:0.75rem; opacity:0.9;">請點擊查看外部網站資訊</div>';
         }
 
         /* --- Carousel Logic --- */
@@ -1934,6 +2477,8 @@
         fetchRate();
         fetchWeather();
         initCarousel();
+        // Init map for the initially active day (Day 1)
+        setTimeout(() => initDayMap('d1'), 500);
 
     </script>
 </body>
