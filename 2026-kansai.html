@@ -164,6 +164,8 @@
         }
         a.weather-card:active { transform: scale(0.98); }
         a.weather-card.sunny { background: linear-gradient(135deg, #fce38a 0%, #f38181 100%); }
+        /* 晴時多雲 (橘色調帶點藍灰，不如晴天刺眼) */
+        a.weather-card.partly-cloudy { background: linear-gradient(135deg, #FFD194 0%, #70E1F5 100%); }
         a.weather-card.cloudy { background: linear-gradient(135deg, #93a5cf 0%, #e4efe9 100%); color: #333 !important; }
         a.weather-card.rain { background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%); }
         a.weather-card.snow { background: linear-gradient(135deg, #83a4d4 0%, #b6fbff 100%); color: #2C3E50 !important; }
@@ -264,7 +266,7 @@
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            width: 45px; 
+            width: 60px;
             flex-shrink: 0; 
             padding-top: 2px;
             position: relative; 
@@ -282,6 +284,8 @@
             z-index: 10; 
             background-color: var(--bg); 
             padding: 2px 0;
+            width: 100%;
+            text-align: center;
         }
         
         .timeline-visual { position: relative; flex-grow: 1; width: 100%; display: flex; justify-content: center; }
@@ -489,7 +493,7 @@
         /* Back to Top Button */
         .back-to-top {
             position: fixed;
-            bottom: 90px; /* Above bottom nav */
+            bottom: 130px; /* Increased from 90px to avoid overlapping with nav on newer iPhones */
             right: 20px;
             width: 44px;
             height: 44px;
@@ -554,26 +558,32 @@
                     <div class="weather-icon-box"><i class="fas fa-cloud-sun weather-icon"></i></div>
                     <div class="weather-temp-box">--°</div>
                     <div class="weather-metrics-box">
-                        <div class="metric-item"><i class="fas fa-umbrella"></i> <span class="val-rain">--%</span></div>
                         <div class="metric-item"><i class="fas fa-temperature-high"></i> <span class="val-feels">--°</span></div>
+                        <div class="metric-item"><i class="fas fa-umbrella"></i> <span class="val-rain">--%</span></div>
                     </div>
                     <div class="weather-arrow"><i class="fas fa-chevron-right"></i></div>
                 </a>
 
-                <!-- Day 1 Route Map & Interactive Map -->
+                <!-- Day 1 Route Map -->
                 <div class="route-map-container">
-                    <div class="route-step"><div class="route-circle">1</div><div class="route-label">機場<br>16:55</div><div class="route-line"></div></div>
-                    <div class="route-step"><div class="route-circle">2</div><div class="route-label">京都站<br>19:34</div><div class="route-line"></div></div>
-                    <div class="route-step"><div class="route-circle">3</div><div class="route-label">飯店<br>19:40</div><div class="route-line"></div></div>
-                    <div class="route-step"><div class="route-circle">4</div><div class="route-label">晚餐<br>20:30</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">1</div><div class="route-label">桃園機場<br>11:30</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">2</div><div class="route-label">關西機場<br>16:55</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">3</div><div class="route-label">京都站<br>19:34</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">4</div><div class="route-label">進進堂<br>19:40</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">5</div><div class="route-label">飯店<br>20:00</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">6</div><div class="route-label">晚餐<br>20:30</div><div class="route-line"></div></div>
                 </div>
-                <!-- FIXED ID: d1-map -->
-                <div id="d1-map" class="leaflet-map-container"></div>
 
                 <div class="timeline-container">
                     <!-- 新增：集合時間 -->
                     <div class="timeline-item">
-                        <div class="timeline-marker"><div class="timeline-time">11:30</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
+                        <div class="timeline-marker">
+                            <div class="timeline-time">11:30</div>
+                            <div class="timeline-visual">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-line" style="top: 0;"></div>
+                            </div>
+                        </div>
                         <div class="content-col">
                             <div class="spot-body">
                                 <h3 class="spot-title">桃園機場第二航廈集合</h3>
@@ -621,8 +631,8 @@
                                 <h3 class="spot-title">抵達關西機場 T1</h3>
                                 <div class="tags-row"><span class="mini-tag warn">入境</span><span class="mini-tag">領取票券</span></div>
                                 <div class="spot-desc">辦理入境手續、領取行李。</div>
-                                <a href="https://services.digital.go.jp/zh-cmn-hant/visit-japan-web/" target="_blank" class="spot-nav-btn pending">
-                                    <i class="fas fa-clipboard-check"></i> Visit Japan Web (尚未填寫)
+                                <a href="https://www.vjw.digital.go.jp/" target="_blank" class="spot-nav-btn">
+                                    <i class="fas fa-clipboard-check"></i> Visit Japan Web
                                 </a>
                             </div>
                         </div>
@@ -658,15 +668,34 @@
                                     </div>
                                 </div>
                                 <div style="margin-top:10px;">
-                                    <a href="https://drive.google.com/drive/folders/1mx-v7M8NXtpr_N_f54wK6gYC8xgeLukc?usp=drive_link" class="spot-nav-btn pending" target="_blank">
-                                        <i class="fas fa-ticket-alt"></i> 車票連結 (尚未購買)
+                                    <a href="https://guest-ui.west-qr.com/#/packages/login/signUp" class="spot-nav-btn" target="_blank">
+                                        <i class="fas fa-ticket-alt"></i> 電子車票
                                     </a>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    
+                    <!-- 19:40 進進堂 -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">19:40</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
+                        <div class="content-col">
+                            <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1000&auto=format&fit=crop" class="spot-image" alt="Shinshindo Bakery" onerror="this.src='https://placehold.co/800x400?text=Bakery'">
+                            <div class="spot-body">
+                                <h3 class="spot-title">進進堂 JR京都站前店</h3>
+                                <div class="tags-row"><span class="mini-tag must-eat">麵包名店</span><span class="mini-tag">早餐預備</span></div>
+                                <div class="spot-desc">
+                                    創立於1913年的京都麵包老舖，傳承自巴黎的道地烘焙技術，空氣中總是瀰漫著剛出爐的迷人麥香。這間位於京都車站前的分店，是品嚐京都洋食底蘊的絕佳選擇。<br>
+                                    <strong>必買推薦：</strong>層次分明的「可頌」、料多實在的「咖哩麵包」，以及口感帶勁的「明太子法國麵包」。
+                                </div>
+                                <a href="https://maps.google.com/?q=進進堂+JR京都站前店" class="spot-nav-btn"><i class="fas fa-location-dot"></i> 導航</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 20:00 飯店 -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">20:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
                             <!-- Carousel for Hotel -->
                             <div class="carousel-container" id="hotel-carousel">
@@ -712,7 +741,7 @@
                         </div>
                     </div>
 
-                    <!-- 20:30 晚餐 (新增實驗功能) -->
+                    <!-- 20:30 晚餐 -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">20:30</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
@@ -742,11 +771,14 @@
                 <a href="#" target="_blank" class="weather-card" id="weather-d2">
                     <div class="weather-icon-box"><i class="fas fa-cloud-sun weather-icon"></i></div>
                     <div class="weather-temp-box">--°</div>
-                    <div class="weather-metrics-box"><div class="metric-item"><i class="fas fa-umbrella"></i> <span class="val-rain">--%</span></div><div class="metric-item"><i class="fas fa-temperature-high"></i> <span class="val-feels">--°</span></div></div>
+                    <div class="weather-metrics-box">
+                        <div class="metric-item"><i class="fas fa-temperature-high"></i> <span class="val-feels">--°</span></div>
+                        <div class="metric-item"><i class="fas fa-umbrella"></i> <span class="val-rain">--%</span></div>
+                    </div>
                     <div class="weather-arrow"><i class="fas fa-chevron-right"></i></div>
                 </a>
 
-                <!-- Day 2 Route Map & Interactive Map -->
+                <!-- Day 2 Route Map -->
                 <div class="route-map-container">
                     <div class="route-step"><div class="route-circle">1</div><div class="route-label">飯店<br>08:20</div><div class="route-line"></div></div>
                     <div class="route-step"><div class="route-circle">2</div><div class="route-label">嵐山<br>09:00</div><div class="route-line"></div></div>
@@ -892,7 +924,7 @@
                 <a href="#" target="_blank" class="weather-card" id="weather-d3">
                     <div class="weather-icon-box"><i class="fas fa-snowflake weather-icon"></i></div>
                     <div class="weather-temp-box">--°</div>
-                    <div class="weather-metrics-box"><div class="metric-item"><i class="fas fa-umbrella"></i> <span class="val-rain">--%</span></div><div class="metric-item"><i class="fas fa-temperature-high"></i> <span class="val-feels">--°</span></div></div>
+                    <div class="weather-metrics-box"><div class="metric-item"><i class="fas fa-temperature-high"></i> <span class="val-feels">--°</span></div><div class="metric-item"><i class="fas fa-umbrella"></i> <span class="val-rain">--%</span></div></div>
                     <div class="weather-arrow"><i class="fas fa-chevron-right"></i></div>
                 </a>
 
@@ -1154,6 +1186,8 @@
                         </div>
                     </div>
                 </div>
+                 <!-- Interactive Map Day 3 -->
+                <div id="d3-map" class="leaflet-map-container"></div>
             </div>
 
             <!-- Day 4 -->
@@ -1161,7 +1195,7 @@
                 <a href="#" target="_blank" class="weather-card" id="weather-d4">
                     <div class="weather-icon-box"><i class="fas fa-cloud-sun weather-icon"></i></div>
                     <div class="weather-temp-box">--°</div>
-                    <div class="weather-metrics-box"><div class="metric-item"><i class="fas fa-umbrella"></i> <span class="val-rain">--%</span></div><div class="metric-item"><i class="fas fa-temperature-high"></i> <span class="val-feels">--°</span></div></div>
+                    <div class="weather-metrics-box"><div class="metric-item"><i class="fas fa-temperature-high"></i> <span class="val-feels">--°</span></div><div class="metric-item"><i class="fas fa-umbrella"></i> <span class="val-rain">--%</span></div></div>
                     <div class="weather-arrow"><i class="fas fa-chevron-right"></i></div>
                 </a>
 
@@ -1177,8 +1211,6 @@
                 <div id="d4-map" class="leaflet-map-container"></div>
 
                 <div class="timeline-container">
-                    
-                    <!-- 10:00 宇治 (Moved to Morning) -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">10:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
@@ -1194,7 +1226,6 @@
                         </div>
                     </div>
 
-                    <!-- 13:30 奈良公園 (Moved to Afternoon) -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">13:30</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
@@ -1210,7 +1241,6 @@
                         </div>
                     </div>
 
-                    <!-- 16:30 前往大阪 -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">16:30</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
@@ -1222,7 +1252,6 @@
                         </div>
                     </div>
 
-                    <!-- 18:00 飯店 -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">18:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
@@ -1911,17 +1940,29 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
     <script>
+        // ==========================================
+        // ★★★ 天氣手動設定區 (旅途中請改這裡) ★★★
+        // ==========================================
+        // code (代碼) 參考: 
+        // 0=晴天, 1=晴時多雲, 2=多雲, 3=陰天
+        // 61=下雨, 71=下雪
+        const MANUAL_FORECAST = {
+            'weather-d1': { code: 71, temp: -2, realFeel: -9, rain: 55 }, // Day 1 (2/8) 少量降雪
+            'weather-d2': { code: 0,  temp: 7,  realFeel: 4,  rain: 3  }, // Day 2 (2/9) 晴天
+            'weather-d3': { code: 1,  temp: 10, realFeel: 9,  rain: 25 }, // Day 3 (2/10) 晴時多雲 (更新)
+            'weather-d4': { code: 61, temp: 10, realFeel: 11, rain: 80 }, // Day 4 (2/11) 雨天
+            'weather-d5': { code: 0,  temp: 12, realFeel: 13, rain: 0  }, // Day 5 (2/12) 晴天
+            'weather-d6': { code: 0,  temp: 13, realFeel: 14, rain: 1  }, // Day 6 (2/13) 晴天
+            'weather-d7': { code: 0,  temp: 14, realFeel: 16, rain: 0  }  // Day 7 (2/14) 晴天
+        };
+        // ==========================================
+
         let currentRate = 0.218;
         
         // --- Map Data for All Days ---
         const mapInstances = {}; // Store map instances by id
         const tourData = {
-            'd1': [
-                { lat: 34.4320, lng: 135.2304, title: "1. 關西機場" },
-                { lat: 34.9858, lng: 135.7588, title: "2. 京都車站" },
-                { lat: 34.98917, lng: 135.75710, title: "3. 飯店" },
-                { lat: 34.98916, lng: 135.75704, title: "4. 晚餐" }
-            ],
+            /* d1 Removed (no map for day 1) */
             'd2': [
                 { lat: 34.98917, lng: 135.75710, title: "1. 飯店" },
                 { lat: 35.0094, lng: 135.6668, title: "2. 嵐山" },
@@ -2166,9 +2207,9 @@
 
             const weatherCodes = {
                 0: { text: "晴朗", icon: "fa-sun", css: "sunny" },
-                1: { text: "多雲", icon: "fa-cloud-sun", css: "cloudy" },
-                2: { text: "多雲", icon: "fa-cloud-sun", css: "cloudy" },
-                3: { text: "陰天", icon: "fa-cloud", css: "cloudy" },
+                1: { text: "晴時多雲", icon: "fa-cloud-sun", css: "partly-cloudy" }, // 更新樣式對應
+                2: { text: "多雲", icon: "fa-cloud", css: "cloudy" },
+                3: { text: "陰天", icon: "fa-smog", css: "cloudy" },
                 45: { text: "有霧", icon: "fa-smog", css: "cloudy" },
                 48: { text: "有霧", icon: "fa-smog", css: "cloudy" },
                 51: { text: "毛毛雨", icon: "fa-cloud-rain", css: "rain" },
@@ -2189,7 +2230,7 @@
                 const linkEl = document.getElementById(loc.id);
                 if (!linkEl) continue;
 
-                // 設定 AccuWeather 連結參數
+                // 設定 AccuWeather 連結參數 (計算天數)
                 const targetDate = new Date(loc.date);
                 targetDate.setHours(0,0,0,0);
                 const diffTime = targetDate - today;
@@ -2198,97 +2239,62 @@
                 if (dayParam < 1) dayParam = 1; 
                 linkEl.href = `${loc.accuUrl}?day=${dayParam}`;
 
-                // 2. 決定要顯示的數據 (API 邏輯優化)
-                // Open-Meteo 免費版預測 16 天。如果旅遊日期在 14 天內，嘗試抓 API
-                if (diffDays >= 0 && diffDays < 14) {
-                    try {
-                        const url = `https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lon}&daily=weather_code,temperature_2m_max,precipitation_probability_max&forecast_days=16&timezone=Asia%2FTokyo`;
-                        const res = await fetch(url);
-                        const data = await res.json();
-                        
-                        // 【優化重點】不使用 diffDays 索引，而是直接尋找「日期字串」
-                        // 這能避免時區計算錯誤導致抓到隔天的天氣
-                        if (data && data.daily && data.daily.time) {
-                            const targetIndex = data.daily.time.indexOf(loc.date);
-
-                            if (targetIndex !== -1 && data.daily.weather_code[targetIndex] !== undefined) {
-                                // 找到對應日期的資料了
-                                const code = data.daily.weather_code[targetIndex];
-                                const temp = data.daily.temperature_2m_max[targetIndex];
-                                const rain = data.daily.precipitation_probability_max[targetIndex];
-                                
-                                updateCard(linkEl, code, temp, rain, weatherCodes);
-                            } else {
-                                // 日期超出 API 範圍
-                                showNoDataState(linkEl);
-                            }
-                        } else {
-                            showNoDataState(linkEl);
-                        }
-                    } catch (e) {
-                        console.log('Weather API fetch failed.', e);
-                        showNoDataState(linkEl);
-                    }
+                // ★ 使用手動鎖定數據 ★
+                // 這樣可以確保顯示的資訊 100% 符合您的預期
+                if (MANUAL_FORECAST[loc.id]) {
+                    const data = MANUAL_FORECAST[loc.id];
+                    updateCard(linkEl, data.code, data.temp, data.rain, weatherCodes, data.realFeel);
                 } else {
-                    // 超過 14 天，顯示無資料狀態
+                    // Fallback (如果忘記設定手動數據)
                     showNoDataState(linkEl);
                 }
             }
         }
 
-        // 輔助函式：更新卡片 UI
-        function updateCard(linkEl, code, temp, rain, codesMap) {
+        // 輔助函式：更新卡片 UI (新增 realFeel 參數)
+        function updateCard(linkEl, code, temp, rain, codesMap, realFeel) {
+            // 預設 fallback
             const info = codesMap[code] || { text: "多雲", icon: "fa-cloud", css: "cloudy" };
             
             // 移除舊的 class 並加入新的
             linkEl.className = `weather-card ${info.css}`;
 
-            // 重置可能被 showNoDataState 隱藏的樣式
+            // 顯示溫度
             const tempBox = linkEl.querySelector('.weather-temp-box');
             tempBox.style.display = 'block';
             tempBox.innerText = `${Math.round(temp)}°`;
 
+            // 顯示圖示
             const iconBox = linkEl.querySelector('.weather-icon-box');
-            iconBox.innerHTML = '<i class="fas weather-icon"></i>'; // Reset to icon structure
+            iconBox.innerHTML = '<i class="fas weather-icon"></i>'; 
             const iconEl = iconBox.querySelector('.weather-icon');
             iconEl.className = `fas ${info.icon} weather-icon`;
 
+            // 計算體感溫度 (如果有手動設定則使用，否則使用原氣溫)
+            const feelsLike = (realFeel !== undefined) ? realFeel : temp;
+
+            // 顯示降雨機率與體感 (更新順序：體感在前，降雨在後)
             const metricsBox = linkEl.querySelector('.weather-metrics-box');
-            // Reset metrics box style
             metricsBox.style.marginRight = '12px';
             metricsBox.style.flexDirection = 'row';
             metricsBox.style.alignItems = 'center';
             metricsBox.innerHTML = `
-                <div class="metric-item"><i class="fas fa-umbrella"></i> <span class="val-rain">--%</span></div>
-                <div class="metric-item"><i class="fas fa-temperature-high"></i> <span class="val-feels">--°</span></div>
+                <div class="metric-item"><i class="fas fa-temperature-high"></i> <span class="val-feels">${Math.round(feelsLike)}°</span></div>
+                <div class="metric-item"><i class="fas fa-umbrella"></i> <span class="val-rain">${rain}%</span></div>
             `;
-
-            linkEl.querySelector('.val-feels').innerText = `${Math.round(temp)}°`; // 簡化：用氣溫代替體感
-            
-            // 如果 rain 有值顯示，沒有顯示 --%
-            if (rain !== undefined) {
-                linkEl.querySelector('.val-rain').innerText = `${rain}%`;
-            }
         }
 
         function showNoDataState(linkEl) {
-            // Clear specific forecast classes, add default
             linkEl.className = 'weather-card cloudy'; 
-            
-            // Icon: Calendar
             const iconBox = linkEl.querySelector('.weather-icon-box');
             iconBox.innerHTML = '<i class="fas fa-calendar-alt"></i>';
-            
-            // Temp Box: Hide
             const tempBox = linkEl.querySelector('.weather-temp-box');
             tempBox.style.display = 'none'; 
-            
-            // Metrics Box: Show message
             const metricsBox = linkEl.querySelector('.weather-metrics-box');
-            metricsBox.style.marginRight = 'auto'; // Push arrow to right
+            metricsBox.style.marginRight = 'auto'; 
             metricsBox.style.flexDirection = 'column';
             metricsBox.style.alignItems = 'flex-start';
-            metricsBox.innerHTML = '<div style="font-size:0.9rem; font-weight:700;">尚無預報資料</div><div style="font-size:0.75rem; opacity:0.9;">請點擊查看外部網站資訊</div>';
+            metricsBox.innerHTML = '<div style="font-size:0.9rem; font-weight:700;">點擊查看天氣</div><div style="font-size:0.75rem; opacity:0.9;">AccuWeather 預報</div>';
         }
 
         /* --- Carousel Logic --- */
