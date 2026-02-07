@@ -573,6 +573,8 @@
                     <div class="route-step"><div class="route-circle">5</div><div class="route-label">飯店<br>20:00</div><div class="route-line"></div></div>
                     <div class="route-step"><div class="route-circle">6</div><div class="route-label">晚餐<br>20:30</div><div class="route-line"></div></div>
                 </div>
+                
+                <!-- Day 1 Map Removed (as requested) -->
 
                 <div class="timeline-container">
                     <!-- 新增：集合時間 -->
@@ -581,7 +583,7 @@
                             <div class="timeline-time">11:30</div>
                             <div class="timeline-visual">
                                 <div class="timeline-dot"></div>
-                                <div class="timeline-line" style="top: 0;"></div>
+                                <div class="timeline-line" style="top: 0;"></div> <!-- 修正：強制第一條線不往上凸 -->
                             </div>
                         </div>
                         <div class="content-col">
@@ -631,6 +633,7 @@
                                 <h3 class="spot-title">抵達關西機場 T1</h3>
                                 <div class="tags-row"><span class="mini-tag warn">入境</span><span class="mini-tag">領取票券</span></div>
                                 <div class="spot-desc">辦理入境手續、領取行李。</div>
+                                <!-- 修正：VJW 按鈕樣式改回預設，移除綠色樣式與勾勾 -->
                                 <a href="https://www.vjw.digital.go.jp/" target="_blank" class="spot-nav-btn">
                                     <i class="fas fa-clipboard-check"></i> Visit Japan Web
                                 </a>
@@ -668,6 +671,7 @@
                                     </div>
                                 </div>
                                 <div style="margin-top:10px;">
+                                    <!-- 修正：移除 (開啟連結) 文字 -->
                                     <a href="https://guest-ui.west-qr.com/#/packages/login/signUp" class="spot-nav-btn" target="_blank">
                                         <i class="fas fa-ticket-alt"></i> 電子車票
                                     </a>
@@ -676,7 +680,7 @@
                         </div>
                     </div>
                     
-                    <!-- 19:40 進進堂 -->
+                    <!-- 19:40 進進堂 (已更新內容) -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">19:40</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
@@ -693,7 +697,7 @@
                         </div>
                     </div>
 
-                    <!-- 20:00 飯店 -->
+                    <!-- 20:00 飯店 (Updated Time) -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">20:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
@@ -718,7 +722,7 @@
                                 <div class="tags-row"><span class="mini-tag">住宿</span><span class="mini-tag must-see">大浴場</span></div>
                                 <div class="spot-desc">
                                     Hotel Androoms Kyoto Shichijo<br>
-                                    • 京都站步行約 8-10 分鐘<br>
+                                    • 京都站步行約 8-10 分鐘。本日續住。<br>
                                     • 飯店設有大浴場 (1F)<br>
                                     • 附近步行可至全家超商、唐吉訶德及Yodobashi 電器賣場
                                     <div style="margin-top:8px; padding:10px; background:#f5f5f5; border-radius:8px; font-size:0.85rem; color:#555; line-height: 1.6;">
@@ -741,7 +745,7 @@
                         </div>
                     </div>
 
-                    <!-- 20:30 晚餐 -->
+                    <!-- 20:30 晚餐 (新增實驗功能) -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">20:30</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
@@ -755,7 +759,7 @@
                                 <div style="display:flex; gap:8px; flex-wrap:wrap;">
                                     <a href="https://maps.app.goo.gl/wJq5qZ8z8z8z8z8z8" class="spot-nav-btn" onclick="window.open('https://maps.google.com/?q=京茶花+南新町', '_blank'); return false;"><i class="fas fa-location-dot"></i> 導航</a>
                                     <!-- 實驗功能按鈕 -->
-                                    <button class="spot-nav-btn" onclick="toggleMenu()" style="background:#FFF3E0; color:#E67E22; border:1px solid #FFE0B2;">
+                                    <button class="spot-nav-btn" onclick="openMenu('kyochabana')" style="background:#FFF3E0; color:#E67E22; border:none;">
                                         <i class="fas fa-book-open"></i> 點餐小幫手
                                     </button>
                                 </div>
@@ -781,10 +785,10 @@
                 <!-- Day 2 Route Map -->
                 <div class="route-map-container">
                     <div class="route-step"><div class="route-circle">1</div><div class="route-label">飯店<br>08:20</div><div class="route-line"></div></div>
-                    <div class="route-step"><div class="route-circle">2</div><div class="route-label">嵐山<br>09:00</div><div class="route-line"></div></div>
-                    <div class="route-step"><div class="route-circle">3</div><div class="route-label">午餐<br>12:00</div><div class="route-line"></div></div>
-                    <div class="route-step"><div class="route-circle">4</div><div class="route-label">鐵道<br>14:00</div><div class="route-line"></div></div>
-                    <div class="route-step"><div class="route-circle">5</div><div class="route-label">晚餐<br>18:00</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">2</div><div class="route-label">嵯峨嵐山<br>09:00</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">3</div><div class="route-label">嵐山散策<br>上午</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">4</div><div class="route-label">午餐<br>11:00</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">5</div><div class="route-label">鐵道館<br>14:00</div><div class="route-line"></div></div>
                     <div class="route-step"><div class="route-circle">6</div><div class="route-label">飯店<br>19:30</div><div class="route-line"></div></div>
                 </div>
                 <!-- FIXED ID: d2-map -->
@@ -792,48 +796,170 @@
 
                 <div class="timeline-container">
                     
-                    <!-- 09:00 嵐山小火車 -->
+                    <!-- 卡片一：09:00 JR 京都站 → 嵯峨嵐山站 (更換照片、新增路線、統一按鈕) -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">09:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
-                            <img src="https://plus.unsplash.com/premium_photo-1664302959152-c51a246c88be?q=80&w=1744&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="spot-image" alt="Arashiyama" onerror="this.src='https://placehold.co/800x400?text=Arashiyama'">
+                            <img src="https://lh3.googleusercontent.com/places/ANJU3DtKE2dZW26-_KjHGLzta_OyDavRvcNYaHN2s6eNW-wLC_82zGgLev-h2KC3GYIod8wta0iPVM7ut1O2t4Y5LMDF2iRrE8A4hCQ=s1600-w480" class="spot-image" alt="JR Train" onerror="this.src='https://placehold.co/800x400?text=JR+Train'">
                             <div class="spot-body">
-                                <h3 class="spot-title">嵐山散策</h3>
-                                <div class="tags-row"><span class="mini-tag must-see">竹林小徑</span><span class="mini-tag">渡月橋</span></div>
+                                <h3 class="spot-title">JR 京都站 → 嵯峨嵐山站</h3>
+                                <div class="tags-row"><span class="mini-tag">交通</span><span class="mini-tag">JR山陰本線</span></div>
                                 <div class="spot-desc">
-                                    嵐山是京都最具代表性的風景勝地，四季皆有不同風情。行程從搭乘復古的「嵯峨野觀光小火車」開始，沿著保津川峽谷行駛，在開放式車廂中感受山風與絕美溪谷景色。下車後，步行進入舉世聞名的「竹林小徑」，高聳入雲的翠綠竹林遮蔽天空，光影灑落下充滿神秘與禪意，是拍攝全家福的絕佳地點。接著參拜以求良緣聞名的「野宮神社」，保留著日本最古老的黑木鳥居。最後漫步至嵐山的地標「渡月橋」，欣賞桂川的潺潺流水與背後嵐山的壯麗景色，感受平安時代貴族鍾愛的度假氛圍。沿途商店街更有各式抹茶甜點與紀念品，值得細細品味。
+                                    從京都車站搭乘 JR 山陰本線（嵯峨野線）前往嵯峨嵐山站，車程約 17 分鐘。這是一條快速便捷的路線，避開了市區公車的壅塞，出站後步行即可開始嵐山的探索之旅。<br>
+                                    <div style="margin-top:8px; padding:8px; background:#f0f2f5; border-radius:8px; font-weight:600; color:var(--primary); font-size:0.85rem; line-height: 1.6;">
+                                        E01 京都站 → E02 梅小路京都西 → ... → E07太秦 → E08 嵯峨嵐山站
+                                    </div>
                                 </div>
-                                <a href="https://maps.google.com/?q=Arashiyama+Bamboo+Grove" class="spot-nav-btn"><i class="fas fa-location-dot"></i> 導航</a>
+                                <a href="https://maps.google.com/?q=JR嵯峨嵐山站" class="spot-nav-btn"><i class="fas fa-location-dot"></i> 導航</a>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 12:00 嵐山午餐 -->
+                    <!-- 卡片二：09:30 野宮神社 (更換照片、移除按鈕) -->
                     <div class="timeline-item">
-                        <div class="timeline-marker"><div class="timeline-time">12:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
+                        <div class="timeline-marker"><div class="timeline-time">09:30</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
-                            <img src="https://images.unsplash.com/photo-1558985250-27a406d64cb3?auto=format&fit=crop&w=800&q=80" class="spot-image" alt="Kyoto Lunch" onerror="this.src='https://placehold.co/800x400?text=Kyoto+Lunch'">
+                            <img src="https://tw.wamazing.com/media/wp-content/uploads/sites/4/2022/10/arashiyamawiter_33475633.jpg.webp" class="spot-image" alt="Nonomiya Shrine" onerror="this.src='https://placehold.co/800x400?text=Nonomiya+Shrine'">
                             <div class="spot-body">
-                                <h3 class="spot-title">嵐山午餐</h3>
-                                <div class="tags-row"><span class="mini-tag must-eat">湯豆腐</span><span class="mini-tag">蕎麥麵</span></div>
+                                <h3 class="spot-title">野宮神社</h3>
+                                <div class="tags-row"><span class="mini-tag must-see">締結良緣</span><span class="mini-tag">黑木鳥居</span></div>
                                 <div class="spot-desc">
-                                    嵐山的湯豆腐口感細緻滑順，是當地名物。我們會找一家有大桌位的湯豆腐或蕎麥麵餐廳，讓一家大小都能舒適地享用暖呼呼的京都午餐。
+                                    藏身於竹林中的古老神社，以祈求良緣與學業進步聞名。這裡保留著日本現存最古老的樹皮黑木鳥居，充滿了平安時代的文學氣息。別忘了摸摸社內的「龜石」，據說能實現願望喔。
                                 </div>
-                                <a href="https://maps.google.com/?q=Arashiyama+Lunch" class="spot-nav-btn"><i class="fas fa-utensils"></i> 搜尋附近餐廳</a>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 13:30 移動 -->
+                    <!-- 卡片三：竹林小徑 (更換照片、移除按鈕) -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time" style="opacity:0">00:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
+                        <div class="content-col">
+                            <img src="https://wp-odai.wamazing.com/media/wp-content/uploads/sites/2/2022/10/arashiyamawiter_ac_23169365_m.jpg.webp" class="spot-image" alt="Bamboo Grove" onerror="this.src='https://placehold.co/800x400?text=Bamboo+Grove'">
+                            <div class="spot-body">
+                                <h3 class="spot-title">竹林小徑</h3>
+                                <div class="tags-row"><span class="mini-tag must-see">打卡聖地</span><span class="mini-tag">全家福</span></div>
+                                <div class="spot-desc">
+                                    嵐山最具代表性的景觀。高聳入雲的翠綠竹林遮蔽了天空，陽光從縫隙間灑落，光影交錯充滿禪意。走在微風吹拂的步道上，聽著竹葉沙沙作響，感受京都獨有的幽靜與神秘氛圍。
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 卡片四：天龍寺 (更換照片、移除按鈕) -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time" style="opacity:0">00:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
+                        <div class="content-col">
+                            <img src="https://wp-odai.wamazing.com/media/wp-content/uploads/sites/2/2024/07/tenryuji_pixta_16647116_M.jpg.webp" class="spot-image" alt="Tenryuji" onerror="this.src='https://placehold.co/800x400?text=Tenryuji'">
+                            <div class="spot-body">
+                                <h3 class="spot-title">天龍寺</h3>
+                                <div class="tags-row"><span class="mini-tag">世界遺產</span><span class="mini-tag">曹源池</span></div>
+                                <div class="spot-desc">
+                                    列名世界遺產的禪寺，以名園「曹源池庭園」著稱。庭園設計巧妙地借景嵐山與龜山，隨著四季更迭展現不同風貌。坐在方丈緣側靜靜欣賞枯山水與池泉迴遊式庭園，心靈也隨之沉澱。
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 卡片五：渡月橋、嵐山公園 (更換照片、移除按鈕) -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time" style="opacity:0">00:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
+                        <div class="content-col">
+                            <img src="https://www.sagano-kanko.co.jp/tc/wp-content/uploads/sites/4/2024/03/saga_togetsukyo-960x600.jpg" class="spot-image" alt="Togetsukyo Bridge" onerror="this.src='https://placehold.co/800x400?text=Togetsukyo'">
+                            <div class="spot-body">
+                                <h3 class="spot-title">渡月橋、嵐山公園</h3>
+                                <div class="tags-row"><span class="mini-tag must-see">地標</span><span class="mini-tag">桂川</span></div>
+                                <div class="spot-desc">
+                                    橫跨桂川的渡月橋是嵐山的象徵，因形似彎月跨越河面而得名。站在橋上眺望背後的嵐山與潺潺流水，景色開闊壯麗。過橋後的嵐山公園中之島地區，更是散步與欣賞河岸風光的絕佳地點。
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 卡片六：友禪的光林 (更換照片、移除按鈕) -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time" style="opacity:0">00:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
+                        <div class="content-col">
+                            <img src="https://cdn.zekkei-japan.jp/images/spots/d209c8c65b7c96c0a63f0a06168bec9f.jpg" class="spot-image" alt="Kimono Forest" onerror="this.src='https://placehold.co/800x400?text=Kimono+Forest'">
+                            <div class="spot-body">
+                                <h3 class="spot-title">友禪的光林 (Kimono Forest)</h3>
+                                <div class="tags-row"><span class="mini-tag must-see">京友禪</span><span class="mini-tag">嵐電站</span></div>
+                                <div class="spot-desc">
+                                    位於嵐電嵐山站內的藝術裝置，由約 600 根裝飾著京友禪圖騰的圓柱組成。白天色彩繽紛絢麗，彷彿置身於和服森林中；夜晚點燈後更是夢幻迷人。這裡還有「龍之愛宕池」，是祈求旅途平安的能量點。
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 卡片七：11:00 嵐山よしむら 蕎麥麵 (更換照片、統一按鈕) -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">11:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
+                        <div class="content-col">
+                            <img src="https://yoshimura-gr.com/arashiyama/images/menu/togetuzen.jpg" class="spot-image" alt="Soba" onerror="this.src='https://placehold.co/800x400?text=Soba'">
+                            <div class="spot-body">
+                                <h3 class="spot-title">嵐山よしむら 蕎麥麵</h3>
+                                <div class="tags-row"><span class="mini-tag must-eat">景觀餐廳</span><span class="mini-tag">手打蕎麥</span></div>
+                                <div class="spot-desc">
+                                    位於渡月橋畔的人氣名店，一邊享用職人手打的蕎麥麵，一邊從窗戶眺望桂川與渡月橋的絕景。麵條香氣濃郁口感Q彈，搭配酥脆的天婦羅更是絕配。建議提前抵達以縮短排隊等候時間。
+                                </div>
+                                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                                    <a href="https://maps.google.com/?q=嵐山よしむら" class="spot-nav-btn"><i class="fas fa-location-dot"></i> 導航</a>
+                                    <!-- 新增 Day 2 點餐小幫手 -->
+                                    <button class="spot-nav-btn" onclick="openMenu('yoshimura')" style="background:#FFF3E0; color:#E67E22; border:none;">
+                                        <i class="fas fa-book-open"></i> 點餐小幫手
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 卡片八：% ARABICA 京都嵐山店 (更換照片、統一按鈕) -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time" style="opacity:0">00:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
+                        <div class="content-col">
+                            <img src="https://banbi.tw/wp-content/uploads/20160505155615_21.jpg" class="spot-image" alt="Arabica Coffee" onerror="this.src='https://placehold.co/800x400?text=Arabica'">
+                            <div class="spot-body">
+                                <h3 class="spot-title">% ARABICA 京都嵐山店</h3>
+                                <div class="tags-row"><span class="mini-tag must-eat">世界級拿鐵</span><span class="mini-tag">網美店</span></div>
+                                <div class="spot-desc">
+                                    坐落於桂川河畔的純白極簡咖啡店，是全球咖啡迷朝聖的熱點。點一杯香醇濃郁的拿鐵，坐在堤岸邊吹著微風，欣賞渡月橋與波光粼粼的河面，享受極致的悠閒時光。記得要拍張 logo 與背景合影的美照！
+                                </div>
+                                <a href="https://maps.google.com/?q=%25+ARABICA+Kyoto+Arashiyama" class="spot-nav-btn"><i class="fas fa-location-dot"></i> 導航</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 卡片九：嵐山 拉拉熊茶房 (更換照片、統一按鈕) -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time" style="opacity:0">00:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
+                        <div class="content-col">
+                            <img src="https://static.popdaily.com.tw/u/202409/9bca11c9-ba92-4b03-8446-0dfb31e6fd1c.jpeg" class="spot-image" alt="Rilakkuma Cafe" onerror="this.src='https://placehold.co/800x400?text=Rilakkuma+Cafe'">
+                            <div class="spot-body">
+                                <h3 class="spot-title">嵐山 拉拉熊茶房</h3>
+                                <div class="tags-row"><span class="mini-tag must-eat">造型甜點</span><span class="mini-tag">限定周邊</span></div>
+                                <div class="spot-desc">
+                                    結合了「和風 × 拉拉熊」的主題茶房，整間店充滿了京都傳統町家的氛圍。這裡提供造型可愛到捨不得吃的拉拉熊餐點與甜點，如拉拉熊咖哩飯或抹茶百匯。一樓商店還有販售許多京都限定的拉拉熊蜂蜜周邊商品！
+                                </div>
+                                <a href="https://maps.google.com/?q=嵐山りらっくま茶房" class="spot-nav-btn"><i class="fas fa-location-dot"></i> 導航</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 13:30 移動：更新為詳細交通卡片 -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">13:30</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
+                            <img src="https://pimg.1px.tw/visitkyototw/1552621641-3210357052.jpg" class="spot-image" alt="JR Train" onerror="this.src='https://placehold.co/800x400?text=JR+Train'">
                             <div class="spot-body">
-                                <h3 class="spot-title">移動：嵐山 -> 梅小路</h3>
-                                <div class="tags-row"><span class="mini-tag">JR</span><span class="mini-tag">約30分</span></div>
+                                <h3 class="spot-title">JR 嵯峨嵐山站 → 梅小路京都西站</h3>
+                                <div class="tags-row"><span class="mini-tag">交通</span><span class="mini-tag">JR山陰本線</span></div>
                                 <div class="spot-desc">
-                                    從 JR 嵯峨嵐山站搭車前往 JR 梅小路京都西站。車程舒適快速，出站後立刻就能抵達鐵道博物館，非常方便。
+                                    結束上午充實的嵐山漫步，搭乘 JR 山陰本線返回市區。這班列車將直接帶我們前往下午的重頭戲——京都鐵道博物館（梅小路京都西站下車），車程僅需約 15 分鐘。這是連結這兩個景點最快速便捷的交通方式，讓親子行程能夠無縫接軌，大人小孩都能輕鬆移動。<br>
+                                    <div style="margin-top:8px; padding:8px; background:#f0f2f5; border-radius:8px; font-weight:600; color:var(--primary); font-size:0.85rem; line-height: 1.6;">
+                                        E08 嵯峨嵐山站 → E07太秦 → ... → E03 丹波口 → E02 梅小路京都西
+                                    </div>
                                 </div>
+                                <!-- 修正：導航連結改為梅小路京都西站 -->
+                                <a href="https://maps.google.com/?q=梅小路京都西站" class="spot-nav-btn"><i class="fas fa-location-dot"></i> 導航</a>
                             </div>
                         </div>
                     </div>
@@ -847,23 +973,57 @@
                                 <h3 class="spot-title">京都鐵道博物館</h3>
                                 <div class="tags-row"><span class="mini-tag must-see">室內</span><span class="mini-tag">扇形車庫</span></div>
                                 <div class="spot-desc">
-                                    日本最大級別的鐵道博物館，是鐵道迷與親子遊客的聖地。館內收藏了從蒸汽火車到新幹線共 53 輛具有歷史價值的真實車輛，包括初代 0 系新幹線與充滿回憶的寢台列車。這裡強調「觀賞、觸摸、體驗」，除了能近距離觀察車輛底盤結構，還有讓小朋友瘋狂的模擬駕駛體驗。戶外擁有現存最古老的「扇形車庫」，停放著氣勢磅礴的蒸汽火車頭，每日更有「SL 蒸汽號」可供搭乘，親身感受鳴笛聲與煤炭氣味。二樓設有巨大的鐵道模型場景（Diorama），精細重現了列車運行的模樣。頂樓的天空露台還能眺望行駛中的東海道新幹線與京都塔美景，即使下雨或天冷也能在舒適的室內度過充實的下午。
+                                    日本最大級別的鐵道博物館，是鐵道迷與親子遊客的聖地。館內收藏了從蒸汽火車到新幹線共 53 輛具有歷史價值的真實車輛。戶外擁有現存最古老的「扇形車庫」，每日更有「SL 蒸汽號」可供搭乘。二樓設有巨大的鐵道模型場景，頂樓還能眺望行駛中的新幹線。
+                                    
+                                    <!-- 新增灰色票券資訊框 -->
+                                    <div style="margin-top:8px; padding:10px; background:#f5f5f5; border-radius:8px; font-size:0.85rem; color:#555; line-height: 1.6;">
+                                        <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px; font-weight:600; color:var(--primary);">
+                                            <i class="fas fa-ticket-alt"></i> 票券資訊
+                                        </div>
+                                        <div style="padding-left:4px;">
+                                            • 成人 1800 日圓<br>
+                                            • 小學生 500日圓<br>
+                                            • 未滿 3 歲 免費<br>
+                                            • 駕駛艙體驗另購 100日圓 / 10 分鐘
+                                        </div>
+                                    </div>
                                 </div>
-                                <a href="https://maps.google.com/?q=Kyoto+Railway+Museum" class="spot-nav-btn"><i class="fas fa-location-dot"></i> 導航</a>
+                                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                                    <a href="https://maps.google.com/?q=Kyoto+Railway+Museum" class="spot-nav-btn"><i class="fas fa-location-dot"></i> 導航</a>
+                                    <!-- 新增購票詳情按鈕 -->
+                                    <a href="https://www.kyotorailwaymuseum.jp/tc/tickets/" target="_blank" class="spot-nav-btn">
+                                        <i class="fas fa-external-link-alt"></i> 購票詳情
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 18:00 晚餐 -->
+                    <!-- 17:00 梅小路公園 (新增) -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">17:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
+                        <div class="content-col">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsXAeVclhq7A5ZzvIc7k0jOjI_FBKF6Q8XhA&sv" class="spot-image" alt="Umekoji Park" onerror="this.src='https://placehold.co/800x400?text=Umekoji+Park'">
+                            <div class="spot-body">
+                                <h3 class="spot-title">梅小路公園</h3>
+                                <div class="tags-row"><span class="mini-tag">散步</span><span class="mini-tag">市集</span></div>
+                                <div class="spot-desc">
+                                    位於鐵道博物館旁的大型都市公園，擁有寬廣的草坪與復古的路面電車展示。這裡最受歡迎的是「朱雀之庭」與充滿綠意的水族館周邊。夕陽西下時，在公園內悠閒散步，看著孩子們在草地上奔跑，是享受京都慢活步調的最佳方式。
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 18:00 晚餐 (標題更新) -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">18:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
                             <img src="https://images.unsplash.com/photo-1552611052-33e04de081de?auto=format&fit=crop&w=800&q=80" class="spot-image" alt="Dinner" onerror="this.src='https://placehold.co/800x400?text=Dinner'">
                             <div class="spot-body">
-                                <h3 class="spot-title">晚餐：梅小路 / 京都車站</h3>
-                                <div class="tags-row"><span class="mini-tag">方便</span></div>
+                                <h3 class="spot-title">晚餐：京都伊勢丹百貨</h3>
+                                <div class="tags-row"><span class="mini-tag">拉麵小路</span><span class="mini-tag">方便</span></div>
                                 <div class="spot-desc">
-                                    在梅小路公園附近或回京都車站用餐。京都車站大樓內有拉麵小路、炸豬排等多樣選擇，交通也方便，吃飽後能快速回到飯店休息。
+                                    在京都車站直結的伊勢丹百貨用餐，選擇多樣且便利。推薦前往10樓的「拉麵小路」品嚐日本各地名店，或是到美食街選購豐富的熟食便當回飯店享用，吃飽後能快速回到飯店休息。
                                 </div>
                             </div>
                         </div>
@@ -917,6 +1077,8 @@
                         </div>
                     </div>
                 </div>
+                 <!-- Interactive Map Day 2 -->
+                <div id="d2-map" class="leaflet-map-container"></div>
             </div>
 
             <!-- Day 3 -->
@@ -930,20 +1092,15 @@
 
                 <!-- Day 3 Route Map (Timeline Style) -->
                 <div class="route-map-container">
-                    <div class="route-step"><div class="route-circle">1</div><div class="route-label">飯店<br>07:30</div><div class="route-line"></div></div>
-                    <div class="route-step"><div class="route-circle">2</div><div class="route-label">租車<br>08:00</div><div class="route-line"></div></div>
-                    <div class="route-step"><div class="route-circle">3</div><div class="route-label">河合神社<br>10:00</div><div class="route-line"></div></div>
-                    <div class="route-step"><div class="route-circle">4</div><div class="route-label">糺之森<br>散步</div><div class="route-line"></div></div>
-                    <div class="route-step"><div class="route-circle">5</div><div class="route-label">下鴨神社<br>參拜</div><div class="route-line"></div></div>
-                    <div class="route-step"><div class="route-circle">6</div><div class="route-label">琵琶湖<br>12:00</div><div class="route-line"></div></div>
-                    <div class="route-step"><div class="route-circle">7</div><div class="route-label">近江牛<br>午餐</div><div class="route-line"></div></div>
-                    <div class="route-step"><div class="route-circle">8</div><div class="route-label">滑雪場<br>14:30</div><div class="route-line"></div></div>
-                    <div class="route-step"><div class="route-circle">9</div><div class="route-label">返回<br>17:00</div><div class="route-line"></div></div>
-                    <div class="route-step"><div class="route-circle">10</div><div class="route-label">飯店<br>18:00</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">1</div><div class="route-label">租車<br>08:00</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">2</div><div class="route-label">下鴨神社<br>10:00</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">3</div><div class="route-label">午餐<br>13:00</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">4</div><div class="route-label">滑雪場<br>14:30</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">5</div><div class="route-label">飯店<br>18:00</div><div class="route-line"></div></div>
                 </div>
 
-                <!-- FIXED ID: d3-map -->
-                <div id="d3-map" class="leaflet-map-container"></div>
+                <!-- FIXED ID: d3-map (Moved to bottom) -->
+                
 
                 <div class="timeline-container">
                     
@@ -977,7 +1134,8 @@
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">09:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
-                            <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80" class="spot-image" alt="Driving" onerror="this.src='https://placehold.co/800x400?text=Driving+Start'">
+                            <!-- 修正：更換照片 -->
+                            <img src="https://resources.matcha-jp.com/resize/720x2000/2025/06/02-235220.webp" class="spot-image" alt="Driving" onerror="this.src='https://placehold.co/800x400?text=Driving+Start'">
                             <div class="spot-body">
                                 <h3 class="spot-title">移動：飯店 -> 河合神社</h3>
                                 <div class="tags-row"><span class="mini-tag">車程20min</span><span class="mini-tag">右駕注意</span></div>
@@ -1101,7 +1259,11 @@
                                 <div class="spot-desc">
                                     來到滋賀縣，絕對不能錯過日本三大和牛之一的「近江牛」。其特色在於肉質細膩、脂肪甘甜且入口即化。午餐安排享用正宗的近江牛料理，無論是燒肉、壽喜燒或牛排，都能品嚐到頂級牛肉的鮮美油脂在口中散開的幸福感，為下午的滑雪行程補充滿滿體力。
                                 </div>
-                                <a href="https://maps.google.com/?q=Omi+Beef+Restaurant+Shiga" class="spot-nav-btn"><i class="fas fa-utensils"></i> 搜尋附近餐廳</a>
+                                <!-- 修正：更新按鈕為導航至松喜屋與官網 -->
+                                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                                    <a href="https://maps.google.com/?q=松喜屋本店" class="spot-nav-btn"><i class="fas fa-location-dot"></i> 導航</a>
+                                    <a href="https://www.matsukiya.net/chinese/main-restaurant-cn.html" target="_blank" class="spot-nav-btn"><i class="fas fa-globe"></i> 官網</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1116,6 +1278,22 @@
                                 <div class="tags-row"><span class="mini-tag warn">保暖</span><span class="mini-tag">雪景</span></div>
                                 <div class="spot-desc">
                                     搭乘全日本速度最快的纜車攀升至標高 1100 公尺的山頂，眼前是琵琶湖的絕美全景與銀白雪世界。前往「Snow Land」戲雪區，這裡是專為親子打造的樂園，可以體驗雪盆滑雪、堆雪人或打雪仗。山上空氣清新冷冽，請務必戴好手套與毛帽，盡情享受在關西難得的粉雪體驗。
+                                    
+                                    <!-- 新增費用資訊框 -->
+                                    <div style="margin-top:8px; padding:10px; background:#f5f5f5; border-radius:8px; font-size:0.85rem; color:#555; line-height: 1.6;">
+                                        <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px; font-weight:600; color:var(--primary);">
+                                            <i class="fas fa-yen-sign"></i> 費用資訊
+                                        </div>
+                                        <div style="padding-left:4px;">
+                                            <strong>設施使用費 (戲雪區+纜車)</strong><br>
+                                            • 成人 5000 日圓<br>
+                                            • 7-12歲 2500 日圓<br>
+                                            • 未滿 3 歲 免費<br>
+                                            <div style="margin-top:4px;"></div>
+                                            <strong>停車費</strong><br>
+                                            • 1000 日圓 / 天
+                                        </div>
+                                    </div>
                                 </div>
                                 <a href="https://maps.google.com/?q=Biwako+Valley" class="spot-nav-btn"><i class="fas fa-location-dot"></i> 導航</a>
                             </div>
@@ -1294,6 +1472,8 @@
                         </div>
                     </div>
                 </div>
+                 <!-- Interactive Map Day 4 -->
+                <div id="d4-map" class="leaflet-map-container"></div>
             </div>
 
             <!-- Day 5 -->
@@ -1394,6 +1574,8 @@
                         </div>
                     </div>
                 </div>
+                <!-- Interactive Map Day 5 -->
+                <div id="d5-map" class="leaflet-map-container"></div>
             </div>
 
              <!-- Day 6 -->
@@ -1520,7 +1702,7 @@
                     <div class="route-step"><div class="route-circle">4</div><div class="route-label">起飛<br>10:55</div><div class="route-line"></div></div>
                 </div>
                 <!-- FIXED ID: d7-map -->
-                <div id="d7-map" class="leaflet-map-container"></div>
+                
 
                 <div class="timeline-container">
                     
@@ -1637,16 +1819,24 @@
                     </div>
                     
                     <div style="background:#F8F9FA; border-radius:8px; padding:12px; font-size:0.9rem; line-height:1.6; border:1px solid #eee;">
+                        <!-- 房型分配 -->
                         <div style="margin-bottom:8px; padding-bottom:8px; border-bottom:1px dashed #e0e0e0;">
-                            <div style="color:var(--text-main); font-weight:600;">房型分配 (6大4小)</div>
+                            <div style="color:var(--text-main); font-weight:600;">房型分配</div>
                             <div style="color:var(--text-sub);">• 標準雙床房 (20 平方公尺) x3</div>
                         </div>
+                        <!-- 飯店設施 (新區塊) -->
+                        <div style="margin-bottom:8px; padding-bottom:8px; border-bottom:1px dashed #e0e0e0;">
+                            <div style="color:var(--text-main); font-weight:600;">飯店設施</div>
+                            <div style="color:var(--text-sub);">• 自助式投幣式洗衣機</div>
+                            <div style="color:var(--text-sub);">• 大浴場</div>
+                        </div>
+                        <!-- 付款資訊 -->
                         <div>
                             <div style="color:#333; font-size:0.85rem; display:flex; align-items:center; gap:6px; margin-bottom:2px;">
                                 <i class="fas fa-exclamation-circle" style="color:#999;"></i> 2/7 前免費取消
                             </div>
-                            <div style="color:var(--text-sub); font-size:0.85rem;">
-                                (將於 2/4 信用卡扣款)
+                            <div style="color:var(--success); font-size:0.85rem; font-weight:600;">
+                                <i class="fas fa-check-circle"></i> 已使用信用卡付款
                             </div>
                         </div>
                     </div>
@@ -1663,11 +1853,18 @@
                     </div>
                     
                     <div style="background:#F8F9FA; border-radius:8px; padding:12px; font-size:0.9rem; line-height:1.6; border:1px solid #eee;">
+                        <!-- 房型分配 -->
                         <div style="margin-bottom:8px; padding-bottom:8px; border-bottom:1px dashed #e0e0e0;">
-                            <div style="color:var(--text-main); font-weight:600;">房型分配 (6大4小)</div>
+                            <div style="color:var(--text-main); font-weight:600;">房型分配</div>
                             <div style="color:var(--text-sub);">• 標準雙床房 (20 平方公尺) x2</div>
                             <div style="color:var(--text-sub);">• 家庭間 (24 平方公尺) x1</div>
                         </div>
+                        <!-- 飯店設施 (新區塊) -->
+                        <div style="margin-bottom:8px; padding-bottom:8px; border-bottom:1px dashed #e0e0e0;">
+                            <div style="color:var(--text-main); font-weight:600;">飯店設施</div>
+                            <div style="color:var(--text-sub);">• 自助式投幣式洗衣機</div>
+                        </div>
+                        <!-- 付款資訊 -->
                         <div>
                             <div style="color:#333; font-size:0.85rem; display:flex; align-items:center; gap:6px; margin-bottom:2px;">
                                 <i class="fas fa-exclamation-circle" style="color:#999;"></i> 2/8 前免費取消
@@ -1690,11 +1887,19 @@
                     </div>
                     
                     <div style="background:#F8F9FA; border-radius:8px; padding:12px; font-size:0.9rem; line-height:1.6; border:1px solid #eee;">
+                        <!-- 房型分配 -->
                         <div style="margin-bottom:8px; padding-bottom:8px; border-bottom:1px dashed #e0e0e0;">
-                            <div style="color:var(--text-main); font-weight:600;">房型分配 (6大4小)</div>
+                            <div style="color:var(--text-main); font-weight:600;">房型分配</div>
                             <div style="color:var(--text-sub);">• 雙床房 (20 平方公尺) x2</div>
                             <div style="color:var(--text-sub);">• 日式西式房間 (36 平方公尺) x1</div>
                         </div>
+                        <!-- 飯店設施 (新區塊) -->
+                        <div style="margin-bottom:8px; padding-bottom:8px; border-bottom:1px dashed #e0e0e0;">
+                            <div style="color:var(--text-main); font-weight:600;">飯店設施</div>
+                            <div style="color:var(--text-sub);">• 自助式投幣式洗衣機</div>
+                            <div style="color:var(--text-sub);">• 大浴場</div>
+                        </div>
+                        <!-- 付款資訊 -->
                         <div>
                             <div style="color:#333; font-size:0.85rem; display:flex; align-items:center; gap:6px; margin-bottom:2px;">
                                 <i class="fas fa-exclamation-circle" style="color:#999;"></i> 1/23 前免費取消
@@ -1866,59 +2071,7 @@
             </div>
             
             <div class="menu-list" style="max-height: 400px; overflow-y: auto;">
-                <!-- 菜單項目 1 -->
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f5f5f5;">
-                    <div>
-                        <div style="font-weight: 700; color: var(--text-main); font-size: 1rem;">番茄御好燒</div>
-                        <div style="font-size: 0.85rem; color: var(--text-sub);">トマトお好み焼き</div>
-                    </div>
-                    <button onclick="speakJapanese('トマトお好み焼き')" style="background: var(--primary); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                        <i class="fas fa-volume-up"></i>
-                    </button>
-                </div>
-
-                <!-- 菜單項目 2 -->
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f5f5f5;">
-                    <div>
-                        <div style="font-weight: 700; color: var(--text-main); font-size: 1rem;">酪梨炒麵</div>
-                        <div style="font-size: 0.85rem; color: var(--text-sub);">アボカド焼きそば</div>
-                    </div>
-                    <button onclick="speakJapanese('アボカド焼きそば')" style="background: var(--primary); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                        <i class="fas fa-volume-up"></i>
-                    </button>
-                </div>
-
-                <!-- 菜單項目 3 -->
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f5f5f5;">
-                    <div>
-                        <div style="font-weight: 700; color: var(--text-main); font-size: 1rem;">豚平燒 (蛋包豬肉)</div>
-                        <div style="font-size: 0.85rem; color: var(--text-sub);">とん平焼き</div>
-                    </div>
-                    <button onclick="speakJapanese('とん平焼き')" style="background: var(--primary); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                        <i class="fas fa-volume-up"></i>
-                    </button>
-                </div>
-
-                <!-- 菜單項目 4 -->
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f5f5f5;">
-                    <div>
-                        <div style="font-weight: 700; color: var(--text-main); font-size: 1rem;">生啤酒</div>
-                        <div style="font-size: 0.85rem; color: var(--text-sub);">生ビール</div>
-                    </div>
-                    <button onclick="speakJapanese('生ビール')" style="background: var(--primary); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                        <i class="fas fa-volume-up"></i>
-                    </button>
-                </div>
-                 <!-- 菜單項目 5 -->
-                 <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f5f5f5;">
-                    <div>
-                        <div style="font-weight: 700; color: var(--text-main); font-size: 1rem;">可樂</div>
-                        <div style="font-size: 0.85rem; color: var(--text-sub);">コーラ</div>
-                    </div>
-                    <button onclick="speakJapanese('コーラ')" style="background: var(--primary); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                        <i class="fas fa-volume-up"></i>
-                    </button>
-                </div>
+                <!-- Content will be injected by JS -->
             </div>
         </div>
     </div>
@@ -1965,20 +2118,20 @@
             /* d1 Removed (no map for day 1) */
             'd2': [
                 { lat: 34.98917, lng: 135.75710, title: "1. 飯店" },
-                { lat: 35.0094, lng: 135.6668, title: "2. 嵐山" },
-                { lat: 35.0116, lng: 135.6760, title: "3. 午餐" },
-                { lat: 34.9863, lng: 135.7419, title: "4. 鐵道博物館" },
-                { lat: 34.9858, lng: 135.7588, title: "5. 晚餐" },
-                { lat: 34.98917, lng: 135.75710, title: "6. 飯店" }
+                { lat: 35.0163, lng: 135.6780, title: "2. 嵯峨嵐山站" },
+                { lat: 35.0177, lng: 135.6743, title: "3. 野宮神社/竹林" },
+                { lat: 35.0157, lng: 135.6738, title: "4. 天龍寺" },
+                { lat: 35.0134, lng: 135.6778, title: "5. 渡月橋/午餐" },
+                { lat: 34.9863, lng: 135.7419, title: "6. 鐵道博物館" },
+                { lat: 34.98917, lng: 135.75710, title: "7. 飯店" }
             ],
             'd3': [
                 { lat: 34.98917, lng: 135.75710, title: "1. 飯店" },
                 { lat: 34.9837, lng: 135.7587, title: "2. 租車 (京都站)" },
-                { lat: 35.0340, lng: 135.7690, title: "3. 河合神社" },
-                { lat: 35.0392, lng: 135.7730, title: "4. 下鴨神社" },
-                { lat: 35.0050, lng: 135.8670, title: "5. 琵琶湖/午餐" }, 
-                { lat: 35.2132, lng: 135.9042, title: "6. 琵琶湖山谷" },
-                { lat: 34.98917, lng: 135.75710, title: "7. 飯店" }
+                { lat: 35.0392, lng: 135.7730, title: "3. 下鴨神社" },
+                { lat: 35.0050, lng: 135.8670, title: "4. 午餐 (近江牛)" }, 
+                { lat: 35.2132, lng: 135.9042, title: "5. 滑雪場" },
+                { lat: 34.98917, lng: 135.75710, title: "6. 飯店" }
             ],
             'd4': [
                 { lat: 34.98917, lng: 135.75710, title: "1. 飯店" },
@@ -2001,8 +2154,7 @@
                 { lat: 34.4105, lng: 135.3005, title: "5. 機場飯店" }
             ],
             'd7': [
-                { lat: 34.4105, lng: 135.3005, title: "1. 飯店" },
-                { lat: 34.4320, lng: 135.2304, title: "2. 關西機場" }
+                /* d7 Removed (no map for day 7) */
             ]
         };
 
@@ -2106,6 +2258,46 @@
         });
 
         // Menu Modal Logic
+        const MENUS = {
+            'kyochabana': [
+                { name: '番茄御好燒', ja: 'トマトお好み焼き' },
+                { name: '酪梨炒麵', ja: 'アボカド焼きそば' },
+                { name: '豚平燒', ja: 'とん平焼き' },
+                { name: '生啤酒', ja: '生ビール' },
+                { name: '可樂', ja: 'コーラ' }
+            ],
+            // 新增：嵐山よしむら菜單
+            'yoshimura': [
+                { name: '渡月膳 (半份蕎麥+天丼)', ja: '渡月膳' }, 
+                { name: '嵐山膳 (蕎麥+小魚飯)', ja: '嵐山膳' }, 
+                { name: '天冷蕎麥麵膳', ja: '天ざる膳' }, 
+                { name: '十割蕎麥麵 (限量)', ja: '十割そば' }
+            ]
+        };
+
+        function openMenu(restaurantKey) {
+            const list = document.querySelector('.menu-list');
+            list.innerHTML = ''; // Clear current
+            
+            const items = MENUS[restaurantKey] || [];
+            
+            items.forEach(item => {
+                const itemHtml = `
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f5f5f5;">
+                    <div>
+                        <div style="font-weight: 700; color: var(--text-main); font-size: 1rem;">${item.name}</div>
+                        <div style="font-size: 0.85rem; color: var(--text-sub);">${item.ja}</div>
+                    </div>
+                    <button onclick="speakJapanese('${item.ja}')" style="background: var(--primary); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                </div>`;
+                list.innerHTML += itemHtml;
+            });
+            
+            toggleMenu();
+        }
+
         function toggleMenu() {
             const modal = document.getElementById('menu-modal');
             if (modal.classList.contains('show')) {
