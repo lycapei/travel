@@ -12,7 +12,7 @@
 
     <title>KANSAI 2026</title>
     
-    <!-- Favicon 設定 -->
+    <!-- Favicon -->
     <link rel="apple-touch-icon" href="image/favicon-2026-kansai.png">
     <link rel="icon" type="image/png" href="image/favicon-2026-kansai.png">
 
@@ -37,7 +37,7 @@
             
             --shadow: 0 4px 12px rgba(0,0,0,0.08);
             --radius: 16px;
-            --bottom-nav-height: 80px; /* 預估高度，用於計算 body padding */
+            --bottom-nav-height: 80px;
             --header-base-height: 60px;
         }
 
@@ -48,14 +48,11 @@
             background-color: var(--bg);
             color: var(--text-main);
             margin: 0;
-            /* 增加底部空間，確保內容不被加高的導航列遮擋 (120px 足夠容納各種機型) */
             padding-bottom: 120px;
             line-height: 1.5;
         }
 
-        /* ----------------
-           Hero & Header
-           ---------------- */
+        /* ---------------- Hero & Header ---------------- */
         .hero {
             position: relative;
             height: 380px;
@@ -72,26 +69,15 @@
             background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 60%, rgba(245,245,247,1) 100%);
         }
 
-        /* Header 適配 iPhone 瀏海/動態島 */
         .header {
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            right: 0; 
-            /* 高度 = 基本高度 + 頂部安全區域 */
+            position: fixed; top: 0; left: 0; right: 0; 
             height: calc(var(--header-base-height) + env(safe-area-inset-top));
-            /* 內距增加頂部安全區域，讓內容往下移，避開瀏海 */
             padding: env(safe-area-inset-top) 20px 0 20px;
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-            z-index: 1000; 
-            transition: all 0.3s ease; 
-            background: transparent; 
-            color: white;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000; transition: all 0.3s ease; 
+            background: transparent; color: white;
         }
         .header-title { font-size: 1.2rem; font-weight: 800; letter-spacing: 1px; text-shadow: 0 2px 8px rgba(0,0,0,0.6); font-family: 'Futura', sans-serif; }
-        
         .header.scrolled { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); color: var(--primary); box-shadow: 0 1px 10px rgba(0,0,0,0.1); }
         .header.scrolled .header-title { text-shadow: none; }
         .header.scrolled .rate-badge { background: #F0F2F5; color: var(--primary); border: none; }
@@ -103,40 +89,24 @@
             display: flex; align-items: center; gap: 5px; transition: all 0.3s;
         }
 
-        /* ----------------
-           Layout
-           ---------------- */
+        /* ---------------- Layout ---------------- */
         .container { position: relative; z-index: 10; margin-top: -50px; padding: 0; max-width: 600px; margin-left: auto; margin-right: auto; }
 
-        /* Day Nav 適配 Header 高度 */
         .day-nav-container {
-            background: var(--bg); 
-            position: sticky; 
-            /* 黏住的位置 = Header 的高度 (含安全區域) */
+            background: var(--bg); position: sticky; 
             top: calc(var(--header-base-height) + env(safe-area-inset-top)); 
-            z-index: 90;
-            padding: 10px 0; margin-bottom: 10px;
+            z-index: 90; padding: 10px 0; margin-bottom: 10px;
             border-top-left-radius: 24px; border-top-right-radius: 24px;
             box-shadow: 0 -4px 10px rgba(0,0,0,0.03);
         }
         .day-nav { display: flex; overflow-x: auto; padding: 0 16px; gap: 10px; -ms-overflow-style: none; scrollbar-width: none; }
         .day-nav::-webkit-scrollbar { display: none; }
         .day-tab {
-            flex: 0 0 auto; 
-            background: white; 
-            padding: 8px 0;
-            border-radius: 20px;
-            font-size: 0.85rem; 
-            color: var(--text-sub); 
-            border: 1px solid #eee;
-            cursor: pointer; 
-            transition: all 0.2s; 
-            text-align: center;
-            width: 72px; 
-            min-width: 72px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
-            white-space: nowrap;
-            overflow: hidden;
+            flex: 0 0 auto; background: white; padding: 8px 0;
+            border-radius: 20px; font-size: 0.85rem; color: var(--text-sub); 
+            border: 1px solid #eee; cursor: pointer; transition: all 0.2s; 
+            text-align: center; width: 72px; min-width: 72px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03); white-space: nowrap; overflow: hidden;
         }
         .day-tab.active {
             background: var(--primary); color: white; border-color: var(--primary);
@@ -145,26 +115,16 @@
         }
         .day-tab small { display: block; font-size: 0.7rem; opacity: 0.8; margin-top: 2px; }
 
-        /* ----------------
-           Weather Cards
-           ---------------- */
+        /* ---------------- Weather Cards ---------------- */
         a.weather-card {
-            display: flex !important;
-            text-decoration: none !important;
-            color: white !important;
+            display: flex !important; text-decoration: none !important; color: white !important;
             background: linear-gradient(135deg, #a8c0ff 0%, #3f2b96 100%);
-            border-radius: var(--radius);
-            padding: 20px 24px;   
-            margin: 0 16px 24px; 
-            align-items: center;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
-            position: relative;
-            z-index: 1;
+            border-radius: var(--radius); padding: 20px 24px; margin: 0 16px 24px; 
+            align-items: center; box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            transition: transform 0.2s; position: relative; z-index: 1;
         }
         a.weather-card:active { transform: scale(0.98); }
         a.weather-card.sunny { background: linear-gradient(135deg, #fce38a 0%, #f38181 100%); }
-        /* 晴時多雲 (橘色調帶點藍灰，不如晴天刺眼) */
         a.weather-card.partly-cloudy { background: linear-gradient(135deg, #FFD194 0%, #70E1F5 100%); }
         a.weather-card.cloudy { background: linear-gradient(135deg, #93a5cf 0%, #e4efe9 100%); color: #333 !important; }
         a.weather-card.rain { background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%); }
@@ -177,191 +137,69 @@
         .metric-item i { opacity: 0.8; font-size: 0.9rem; }
         .weather-arrow { opacity: 0.6; font-size: 1rem; }
 
-        /* ----------------
-           Route Map (Timeline Style)
-           ---------------- */
+        /* ---------------- Route Map ---------------- */
         .route-map-container {
-            padding: 0 16px 20px;
-            overflow-x: auto;
-            display: flex;
-            gap: 0;
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+            padding: 0 16px 20px; overflow-x: auto; display: flex; gap: 0;
+            -ms-overflow-style: none; scrollbar-width: none;
         }
         .route-map-container::-webkit-scrollbar { display: none; }
-
         .route-step {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-width: 85px;
-            position: relative;
-            flex-shrink: 0;
+            display: flex; flex-direction: column; align-items: center;
+            min-width: 85px; position: relative; flex-shrink: 0;
         }
-
         .route-circle {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: white;
-            border: 2px solid var(--primary);
-            color: var(--primary);
-            font-size: 0.8rem;
-            font-weight: 700;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2;
-            margin-bottom: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 28px; height: 28px; border-radius: 50%; background: white;
+            border: 2px solid var(--primary); color: var(--primary);
+            font-size: 0.8rem; font-weight: 700; display: flex;
+            justify-content: center; align-items: center; z-index: 2;
+            margin-bottom: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-
-        .route-label {
-            font-size: 0.75rem;
-            color: var(--text-main);
-            text-align: center;
-            line-height: 1.3;
-            font-weight: 600;
-            padding: 0 4px;
-        }
-
+        .route-label { font-size: 0.75rem; color: var(--text-main); text-align: center; line-height: 1.3; font-weight: 600; padding: 0 4px; }
         .route-line {
-            position: absolute;
-            top: 14px;
-            left: 50%;
-            width: 100%;
-            height: 0;
-            border-top: 2px dashed #ddd;
-            z-index: 1;
+            position: absolute; top: 14px; left: 50%; width: 100%; height: 0;
+            border-top: 2px dashed #ddd; z-index: 1;
         }
+        .route-step:last-child .route-line { display: none; }
 
-        .route-step:last-child .route-line {
-            display: none;
-        }
-
-        /* ----------------
-           Interactive Map (Leaflet)
-           ---------------- */
+        /* ---------------- Leaflet Map ---------------- */
         .leaflet-map-container {
-            height: 300px;
-            width: calc(100% - 32px);
-            margin: 0 16px 24px 16px;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            position: relative;
-            z-index: 5;
+            height: 300px; width: calc(100% - 32px); margin: 0 16px 24px 16px;
+            border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            position: relative; z-index: 5;
         }
 
-        /* ----------------
-           Timeline Layout
-           ---------------- */
+        /* ---------------- Timeline ---------------- */
         .timeline-container { padding: 0 16px 20px; }
         .day-detail { display: none; }
         .day-detail.active { display: block; animation: fadeIn 0.3s ease; }
-        
         .timeline-item { display: flex; align-items: stretch; margin-bottom: 24px; gap: 16px; }
-        
-        .timeline-marker { 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            width: 60px;
-            flex-shrink: 0; 
-            padding-top: 2px;
-            position: relative; 
-        }
-        
-        /* 時間文字 */
+        .timeline-marker { display: flex; flex-direction: column; align-items: center; width: 60px; flex-shrink: 0; padding-top: 2px; position: relative; }
         .timeline-time { 
-            font-size: 0.9rem; 
-            font-weight: 700; 
-            color: var(--primary); 
-            margin-bottom: 8px; 
-            font-family: monospace, sans-serif; 
-            letter-spacing: -0.5px;
-            position: relative;
-            z-index: 10; 
-            background-color: var(--bg); 
-            padding: 2px 0;
-            width: 100%;
-            text-align: center;
+            font-size: 0.9rem; font-weight: 700; color: var(--primary); 
+            margin-bottom: 8px; font-family: monospace, sans-serif; letter-spacing: -0.5px;
+            position: relative; z-index: 10; background-color: var(--bg); 
+            padding: 2px 0; width: 100%; text-align: center;
         }
-        
         .timeline-visual { position: relative; flex-grow: 1; width: 100%; display: flex; justify-content: center; }
-        
-        /* 隱藏圓點 */
         .timeline-dot { display: none; }
-        
-        /* 線條 */
         .timeline-line { 
-            position: absolute; 
-            top: -10px;
-            bottom: -36px; 
-            width: 2px; 
-            background: #E0E0E0; 
-            z-index: 1; 
-            left: 50%;
-            transform: translateX(-50%);
+            position: absolute; top: -10px; bottom: -36px; width: 2px; 
+            background: #E0E0E0; z-index: 1; left: 50%; transform: translateX(-50%);
         }
         .timeline-item:first-child .timeline-line { top: 0; }
         .timeline-item:last-child .timeline-line { display: none; }
-
         .content-col { flex-grow: 1; background: white; border-radius: var(--radius); box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden; }
         
-        /* Carousel Styles */
-        .carousel-container {
-            position: relative;
-            width: 100%;
-            height: 180px; /* Consistent height */
-            overflow: hidden;
-            background-color: #eee;
-        }
-        .carousel-track {
-            display: flex;
-            height: 100%;
-            transition: transform 0.3s ease-out;
-            cursor: pointer;
-        }
-        .carousel-slide {
-            min-width: 100%;
-            height: 100%;
-            box-sizing: border-box;
-        }
-        .carousel-slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-        .carousel-dots {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 6px;
-            z-index: 5;
-            background: rgba(0,0,0,0.2);
-            padding: 4px 8px;
-            border-radius: 10px;
-        }
-        .carousel-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.5);
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .carousel-dot.active {
-            background: white;
-            transform: scale(1.2);
-        }
+        /* ---------------- Carousel ---------------- */
+        .carousel-container { position: relative; width: 100%; height: 180px; overflow: hidden; background-color: #eee; }
+        .carousel-track { display: flex; height: 100%; transition: transform 0.3s ease-out; cursor: pointer; }
+        .carousel-slide { min-width: 100%; height: 100%; box-sizing: border-box; }
+        .carousel-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .carousel-dots { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; z-index: 5; background: rgba(0,0,0,0.2); padding: 4px 8px; border-radius: 10px; }
+        .carousel-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255, 255, 255, 0.5); cursor: pointer; transition: background 0.2s; }
+        .carousel-dot.active { background: white; transform: scale(1.2); }
 
-        /* Legacy Image Style (for non-carousel items) */
         .spot-image { width: 100%; height: 160px; object-fit: cover; background-color: #eee; }
-
         .spot-body { padding: 16px; }
         .spot-title { margin: 0 0 8px 0; font-size: 1.15rem; color: var(--text-main); font-weight: 700; }
         .spot-desc { font-size: 0.95rem; color: var(--text-sub); margin-bottom: 12px; line-height: 1.6; }
@@ -373,37 +211,22 @@
         .mini-tag.buy { background: #E3F2FD; color: #1976D2; border: 1px solid #BBDEFB; }
         .mini-tag.success { background: #E8F5E9; color: #27AE60; border: 1px solid #C8E6C9; }
 
-        /* Navigation Button Style */
         .spot-nav-btn { 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            background: #E3F2FD; 
-            color: var(--primary); 
-            padding: 12px; 
-            border-radius: 8px; 
-            font-size: 0.9rem; 
-            font-weight: 600; 
-            text-decoration: none; 
-            margin-top: 10px; 
-            transition: background 0.2s; 
-            flex: 1; 
+            display: flex; justify-content: center; align-items: center; 
+            background: #E3F2FD; color: var(--primary); padding: 12px; 
+            border-radius: 8px; font-size: 0.9rem; font-weight: 600; 
+            text-decoration: none; margin-top: 10px; transition: background 0.2s; flex: 1; 
         }
         .spot-nav-btn:active { background: #BBDEFB; }
         .spot-nav-btn i { margin-right: 6px; }
-
         .spot-nav-btn.pending { background: #F0F0F0; color: #555; cursor: pointer; }
-        .spot-nav-btn.pending:active { background: #E0E0E0; }
         .spot-nav-btn.disabled { background: #EEEEEE; color: #999; cursor: default; pointer-events: none; }
 
-        /* ----------------
-           Layout Utils & Modals
-           ---------------- */
+        /* ---------------- Tab & Modal ---------------- */
         .tab-content { display: none; padding-top:10px; animation: fadeIn 0.3s ease; }
         .tab-content.active { display: block; }
         #view-itinerary { padding: 0; }
 
-        /* Generic Modal */
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 2000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.2s; }
         .modal-overlay.show { display: flex; opacity: 1; }
         .calc-card { background: white; width: 85%; max-width: 320px; border-radius: 16px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); transform: scale(0.9); transition: transform 0.2s; }
@@ -416,46 +239,15 @@
         .calc-input:focus { border-color: var(--primary); }
         .rate-info { text-align: center; font-size: 0.8rem; color: #aaa; margin-top: 10px; }
 
-        /* Lightbox */
-        .lightbox {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.95);
-            display: none; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 3000; opacity: 0; transition: opacity 0.3s;
-        }
+        .lightbox { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.95); display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 3000; opacity: 0; transition: opacity 0.3s; }
         .lightbox.active { display: flex; opacity: 1; }
-        .lightbox-content-wrapper {
-            position: relative;
-            width: 100%;
-            height: 80%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+        .lightbox-content-wrapper { position: relative; width: 100%; height: 80%; display: flex; justify-content: center; align-items: center; }
         .lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; transition: opacity 0.2s; }
         .lightbox-close { position: absolute; top: 20px; right: 20px; color: white; font-size: 2rem; cursor: pointer; padding: 10px; z-index: 3001; }
-        
-        /* Lightbox Dots */
-        .lightbox-dots {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-            z-index: 3001;
-            padding-bottom: 20px;
-        }
-        .lightbox-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.4);
-            transition: all 0.2s;
-        }
-        .lightbox-dot.active {
-            background: white;
-            transform: scale(1.3);
-        }
+        .lightbox-dots { display: flex; gap: 10px; margin-top: 20px; z-index: 3001; padding-bottom: 20px; }
+        .lightbox-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255, 255, 255, 0.4); transition: all 0.2s; }
+        .lightbox-dot.active { background: white; transform: scale(1.3); }
 
-        /* Checklist Styles (New) */
         .checklist-group { margin-bottom: 15px; }
         .checklist-title { font-size: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 8px; border-bottom: 1px solid #eee; padding-bottom: 4px; }
         .checklist-item { display: flex; align-items: center; margin-bottom: 8px; font-size: 0.95rem; color: var(--text-main); }
@@ -465,61 +257,26 @@
         .info-section { background: white; border-radius: var(--radius); padding: 20px; margin: 0 16px 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .info-header { font-weight: 700; font-size: 1.1rem; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid #eee; color: var(--primary); }
         .info-list-item { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.95rem; }
-        
-        /* Bottom Nav Optimized */
+
         .bottom-nav { 
-            position: fixed; bottom: 0; left: 0; right: 0; 
-            /* 移除固定高度，改用 padding 撐開 */
-            height: auto; 
-            background: rgba(255, 255, 255, 0.98); 
-            border-top: 1px solid rgba(0,0,0,0.05); 
-            display: flex; justify-content: space-around; 
-            align-items: center; 
-            z-index: 1000; 
-            /* 上方留白 12px */
-            padding-top: 12px;
-            /* 下方留白：安全區域 + 16px 緩衝，讓手指好點擊，不會卡到 Home Bar */
-            padding-bottom: calc(env(safe-area-inset-bottom) + 16px);
+            position: fixed; bottom: 0; left: 0; right: 0; height: auto; 
+            background: rgba(255, 255, 255, 0.98); border-top: 1px solid rgba(0,0,0,0.05); 
+            display: flex; justify-content: space-around; align-items: center; 
+            z-index: 1000; padding-top: 12px; padding-bottom: calc(env(safe-area-inset-bottom) + 16px);
         }
-        .nav-item { 
-            flex: 1; text-align: center; color: #BDC3C7; font-size: 0.8rem; cursor: pointer; 
-            display: flex; flex-direction: column; justify-content: center; align-items: center; 
-        }
+        .nav-item { flex: 1; text-align: center; color: #BDC3C7; font-size: 0.8rem; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .nav-item.active { color: var(--primary); }
         .nav-item i { font-size: 1.2rem; margin-bottom: 4px; }
-        .hidden { display: none; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Back to Top Button */
         .back-to-top {
-            position: fixed;
-            bottom: 130px; /* Increased from 90px to avoid overlapping with nav on newer iPhones */
-            right: 20px;
-            width: 44px;
-            height: 44px;
-            background: white;
-            color: var(--primary);
-            border-radius: 50%;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            border: none;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.2rem;
-            cursor: pointer;
-            z-index: 900;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s, transform 0.3s;
+            position: fixed; bottom: 130px; right: 20px; width: 44px; height: 44px;
+            background: white; color: var(--primary); border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: none;
+            display: flex; justify-content: center; align-items: center; font-size: 1.2rem;
+            cursor: pointer; z-index: 900; opacity: 0; pointer-events: none; transition: opacity 0.3s, transform 0.3s;
         }
-        .back-to-top.show {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .back-to-top:active {
-            transform: scale(0.9);
-            background: #f8f9fa;
-        }
+        .back-to-top.show { opacity: 1; pointer-events: auto; }
+        .back-to-top:active { transform: scale(0.9); background: #f8f9fa; }
     </style>
 </head>
 <body>
@@ -567,23 +324,21 @@
                 <!-- Day 1 Route Map -->
                 <div class="route-map-container">
                     <div class="route-step"><div class="route-circle">1</div><div class="route-label">桃園機場<br>11:30</div><div class="route-line"></div></div>
-                    <div class="route-step"><div class="route-circle">2</div><div class="route-label">關西機場<br>16:55</div><div class="route-line"></div></div>
-                    <div class="route-step"><div class="route-circle">3</div><div class="route-label">京都站<br>19:34</div><div class="route-line"></div></div>
-                    <div class="route-step"><div class="route-circle">4</div><div class="route-label">進進堂<br>19:40</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">2</div><div class="route-label">飛機起飛<br>13:30</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">3</div><div class="route-label">飛機降落<br>16:55</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">4</div><div class="route-label">京都站<br>19:30</div><div class="route-line"></div></div>
                     <div class="route-step"><div class="route-circle">5</div><div class="route-label">飯店<br>20:00</div><div class="route-line"></div></div>
                     <div class="route-step"><div class="route-circle">6</div><div class="route-label">晚餐<br>20:30</div><div class="route-line"></div></div>
                 </div>
-                
-                <!-- Day 1 Map Removed (as requested) -->
 
                 <div class="timeline-container">
-                    <!-- 新增：集合時間 -->
+                    <!-- 11:30 集合 -->
                     <div class="timeline-item">
                         <div class="timeline-marker">
                             <div class="timeline-time">11:30</div>
                             <div class="timeline-visual">
                                 <div class="timeline-dot"></div>
-                                <div class="timeline-line" style="top: 0;"></div> <!-- 修正：強制第一條線不往上凸 -->
+                                <div class="timeline-line" style="top:0"></div>
                             </div>
                         </div>
                         <div class="content-col">
@@ -601,10 +356,10 @@
                         </div>
                     </div>
 
+                    <!-- 13:30 航班 -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">13:30</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
-                            <!-- 長榮圖片 (更新) -->
                             <img src="https://img.freepik.com/free-photo/airplane_74190-463.jpg?semt=ais_hybrid&w=740&q=80" class="spot-image" alt="EVA Air" onerror="this.src='https://placehold.co/800x400?text=EVA+Air'">
                             <div class="spot-body">
                                 <h3 class="spot-title">長榮航空 BR130 | 桃園 -> 關西</h3>
@@ -624,26 +379,27 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- 16:55 抵達 -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">16:55</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
-                            <!-- 機場圖片 (更新) -->
                             <img src="https://images.unsplash.com/photo-1589452271712-64b8a66c7b71?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="spot-image" alt="KIX" onerror="this.src='https://placehold.co/800x400?text=KIX+Airport'">
                             <div class="spot-body">
                                 <h3 class="spot-title">抵達關西機場 T1</h3>
                                 <div class="tags-row"><span class="mini-tag warn">入境</span><span class="mini-tag">領取票券</span></div>
                                 <div class="spot-desc">辦理入境手續、領取行李。</div>
-                                <!-- 修正：VJW 按鈕樣式改回預設，移除綠色樣式與勾勾 -->
                                 <a href="https://www.vjw.digital.go.jp/" target="_blank" class="spot-nav-btn">
                                     <i class="fas fa-clipboard-check"></i> Visit Japan Web
                                 </a>
                             </div>
                         </div>
                     </div>
+
+                    <!-- 18:15 HARUKA -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">18:15</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
-                            <!-- HARUKA 圖片 (更新) -->
                             <img src="https://www.jr-hellokittyharuka.jp/assets/images/ogp.jpg" class="spot-image" alt="HARUKA" onerror="this.src='https://placehold.co/800x400?text=HARUKA'">
                             <div class="spot-body">
                                 <h3 class="spot-title">HARUKA | 關西機場 -> 京都車站</h3>
@@ -671,7 +427,6 @@
                                     </div>
                                 </div>
                                 <div style="margin-top:10px;">
-                                    <!-- 修正：移除 (開啟連結) 文字 -->
                                     <a href="https://guest-ui.west-qr.com/#/packages/login/signUp" class="spot-nav-btn" target="_blank">
                                         <i class="fas fa-ticket-alt"></i> 電子車票
                                     </a>
@@ -680,7 +435,7 @@
                         </div>
                     </div>
                     
-                    <!-- 19:40 進進堂 (已更新內容) -->
+                    <!-- 19:40 進進堂 -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">19:40</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
@@ -697,7 +452,7 @@
                         </div>
                     </div>
 
-                    <!-- 20:00 飯店 (Updated Time) -->
+                    <!-- 20:00 飯店 -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">20:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
@@ -745,7 +500,7 @@
                         </div>
                     </div>
 
-                    <!-- 20:30 晚餐 (新增實驗功能) -->
+                    <!-- 20:30 晚餐 -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">20:30</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
@@ -758,7 +513,6 @@
                                 </div>
                                 <div style="display:flex; gap:8px; flex-wrap:wrap;">
                                     <a href="https://maps.app.goo.gl/wJq5qZ8z8z8z8z8z8" class="spot-nav-btn" onclick="window.open('https://maps.google.com/?q=京茶花+南新町', '_blank'); return false;"><i class="fas fa-location-dot"></i> 導航</a>
-                                    <!-- 實驗功能按鈕 -->
                                     <button class="spot-nav-btn" onclick="openMenu('kyochabana')" style="background:#FFF3E0; color:#E67E22; border:none;">
                                         <i class="fas fa-book-open"></i> 點餐小幫手
                                     </button>
@@ -766,7 +520,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
@@ -791,12 +544,10 @@
                     <div class="route-step"><div class="route-circle">5</div><div class="route-label">鐵道館<br>14:00</div><div class="route-line"></div></div>
                     <div class="route-step"><div class="route-circle">6</div><div class="route-label">飯店<br>19:30</div><div class="route-line"></div></div>
                 </div>
-                <!-- FIXED ID: d2-map -->
-                <div id="d2-map" class="leaflet-map-container"></div>
 
                 <div class="timeline-container">
                     
-                    <!-- 卡片一：09:00 JR 京都站 → 嵯峨嵐山站 (更換照片、新增路線、統一按鈕) -->
+                    <!-- 卡片一：09:00 JR 京都站 → 嵯峨嵐山站 -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">09:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
@@ -815,7 +566,7 @@
                         </div>
                     </div>
 
-                    <!-- 卡片二：09:30 野宮神社 (更換照片、移除按鈕) -->
+                    <!-- 卡片二：09:30 野宮神社 -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">09:30</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
@@ -830,7 +581,7 @@
                         </div>
                     </div>
 
-                    <!-- 卡片三：竹林小徑 (更換照片、移除按鈕) -->
+                    <!-- 卡片三：竹林小徑 -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time" style="opacity:0">00:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
@@ -845,7 +596,7 @@
                         </div>
                     </div>
 
-                    <!-- 卡片四：天龍寺 (更換照片、移除按鈕) -->
+                    <!-- 卡片四：天龍寺 -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time" style="opacity:0">00:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
@@ -860,7 +611,7 @@
                         </div>
                     </div>
 
-                    <!-- 卡片五：渡月橋、嵐山公園 (更換照片、移除按鈕) -->
+                    <!-- 卡片五：渡月橋、嵐山公園 -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time" style="opacity:0">00:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
@@ -875,7 +626,7 @@
                         </div>
                     </div>
 
-                    <!-- 卡片六：友禪的光林 (更換照片、移除按鈕) -->
+                    <!-- 卡片六：友禪的光林 -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time" style="opacity:0">00:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
@@ -890,7 +641,7 @@
                         </div>
                     </div>
 
-                    <!-- 卡片七：11:00 嵐山よしむら 蕎麥麵 (更換照片、統一按鈕) -->
+                    <!-- 卡片七：11:00 嵐山よしむら 蕎麥麵 -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">11:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
@@ -903,7 +654,6 @@
                                 </div>
                                 <div style="display:flex; gap:8px; flex-wrap:wrap;">
                                     <a href="https://maps.google.com/?q=嵐山よしむら" class="spot-nav-btn"><i class="fas fa-location-dot"></i> 導航</a>
-                                    <!-- 新增 Day 2 點餐小幫手 -->
                                     <button class="spot-nav-btn" onclick="openMenu('yoshimura')" style="background:#FFF3E0; color:#E67E22; border:none;">
                                         <i class="fas fa-book-open"></i> 點餐小幫手
                                     </button>
@@ -912,7 +662,7 @@
                         </div>
                     </div>
 
-                    <!-- 卡片八：% ARABICA 京都嵐山店 (更換照片、統一按鈕) -->
+                    <!-- 卡片八：% ARABICA 京都嵐山店 -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time" style="opacity:0">00:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
@@ -928,7 +678,7 @@
                         </div>
                     </div>
 
-                    <!-- 卡片九：嵐山 拉拉熊茶房 (更換照片、統一按鈕) -->
+                    <!-- 卡片九：嵐山 拉拉熊茶房 -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time" style="opacity:0">00:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
@@ -958,7 +708,6 @@
                                         E08 嵯峨嵐山站 → E07太秦 → ... → E03 丹波口 → E02 梅小路京都西
                                     </div>
                                 </div>
-                                <!-- 修正：導航連結改為梅小路京都西站 -->
                                 <a href="https://maps.google.com/?q=梅小路京都西站" class="spot-nav-btn"><i class="fas fa-location-dot"></i> 導航</a>
                             </div>
                         </div>
@@ -974,8 +723,6 @@
                                 <div class="tags-row"><span class="mini-tag must-see">室內</span><span class="mini-tag">扇形車庫</span></div>
                                 <div class="spot-desc">
                                     日本最大級別的鐵道博物館，是鐵道迷與親子遊客的聖地。館內收藏了從蒸汽火車到新幹線共 53 輛具有歷史價值的真實車輛。戶外擁有現存最古老的「扇形車庫」，每日更有「SL 蒸汽號」可供搭乘。二樓設有巨大的鐵道模型場景，頂樓還能眺望行駛中的新幹線。
-                                    
-                                    <!-- 新增灰色票券資訊框 -->
                                     <div style="margin-top:8px; padding:10px; background:#f5f5f5; border-radius:8px; font-size:0.85rem; color:#555; line-height: 1.6;">
                                         <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px; font-weight:600; color:var(--primary);">
                                             <i class="fas fa-ticket-alt"></i> 票券資訊
@@ -990,7 +737,6 @@
                                 </div>
                                 <div style="display:flex; gap:8px; flex-wrap:wrap;">
                                     <a href="https://maps.google.com/?q=Kyoto+Railway+Museum" class="spot-nav-btn"><i class="fas fa-location-dot"></i> 導航</a>
-                                    <!-- 新增購票詳情按鈕 -->
                                     <a href="https://www.kyotorailwaymuseum.jp/tc/tickets/" target="_blank" class="spot-nav-btn">
                                         <i class="fas fa-external-link-alt"></i> 購票詳情
                                     </a>
@@ -999,7 +745,7 @@
                         </div>
                     </div>
 
-                    <!-- 17:00 梅小路公園 (新增) -->
+                    <!-- 17:00 梅小路公園 -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">17:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
@@ -1014,7 +760,7 @@
                         </div>
                     </div>
 
-                    <!-- 18:00 晚餐 (標題更新) -->
+                    <!-- 18:00 晚餐 -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">18:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
@@ -1077,7 +823,7 @@
                         </div>
                     </div>
                 </div>
-                 <!-- Interactive Map Day 2 -->
+                <!-- Interactive Map Day 2 (Moved Here) -->
                 <div id="d2-map" class="leaflet-map-container"></div>
             </div>
 
@@ -1098,9 +844,6 @@
                     <div class="route-step"><div class="route-circle">4</div><div class="route-label">滑雪場<br>14:30</div><div class="route-line"></div></div>
                     <div class="route-step"><div class="route-circle">5</div><div class="route-label">飯店<br>18:00</div><div class="route-line"></div></div>
                 </div>
-
-                <!-- FIXED ID: d3-map (Moved to bottom) -->
-                
 
                 <div class="timeline-container">
                     
@@ -1134,7 +877,6 @@
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">09:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
-                            <!-- 修正：更換照片 -->
                             <img src="https://resources.matcha-jp.com/resize/720x2000/2025/06/02-235220.webp" class="spot-image" alt="Driving" onerror="this.src='https://placehold.co/800x400?text=Driving+Start'">
                             <div class="spot-body">
                                 <h3 class="spot-title">移動：飯店 -> 河合神社</h3>
@@ -1147,7 +889,7 @@
                         </div>
                     </div>
 
-                    <!-- 10:00 河合神社 (Moved from Day 2) -->
+                    <!-- 10:00 河合神社 -->
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">10:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
@@ -1176,7 +918,7 @@
                         </div>
                     </div>
 
-                    <!-- Tadasu no Mori (Moved from Day 2) -->
+                    <!-- Tadasu no Mori -->
                     <div class="timeline-item">
                         <div class="timeline-marker">
                             <div class="timeline-time" style="opacity: 0;">00:00</div>
@@ -1194,7 +936,7 @@
                         </div>
                     </div>
 
-                    <!-- Shimogamo Shrine (Moved from Day 2) -->
+                    <!-- Shimogamo Shrine -->
                     <div class="timeline-item">
                         <div class="timeline-marker">
                             <div class="timeline-time" style="opacity: 0;">00:00</div>
@@ -1259,7 +1001,6 @@
                                 <div class="spot-desc">
                                     來到滋賀縣，絕對不能錯過日本三大和牛之一的「近江牛」。其特色在於肉質細膩、脂肪甘甜且入口即化。午餐安排享用正宗的近江牛料理，無論是燒肉、壽喜燒或牛排，都能品嚐到頂級牛肉的鮮美油脂在口中散開的幸福感，為下午的滑雪行程補充滿滿體力。
                                 </div>
-                                <!-- 修正：更新按鈕為導航至松喜屋與官網 -->
                                 <div style="display:flex; gap:8px; flex-wrap:wrap;">
                                     <a href="https://maps.google.com/?q=松喜屋本店" class="spot-nav-btn"><i class="fas fa-location-dot"></i> 導航</a>
                                     <a href="https://www.matsukiya.net/chinese/main-restaurant-cn.html" target="_blank" class="spot-nav-btn"><i class="fas fa-globe"></i> 官網</a>
@@ -1279,7 +1020,6 @@
                                 <div class="spot-desc">
                                     搭乘全日本速度最快的纜車攀升至標高 1100 公尺的山頂，眼前是琵琶湖的絕美全景與銀白雪世界。前往「Snow Land」戲雪區，這裡是專為親子打造的樂園，可以體驗雪盆滑雪、堆雪人或打雪仗。山上空氣清新冷冽，請務必戴好手套與毛帽，盡情享受在關西難得的粉雪體驗。
                                     
-                                    <!-- 新增費用資訊框 -->
                                     <div style="margin-top:8px; padding:10px; background:#f5f5f5; border-radius:8px; font-size:0.85rem; color:#555; line-height: 1.6;">
                                         <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px; font-weight:600; color:var(--primary);">
                                             <i class="fas fa-yen-sign"></i> 費用資訊
@@ -1320,7 +1060,7 @@
                     <div class="timeline-item">
                         <div class="timeline-marker"><div class="timeline-time">18:00</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
                         <div class="content-col">
-                            <!-- Day 3 Hotel Carousel (Updated) -->
+                            <!-- Day 3 Hotel Carousel -->
                             <div class="carousel-container">
                                 <div class="carousel-track">
                                     <div class="carousel-slide"><img src="https://www.hotel-androoms.com/aks/assets/pc/img/room_st_p1.jpg" alt="Room 1"></div>
@@ -1338,7 +1078,7 @@
 
                             <div class="spot-body">
                                 <h3 class="spot-title">住宿: 京都七條安住睦世酒店</h3>
-                                <div class="tags-row"><span class="mini-tag">連泊</span><span class="mini-tag must-see">大浴場</span></div>
+                                <div class="tags-row"><span class="mini-tag">連泊</span><span class="mini-tag">大浴場</span></div>
                                 <div class="spot-desc">
                                     Hotel Androoms Kyoto Shichijo<br>
                                     • 京都站步行約 8-10 分鐘。本日續住。<br>
@@ -1364,7 +1104,8 @@
                         </div>
                     </div>
                 </div>
-                 <!-- Interactive Map Day 3 -->
+
+                <!-- FIXED ID: d3-map (Moved to bottom) -->
                 <div id="d3-map" class="leaflet-map-container"></div>
             </div>
 
@@ -1377,16 +1118,15 @@
                     <div class="weather-arrow"><i class="fas fa-chevron-right"></i></div>
                 </a>
 
-                <!-- Day 4 Route Map & Interactive Map -->
+                <!-- Day 4 Route Map -->
                 <div class="route-map-container">
                     <div class="route-step"><div class="route-circle">1</div><div class="route-label">飯店<br>09:00</div><div class="route-line"></div></div>
                     <div class="route-step"><div class="route-circle">2</div><div class="route-label">宇治<br>10:00</div><div class="route-line"></div></div>
                     <div class="route-step"><div class="route-circle">3</div><div class="route-label">奈良<br>13:30</div><div class="route-line"></div></div>
                     <div class="route-step"><div class="route-circle">4</div><div class="route-label">大阪<br>16:30</div><div class="route-line"></div></div>
                     <div class="route-step"><div class="route-circle">5</div><div class="route-label">飯店<br>18:00</div><div class="route-line"></div></div>
+                    <div class="route-step"><div class="route-circle">6</div><div class="route-label">晚餐<br>18:30</div><div class="route-line"></div></div>
                 </div>
-                <!-- FIXED ID: d4-map -->
-                <div id="d4-map" class="leaflet-map-container"></div>
 
                 <div class="timeline-container">
                     <div class="timeline-item">
@@ -1471,8 +1211,40 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- 18:30 晚餐 -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">18:30</div><div class="timeline-visual"><div class="timeline-dot"></div><div class="timeline-line"></div></div></div>
+                        <div class="content-col">
+                            <img src="https://tisshuang.com/wp-content/uploads/2024/02/%E6%89%8B%E6%A9%9F%E5%87%BA%E6%B1%81%E9%8D%8B08-1.jpg" class="spot-image" alt="Crab Hotpot" onerror="this.src='https://placehold.co/800x400?text=Crab+Hotpot'">
+                            <div class="spot-body">
+                                <h3 class="spot-title">晚餐：出汁鍋 (燒肉蟹腳放題)</h3>
+                                <div class="tags-row"><span class="mini-tag must-eat">吃到飽</span><span class="mini-tag">螃蟹</span></div>
+                                <div class="spot-desc">
+                                    這是一家位於難波附近的超人氣吃到飽餐廳，主打特色是結合了涮涮鍋與壽喜燒的「出汁鍋」。除了豐富的肉品與海鮮外，還可以加價享受長腳蟹吃到飽，絕對能滿足全家人的胃口。
+                                    <div style="margin-top:8px; padding:10px; background:#f5f5f5; border-radius:8px; font-size:0.85rem; color:#555; line-height: 1.6;">
+                                        <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px; font-weight:600; color:var(--primary);">
+                                            <i class="fas fa-yen-sign"></i> 價格資訊
+                                        </div>
+                                        <div style="padding-left:4px;">
+                                            • 牛/豬 2980 日圓<br>
+                                            • 黑毛和牛/牛/豬/雞 3980 日圓<br>
+                                            • 以上可加價追加長腳蟹放題<br>
+                                            • 7-12歲 半價<br>
+                                            • 未滿 3 歲 免費
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                                    <a href="https://maps.google.com/?q=出汁鍋と海鮮門戸" class="spot-nav-btn"><i class="fas fa-location-dot"></i> 導航</a>
+                                    <a href="https://kdhy700.gorp.jp/" target="_blank" class="spot-nav-btn"><i class="fas fa-globe"></i> 官網</a>
+                                    <a href="https://www.paine0602.com/dashinabe-to-kaisen-mondo/" target="_blank" class="spot-nav-btn"><i class="fas fa-comment-dots"></i> 評價</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                 <!-- Interactive Map Day 4 -->
+                <!-- Interactive Map Day 5 (Moved Here) -->
                 <div id="d4-map" class="leaflet-map-container"></div>
             </div>
 
@@ -1481,11 +1253,11 @@
                  <a href="#" target="_blank" class="weather-card" id="weather-d5">
                     <div class="weather-icon-box"><i class="fas fa-sun weather-icon"></i></div>
                     <div class="weather-temp-box">--°</div>
-                    <div class="weather-metrics-box"><div class="metric-item"><i class="fas fa-umbrella"></i> <span class="val-rain">--%</span></div><div class="metric-item"><i class="fas fa-temperature-high"></i> <span class="val-feels">--°</span></div></div>
+                    <div class="weather-metrics-box"><div class="metric-item"><i class="fas fa-temperature-high"></i> <span class="val-feels">--°</span></div><div class="metric-item"><i class="fas fa-umbrella"></i> <span class="val-rain">--%</span></div></div>
                     <div class="weather-arrow"><i class="fas fa-chevron-right"></i></div>
                 </a>
 
-                <!-- Day 5 Route Map & Interactive Map -->
+                <!-- Day 5 Route Map -->
                 <div class="route-map-container">
                     <div class="route-step"><div class="route-circle">1</div><div class="route-label">飯店<br>09:15</div><div class="route-line"></div></div>
                     <div class="route-step"><div class="route-circle">2</div><div class="route-label">海遊館<br>10:00</div><div class="route-line"></div></div>
@@ -1493,8 +1265,6 @@
                     <div class="route-step"><div class="route-circle">4</div><div class="route-label">心齋橋<br>16:00</div><div class="route-line"></div></div>
                     <div class="route-step"><div class="route-circle">5</div><div class="route-label">飯店<br>20:00</div><div class="route-line"></div></div>
                 </div>
-                <!-- FIXED ID: d5-map -->
-                <div id="d5-map" class="leaflet-map-container"></div>
 
                 <div class="timeline-container">
                     <div class="timeline-item">
@@ -1574,7 +1344,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- Interactive Map Day 5 -->
+                <!-- Interactive Map Day 5 (Moved Here) -->
                 <div id="d5-map" class="leaflet-map-container"></div>
             </div>
 
@@ -1587,7 +1357,7 @@
                     <div class="weather-arrow"><i class="fas fa-chevron-right"></i></div>
                 </a>
 
-                <!-- Day 6 Route Map & Interactive Map -->
+                <!-- Day 6 Route Map -->
                 <div class="route-map-container">
                     <div class="route-step"><div class="route-circle">1</div><div class="route-label">飯店<br>09:30</div><div class="route-line"></div></div>
                     <div class="route-step"><div class="route-circle">2</div><div class="route-label">麵包超人<br>10:30</div><div class="route-line"></div></div>
@@ -1595,8 +1365,6 @@
                     <div class="route-step"><div class="route-circle">4</div><div class="route-label">Outlet<br>16:30</div><div class="route-line"></div></div>
                     <div class="route-step"><div class="route-circle">5</div><div class="route-label">機場飯店<br>19:00</div><div class="route-line"></div></div>
                 </div>
-                <!-- FIXED ID: d6-map -->
-                <div id="d6-map" class="leaflet-map-container"></div>
 
                 <div class="timeline-container">
                     <div class="timeline-item">
@@ -1683,6 +1451,8 @@
                         </div>
                     </div>
                 </div>
+                <!-- Interactive Map Day 6 (Moved Here) -->
+                <div id="d6-map" class="leaflet-map-container"></div>
             </div>
             
             <!-- Day 7 -->
@@ -1694,16 +1464,14 @@
                     <div class="weather-arrow"><i class="fas fa-chevron-right"></i></div>
                 </a>
 
-                <!-- Day 7 Route Map & Interactive Map -->
+                <!-- Day 7 Route Map -->
                 <div class="route-map-container">
                     <div class="route-step"><div class="route-circle">1</div><div class="route-label">飯店<br>07:50</div><div class="route-line"></div></div>
                     <div class="route-step"><div class="route-circle">2</div><div class="route-label">接駁車<br>08:00</div><div class="route-line"></div></div>
                     <div class="route-step"><div class="route-circle">3</div><div class="route-label">機場<br>08:15</div><div class="route-line"></div></div>
                     <div class="route-step"><div class="route-circle">4</div><div class="route-label">起飛<br>10:55</div><div class="route-line"></div></div>
                 </div>
-                <!-- FIXED ID: d7-map -->
                 
-
                 <div class="timeline-container">
                     
                     <!-- 08:00 接駁車 -->
@@ -2137,7 +1905,8 @@
                 { lat: 34.98917, lng: 135.75710, title: "1. 飯店" },
                 { lat: 34.8893, lng: 135.8077, title: "2. 宇治平等院" },
                 { lat: 34.6850, lng: 135.8430, title: "3. 奈良公園" },
-                { lat: 34.6823, lng: 135.5005, title: "4. 大阪飯店" }
+                { lat: 34.6823, lng: 135.5005, title: "4. 大阪飯店" },
+                { lat: 34.6631, lng: 135.5015, title: "5. 晚餐(出汁鍋)" } // 新增晚餐座標
             ],
             'd5': [
                 { lat: 34.6823, lng: 135.5005, title: "1. 飯店" },
