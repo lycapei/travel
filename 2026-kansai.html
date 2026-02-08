@@ -299,8 +299,8 @@
             <!-- Day Nav -->
             <div class="day-nav-container">
                 <div class="day-nav">
-                    <div class="day-tab active" onclick="switchDay('d1', this)">Day 1<small>2/8 出發</small></div>
-                    <div class="day-tab" onclick="switchDay('d2', this)">Day 2<small>2/9 京都</small></div>
+                    <div class="day-tab" onclick="switchDay('d1', this)">Day 1<small>2/8 出發</small></div>
+                    <div class="day-tab active" onclick="switchDay('d2', this)">Day 2<small>2/9 京都</small></div>
                     <div class="day-tab" onclick="switchDay('d3', this)">Day 3<small>2/10 琵琶湖</small></div>
                     <div class="day-tab" onclick="switchDay('d4', this)">Day 4<small>2/11 奈良</small></div>
                     <div class="day-tab" onclick="switchDay('d5', this)">Day 5<small>2/12 大阪</small></div>
@@ -2010,7 +2010,7 @@
         // 61=下雨, 71=下雪
         const MANUAL_FORECAST = {
             'weather-d1': { code: 71, temp: -2, realFeel: -9, rain: 55 }, // Day 1 (2/8) 少量降雪
-            'weather-d2': { code: 0,  temp: 7,  realFeel: 4,  rain: 3  }, // Day 2 (2/9) 晴天
+            'weather-d2': { code: 71,  temp: 7,  realFeel: 4,  rain: 55  }, // Day 2 (2/9) 晴天
             'weather-d3': { code: 1,  temp: 10, realFeel: 9,  rain: 25 }, // Day 3 (2/10) 晴時多雲 (更新)
             'weather-d4': { code: 61, temp: 10, realFeel: 11, rain: 80 }, // Day 4 (2/11) 雨天
             'weather-d5': { code: 0,  temp: 12, realFeel: 13, rain: 0  }, // Day 5 (2/12) 晴天
