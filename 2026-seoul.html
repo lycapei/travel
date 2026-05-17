@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="robots" content="noindex">
+    
+    <!-- iOS Web App 設定 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="KOREA 2026">
+    
+    <!-- Favicon & Touch Icon -->
+    <link rel="apple-touch-icon" href="image/favicon-2026-seoul.png">
+    <link rel="icon" type="image/png" href="image/favicon-2026-seoul.png">
+
+    <title>韓國晚春之旅 2026</title>
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            /* 清新晚春新綠色調 */
+            --primary: #B7D5AC;        /* 清新嫩芽綠 */
+            --primary-dark: #4A6351;   /* 深綠色提升對比度 */
+            --accent-pink: #FFC0CB;    /* 櫻花粉 (點綴色) */
+            --tag-pink-bg: #FFF0F5;    /* 極淡櫻花粉標籤背景 */
+            --tag-pink-text: #D4808D;  /* 標籤文字色 */
+            --bg-cream: #FAFBF9;       /* 奶油暖白 */
+            --text-main: #333333;
+            --text-sub: #757575;
+            --btn-blue: #E3F2FD;
+            
+            --shadow: 0 4px 15px rgba(183, 213, 172, 0.2);
+            --radius: 20px;
+            --header-base-height: 60px;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "Malgun Gothic", sans-serif;
+            background-color: var(--bg-cream);
+            color: var(--text-main);
+            margin: 0;
+            padding-bottom: 100px;
+            line-height: 1.6;
+            background-image: radial-gradient(at 0% 0%, #FFF5F7 0%, transparent 30%);
+        }
+
+        /* ---------------- Header & Hero ---------------- */
+        .hero {
+            position: relative;
+            height: 350px;
+            width: 100%;
+            background-image: url('https://plus.unsplash.com/premium_photo-1661886333708-877148b43ae1?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+            background-size: cover;
+            background-position: center; 
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, transparent 60%, var(--bg-cream) 100%);
+        }
+
+        .header {
+            position: fixed; top: 0; left: 0; right: 0; 
+            height: calc(var(--header-base-height) + env(safe-area-inset-top));
+            padding: env(safe-area-inset-top) 20px 0 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000; transition: all 0.3s ease; color: white;
+        }
+        .header.scrolled { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); color: var(--primary-dark); box-shadow: 0 1px 10px rgba(0,0,0,0.05); }
+        .header-title { font-size: 1.1rem; font-weight: 800; letter-spacing: 1px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .header.scrolled .header-title { text-shadow: none; }
+
+        .rate-badge {
+            background: rgba(255,255,255,0.3); backdrop-filter: blur(4px); color: white;
+            padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 700;
+            cursor: pointer; border: 1px solid rgba(255,255,255,0.4);
+            display: flex; align-items: center; gap: 5px;
+        }
+        .rate-badge i { color: var(--accent-pink); }
+        .header.scrolled .rate-badge { background: #F4F8F2; color: var(--primary-dark); border: none; }
+
+        /* ---------------- Layout ---------------- */
+        .container { position: relative; z-index: 10; margin-top: -30px; padding: 0; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+        .day-nav-container {
+            background: var(--bg-cream); position: sticky; 
+            top: calc(var(--header-base-height) + env(safe-area-inset-top)); 
+            z-index: 90; padding: 10px 16px; 
+            border-top-left-radius: 20px; border-top-right-radius: 20px;
+        }
+        .day-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        .day-tab {
+            background: white; padding: 12px 0;
+            border-radius: 14px; font-size: 0.8rem; color: var(--text-sub); 
+            border: 1px solid #F0F2EE; cursor: pointer; transition: all 0.2s; 
+            text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+        .day-tab.active {
+            background: var(--primary); color: white; border-color: var(--primary);
+            font-weight: 700; transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(183, 213, 172, 0.4);
+        }
+        .day-tab small { display: block; font-size: 0.65rem; opacity: 0.8; margin-top: 2px; }
+
+        /* ---------------- 天氣預報卡片 (移除邊框，優化清晰度) ---------------- */
+        a.weather-card {
+            display: flex !important; text-decoration: none !important; 
+            color: var(--primary-dark) !important;
+            background: linear-gradient(135deg, #F1F8E9 0%, #E8F5E9 100%); 
+            border: none; 
+            border-radius: var(--radius); padding: 18px 16px; margin: 0 16px 20px; 
+            align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            transition: transform 0.2s; position: relative; z-index: 1;
+        }
+        a.weather-card:active { transform: scale(0.98); }
+        .weather-icon-box { font-size: 2.2rem; margin-right: 12px; width: 45px; text-align: center; color: var(--primary-dark); }
+        .weather-temp-box { font-size: 2.2rem; font-weight: 800; line-height: 1; margin-right: auto; }
+        
+        .weather-metrics-box { display: flex; align-items: center; gap: 10px; font-size: 0.8rem; font-weight: 700; margin-right: 8px; }
+        .metric-item { display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+        .metric-item i { color: var(--primary-dark); opacity: 0.6; font-size: 0.8rem; }
+        .weather-arrow { opacity: 0.5; font-size: 0.9rem; }
+
+        /* ---------------- 行程時間線 ---------------- */
+        .tab-content { display: none; padding: 10px 0; animation: fadeIn 0.4s ease; }
+        .tab-content.active { display: block; }
+        .day-detail { display: none; }
+        .day-detail.active { display: block; }
+        .timeline-container { padding: 10px 16px 20px; }
+        .timeline-item { display: flex; gap: 15px; margin-bottom: 25px; }
+        .timeline-marker { display: flex; flex-direction: column; align-items: center; width: 50px; flex-shrink: 0; position: relative; padding-top: 12px; }
+        .timeline-time { font-size: 0.9rem; font-weight: 800; color: var(--primary-dark); margin-bottom: 4px; text-align: center; }
+        .timeline-line { position: absolute; top: 34px; bottom: -28px; width: 2px; background: #E8EBE6; z-index: 1; }
+        .timeline-item:last-child .timeline-line { display: none; }
+        
+        .content-col { flex-grow: 1; background: white; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+        .spot-body { padding: 16px; }
+        .spot-title { margin: 0 0 6px 0; font-size: 1.1rem; color: #333; font-weight: 700; }
+        .spot-desc { font-size: 0.9rem; color: var(--text-sub); line-height: 1.6; }
+        .mini-tag { display: inline-block; font-size: 0.75rem; padding: 4px 10px; border-radius: 8px; background: var(--tag-pink-bg); color: var(--tag-pink-text); font-weight: 700; margin-right: 6px; margin-bottom: 8px; border: 1px solid #FFEBEE; }
+        .mini-tag.green { background: #F1F8E9; color: var(--primary-dark); border: 1px solid #DCEDC8; }
+
+        .spot-image { 
+            width: 100%; 
+            height: 160px; 
+            object-fit: cover; 
+            background-color: #f5f5f5; 
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .spot-image:hover {
+            transform: scale(1.02);
+        }
+
+        /* 按鈕統一風格 */
+        .bud-green-btn { display: flex; justify-content: center; align-items: center; background: var(--primary); color: white; width: 100%; padding: 14px; text-decoration: none; font-weight: 700; font-size: 0.95rem; margin-top: 15px; border-radius: 12px; border: none; transition: all 0.2s; cursor: pointer; box-shadow: 0 4px 10px rgba(183, 213, 172, 0.2); }
+        .bud-green-btn:active { background: var(--primary-dark); transform: scale(0.98); }
+        .bud-green-btn i { margin-right: 8px; }
+
+        /* ---------------- 購物推薦分頁與二級分類 (擴增為五列，加大高度) ---------------- */
+        .shop-nav-container {
+            padding: 5px 16px 15px 16px;
+        }
+        .shop-nav {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* 5 列平均分配 */
+            gap: 6px;
+            width: 100%;
+        }
+        .shop-tab {
+            background: white;
+            border: 1px solid #F0F2EE;
+            padding: 14px 0; /* 由原先的 8px 增加到 14px (約1.5倍高度) */
+            border-radius: 10px;
+            font-size: 0.8rem; /* 稍微放大字體提升可讀性 */
+            color: var(--text-sub);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .shop-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 2px 8px rgba(183, 213, 172, 0.3);
+        }
+
+        .shopping-list {
+            padding: 0 16px;
+        }
+        .shopping-item {
+            display: flex;
+            gap: 15px;
+            padding: 16px;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 15px;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+        .shopping-img {
+            width: 95px;
+            height: 95px;
+            border-radius: 14px;
+            object-fit: cover;
+            flex-shrink: 0;
+            background-color: #f5f5f5;
+            border: 1px solid #EBF0EA;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .shopping-img:hover {
+            transform: scale(1.05);
+        }
+        .shopping-info {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        .shopping-title-text {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #333;
+            margin: 0;
+        }
+        .shopping-desc-text {
+            font-size: 0.8rem;
+            color: var(--text-sub);
+            line-height: 1.4;
+            margin: 2px 0 6px 0;
+        }
+        .shopping-meta {
+            font-size: 0.78rem;
+            color: var(--primary-dark);
+            font-weight: 700;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .shopping-meta div {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .shopping-meta i {
+            width: 14px;
+            color: var(--accent-pink);
+            text-align: center;
+        }
+
+        /* 資訊頁與準備頁 */
+        .info-section { background: white; border-radius: var(--radius); padding: 20px; margin: 0 16px 16px; box-shadow: var(--shadow); border-top: 4px solid var(--primary); }
+        .info-header { font-weight: 800; font-size: 1.05rem; margin-bottom: 18px; color: var(--primary-dark); display: flex; align-items: center; gap: 10px; }
+        .info-header i { color: var(--primary); }
+        .checklist-item { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid #F5F5F5; font-size: 0.95rem; }
+        .checklist-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--primary); }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 2000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.2s; backdrop-filter: blur(5px); }
+        .modal-overlay.show { display: flex; opacity: 1; }
+        .calc-card { background: white; width: 85%; max-width: 320px; border-radius: 24px; padding: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); border: 1px solid #F0F2EE; }
+        .calc-input { width: 100%; padding: 12px 12px 12px 65px; border: 1.5px solid #F0F0F0; border-radius: 15px; font-size: 1.25rem; text-align: right; outline: none; margin-bottom: 12px; background: #FAFBF9; }
+        .calc-input:focus { border-color: var(--primary); background: white; }
+
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255, 255, 255, 0.98); border-top: 1px solid #F0F2EE; display: flex; justify-content: space-around; align-items: center; z-index: 1000; padding-top: 12px; padding-bottom: calc(env(safe-area-inset-bottom) + 12px); }
+        .nav-item { flex: 1; text-align: center; color: #BABAB3; font-size: 0.75rem; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .nav-item.active { color: var(--primary-dark); font-weight: 700; }
+        .nav-item i { font-size: 1.3rem; }
+
+        .train-card { background: #F7F8F9; border-radius: 12px; margin-top: 12px; overflow: hidden; }
+        .train-list { padding: 8px 16px; }
+        .train-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px dashed #DDD; color: #444; font-weight: 600; font-size: 0.95rem; }
+        .train-row:last-child { border-bottom: none; }
+        .train-row i { color: var(--primary-dark); font-size: 1rem; width: 20px; text-align: center; }
+        .train-time { font-family: monospace, sans-serif; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header" id="app-header">
+        <div class="header-title">SEOUL 2026</div>
+        <div class="rate-badge" onclick="toggleCalculator()">
+            <i class="fas fa-won-sign"></i> <span id="rate-text">...</span>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <div class="hero"></div>
+
+    <main class="container">
+        
+        <!-- 分頁 1: 行程 -->
+        <div id="view-itinerary" class="tab-content active">
+            <div class="day-nav-container">
+                <div class="day-nav">
+                    <div class="day-tab active" onclick="switchDay('d1', this)">Day 1<small>5/22 (五)</small></div>
+                    <div class="day-tab" onclick="switchDay('d2', this)">Day 2<small>5/23 (六)</small></div>
+                    <div class="day-tab" onclick="switchDay('d3', this)">Day 3<small>5/24 (日)</small></div>
+                    <div class="day-tab" onclick="switchDay('d4', this)">Day 4<small>5/25 (一)</small></div>
+                </div>
+            </div>
+
+            <!-- Day 1 Content -->
+            <div id="day-d1" class="day-detail active">
+                <a href="#" target="_blank" class="weather-card" id="weather-d1">
+                    <div class="weather-icon-box"><i class="fas fa-spinner fa-spin weather-icon"></i></div>
+                    <div class="weather-temp-box">--°</div>
+                    <div class="weather-metrics-box">
+                        <div class="metric-item"><i class="fas fa-temperature-high"></i> <span class="val-feels">--°</span></div>
+                        <div class="metric-item"><i class="fas fa-umbrella"></i> <span class="val-rain">--%</span></div>
+                        <div class="metric-item"><i class="fas fa-sun"></i> <span class="val-uv">--</span></div>
+                    </div>
+                    <div class="weather-arrow"><i class="fas fa-chevron-right"></i></div>
+                </a>
+
+                <div class="timeline-container">
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">05:00</div><div class="timeline-line"></div></div>
+                        <div class="content-col">
+                            <div class="spot-body">
+                                <h3 class="spot-title">機場接送</h3>
+                                <div class="tags-row"><span class="mini-tag green">箱型車</span></div>
+                                <p class="spot-desc">司機將於約定地點準時等候，前往桃園機場第二航廈。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">05:30</div><div class="timeline-line"></div></div>
+                        <div class="content-col">
+                            <div class="spot-body">
+                                <h3 class="spot-title">抵達桃園機場 T2</h3>
+                                <div class="tags-row"><span class="mini-tag green">報到</span><span class="mini-tag green">托運</span></div>
+                                <p class="spot-desc">前往長榮航空櫃檯辦理 BR 170 登機手續。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">07:30</div><div class="timeline-line"></div></div>
+                        <div class="content-col">
+                            <img src="https://img.freepik.com/free-photo/airplane_74190-463.jpg?semt=ais_hybrid&w=740&q=80" style="width:100%; height:160px; object-fit:cover;" class="spot-image" onclick="toggleLightbox(this.src)">
+                            <div class="spot-body">
+                                <h3 class="spot-title">桃園機場 T2 起飛</h3>
+                                <div class="tags-row"><span class="mini-tag green">BR 170</span></div>
+                                <p class="spot-desc">準時起飛，預計飛行時間 2h 30m。</p>
+                                <div style="background: #F9FBF8; padding: 12px; border-radius: 10px; font-size: 0.85rem; border: 1px solid #F0F4EE;">
+                                    <div style="font-weight: 700; color: var(--primary-dark); margin-bottom: 4px;"><i class="fas fa-utensils"></i>餐點預訂</div>
+                                    <div style="padding-left: 20px;">• 兒童餐點（已預訂）</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">11:00</div><div class="timeline-line"></div></div>
+                        <div class="content-col">
+                            <img src="https://blog.lifetour.com.tw/wp-content/uploads/2025/08/%E9%9F%93%E5%9C%8B_%E9%A6%96%E7%88%BE_%E5%8D%97%E5%B1%B1%E5%85%AC%E5%9C%92_shutterstock_2496920855.jpg" style="width:100%; height:140px; object-fit:cover;" class="spot-image" onclick="toggleLightbox(this.src)">
+                            <div class="spot-body">
+                                <h3 class="spot-title">抵達仁川機場 T1</h3>
+                                <div class="tags-row"><span class="mini-tag">入境</span><span class="mini-tag green">提領行李</span></div>
+                                <p class="spot-desc">辦理入境手續、領取行李。</p>
+                                <a href="https://www.airport.kr/ap/en/index.do" target="_blank" class="bud-green-btn">
+                                    <i class="fas fa-clipboard-check"></i> 仁川機場導覽
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">12:00</div><div class="timeline-line"></div></div>
+                        <div class="content-col">
+                            <img src="https://media-cdn.tripadvisor.com/media/attractions-splice-spp-674x446/09/19/bb/a5.jpg" style="width:100%; height:160px; object-fit:cover;" class="spot-image" onclick="toggleLightbox(this.src)">
+                            <div class="spot-body">
+                                <h3 class="spot-title">機場→飯店</h3>
+                                <div class="tags-row"><span class="mini-tag">AREX</span><span class="mini-tag">地鐵4號線</span></div>
+                                <p class="spot-desc">先搭乘 AREX 機場快線後轉地鐵 4 號線。</p>
+                                <div style="border-left: 3px solid var(--accent-pink); padding-left: 12px; margin-bottom: 15px;">
+                                    <p class="spot-desc" style="margin-bottom: 0;">• AREX 機場快線車程約 43 分鐘</p>
+                                </div>
+                                <div class="train-card">
+                                    <div class="train-list">
+                                        <div class="train-row"><i class="fas fa-train"></i><span class="train-time">11:38 → 12:21</span></div>
+                                        <div class="train-row"><i class="fas fa-train"></i><span class="train-time">12:18 → 13:01</span></div>
+                                        <div class="train-row"><i class="fas fa-train"></i><span class="train-time">12:53 → 13:36</span></div>
+                                        <div class="train-row"><i class="fas fa-train"></i><span class="train-time">13:28 → 14:11</span></div>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 15px; border-left: 3px solid var(--accent-pink); padding-left: 12px;">
+                                    <p class="spot-desc" style="font-size: 0.85rem; margin-bottom: 0; color: var(--text-main);">
+                                        首爾站轉地鐵 4 號線<br>
+                                        東大門歷史文化公園站<br>
+                                        從 4 號出口步行至東橫 INN。
+                                    </p>
+                                </div>
+                                <a href="https://www.airportrailroad.com/train/express/info" target="_blank" class="bud-green-btn">
+                                    <i class="fas fa-clock"></i> AREX 時刻表
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">13:30</div><div class="timeline-line"></div></div>
+                        <div class="content-col">
+                            <img src="https://rsv.toyoko-inn.com/content/room/00291/%ED%8A%B8%EC%9C%88%EB%A3%B831.jpg" style="width:100%; height:160px; object-fit:cover;" class="spot-image" onclick="toggleLightbox(this.src)">
+                            <div class="spot-body">
+                                <h3 class="spot-title">東橫INN首爾東大門2號店</h3>
+                                <div class="tags-row"><span class="mini-tag">飯店</span><span class="mini-tag green">寄放行李</span></div>
+                                <p class="spot-desc">抵達飯店寄放行李，正式展開首爾市區探索之旅。</p>
+                                <a href="https://www.google.com/maps/search/Toyoko+Inn+Seoul+Dongdaemun+2" target="_blank" class="bud-green-btn">
+                                    <i class="fas fa-map-marker-alt"></i> 地圖導航
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 14:30 明洞換錢 -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">14:30</div><div class="timeline-line"></div></div>
+                        <div class="content-col">
+                            <div class="spot-body">
+                                <h3 class="spot-title">明洞換錢</h3>
+                                <div class="tags-row"><span class="mini-tag green">必備</span><span class="mini-tag">匯率</span></div>
+                                <p class="spot-desc">前往明洞大使館或一品香換錢所兌換韓元，獲取最優匯率。</p>
+                                <a href="https://www.google.com/maps/search/Myeongdong+Currency+Exchange" target="_blank" class="bud-green-btn">
+                                    <i class="fas fa-location-dot"></i> 搜尋換錢所
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 15:00 明洞大創 -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">15:00</div><div class="timeline-line"></div></div>
+                        <div class="content-col">
+                            <img src="https://scontent.ftpe9-1.fna.fbcdn.net/v/t39.30808-6/488723003_9721090921276234_1452323274430794919_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=110&ccb=1-7&_nc_sid=127cfc&_nc_ohc=vs7WydgTHjwQ7kNvwEWTTl2&_nc_oc=Adrk69u7kwZ3xUJKD-YhCHLM6wqYmTBRNAV1DognPt7ApSfrmZmkatEgPn62eDSgN_o&_nc_zt=23&_nc_ht=scontent.ftpe9-1.fna&_nc_gid=Misny24BNVzauIwI5d531A&_nc_ss=7b289&oh=00_Af5gpkU5iBDnhfQU_ii_cLTa0p8QJPaBbpmA4C_ws_L8VA&oe=6A0F5660" class="spot-image" onclick="toggleLightbox(this.src)">
+                            <div class="spot-body">
+                                <h3 class="spot-title">明洞大創</h3>
+                                <div class="tags-row"><span class="mini-tag green">必逛</span><span class="mini-tag">12層大樓</span></div>
+                                <p class="spot-desc">位於明洞站旁的超巨型 12 層大創百貨！商品包羅萬象、實用雜貨與伴手禮都超劃算！</p>
+                                <a href="https://www.google.com/maps/search/Daiso+Myeongdong+Station" target="_blank" class="bud-green-btn">
+                                    <i class="fas fa-location-dot"></i> 導航至大創
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- NorthFace (無壓時間) -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">隨後</div><div class="timeline-line"></div></div>
+                        <div class="content-col">
+                            <img src="https://d1luhpavo4dn74.cloudfront.net/wp-content/uploads/travel-plus-07-02.jpg" class="spot-image" onclick="toggleLightbox(this.src)">
+                            <div class="spot-body">
+                                <h3 class="spot-title">NorthFace</h3>
+                                <div class="tags-row"><span class="mini-tag green">潮流</span><span class="mini-tag">韓國限定</span></div>
+                                <p class="spot-desc">專攻韓國限定的 The North Face White Label（白標系列），兼具機能與街頭休閒設計，版型絕佳！</p>
+                                <a href="https://www.google.com/maps/search/The+North+Face+Myeongdong" target="_blank" class="bud-green-btn">
+                                    <i class="fas fa-location-dot"></i> 導航至 NorthFace
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 18:00 柳家辣炒雞排 | Musoe 水芹菜烤肉 -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">18:00</div><div class="timeline-line" style="display:none;"></div></div>
+                        <div class="content-col">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpm-AOGHXAroGvQbgCOBbu1KXRM5RU0wCyxg&s" style="width:100%; height:160px; object-fit:cover;" class="spot-image" onclick="toggleLightbox(this.src)">
+                            <div class="spot-body">
+                                <h3 class="spot-title">柳家辣炒雞排 | Musoe 水芹菜烤肉</h3>
+                                <div class="tags-row"><span class="mini-tag green">晚餐推薦</span><span class="mini-tag">雙提案</span></div>
+                                <p class="spot-desc">
+                                    <b>【A】柳家辣炒雞排：</b>超人氣辣炒雞排名店，鮮嫩雞肉搭配獨門辣醬與濃郁起司，美味過癮！<br>
+                                    <b>【B】Musoe 水芹菜烤肉：</b>生五花肉與烤盤上堆積如山的新鮮水芹菜完美結合，解膩多汁、香氣逼人！
+                                </p>
+                                <a href="https://www.google.com/maps/search/Myeongdong+Restaurants+Yoogane+Musoe" target="_blank" class="bud-green-btn">
+                                    <i class="fas fa-location-dot"></i> 搜尋明洞美食
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 2 Content -->
+            <div id="day-d2" class="day-detail">
+                <a href="#" target="_blank" class="weather-card" id="weather-d2">
+                    <div class="weather-icon-box"><i class="fas fa-spinner fa-spin weather-icon"></i></div>
+                    <div class="weather-temp-box">--°</div>
+                    <div class="weather-metrics-box">
+                        <div class="metric-item"><i class="fas fa-temperature-high"></i> <span class="val-feels">--°</span></div>
+                        <div class="metric-item"><i class="fas fa-umbrella"></i> <span class="val-rain">--%</span></div>
+                        <div class="metric-item"><i class="fas fa-sun"></i> <span class="val-uv">--</span></div>
+                    </div>
+                    <div class="weather-arrow"><i class="fas fa-chevron-right"></i></div>
+                </a>
+                
+                <div class="timeline-container">
+                    
+                    <!-- 09:00 景福宮 x 韓服體驗 -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">09:00</div><div class="timeline-line"></div></div>
+                        <div class="content-col">
+                            <img src="https://blog-static.kkday.com/zh-tw/blog/wp-content/uploads/Korea_Seoul_Gyeongbok-Palace_Ashutterstock_225199528.jpg" class="spot-image" onclick="toggleLightbox(this.src)">
+                            <div class="spot-body">
+                                <h3 class="spot-title">景福宮 x 韓服體驗</h3>
+                                <div class="tags-row"><span class="mini-tag green">第一批預約</span><span class="mini-tag">美照首選</span></div>
+                                <p class="spot-desc">預約第一批！此時更換服裝最美最新、遊客較少，早晨溫和的陽光拍起照片來最漂亮動人。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 11:30 土俗村蔘雞湯 | 無垢屋 -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">11:30</div><div class="timeline-line"></div></div>
+                        <div class="content-col">
+                            <img src="https://niniyeh.com/wp-content/uploads/2024/01/IMG_0425-2.jpg" class="spot-image" onclick="toggleLightbox(this.src)">
+                            <div class="spot-body">
+                                <h3 class="spot-title">土俗村蔘雞湯 | 無垢屋</h3>
+                                <div class="tags-row"><span class="mini-tag">美食雙提案</span></div>
+                                <p class="spot-desc">
+                                    <b>【A】土俗村蔘雞湯：</b>經典老字號，濃郁白濁湯頭與軟嫩雞肉，最道地的首爾滋味。<br>
+                                    <b>【B】無垢屋 (Muguok 安國總店)：</b>近期爆紅的北韓式蔘雞湯。採用湯肉分離設計，雞白湯濃郁如濃湯般溫潤不辣，非常適合全家大小一同享用！
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 14:00 廣藏市場 -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">14:00</div><div class="timeline-line"></div></div>
+                        <div class="content-col">
+                            <img src="https://blog-static.kkday.com/zh-hk/blog/wp-content/uploads/Screenshot-2023-09-21-at-4.32.06-PM.png" class="spot-image" onclick="toggleLightbox(this.src)">
+                            <div class="spot-body">
+                                <h3 class="spot-title">廣藏市場</h3>
+                                <div class="tags-row"><span class="mini-tag green">傳統美食</span><span class="mini-tag">莫代爾棉被</span></div>
+                                <p class="spot-desc">體驗首爾最道地的傳統市場風情！這裡不僅有綠豆煎餅、麻藥紫菜包飯等經典在地小吃，也是挑選莫代爾親膚棉被的必訪之地（推薦至藝家 88 號購買，買完可請店家強力真空壓縮，方便收納打包回台）。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 16:30 聖水洞 -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">16:30</div><div class="timeline-line"></div></div>
+                        <div class="content-col">
+                            <img src="https://damei17.com/wp-content/uploads/2025/03/Olive-Young-N%E8%81%96%E6%B0%B4-1.jpg" class="spot-image" onclick="toggleLightbox(this.src)">
+                            <div class="spot-body">
+                                <h3 class="spot-title">聖水洞</h3>
+                                <div class="tags-row"><span class="mini-tag green">Dior 外牆</span><span class="mini-tag">潮流散步</span></div>
+                                <p class="spot-desc">走訪首爾當紅的潮流重鎮！除了欣賞 Dior 夢幻概念店的華麗外牆，還可安排至絕美的 Tourensol 咖啡廳休息，精緻優雅的空間適合旅伴舒適放鬆喝咖啡，其他人則能自在探訪周邊的設計師店鋪與潮流快閃店。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 18:30 Musoe 水芹菜烤肉 | 曹曹刀削麵 -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">18:30</div><div class="timeline-line" style="display:none;"></div></div>
+                        <div class="content-col">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThN0KRJXIgBDG93UyprpXQdXNhdg5teuffMA&s" class="spot-image" onclick="toggleLightbox(this.src)">
+                            <div class="spot-body">
+                                <h3 class="spot-title">Musoe 水芹菜烤肉 | 曹曹刀削麵</h3>
+                                <div class="tags-row"><span class="mini-tag">晚餐雙提案</span></div>
+                                <p class="spot-desc">
+                                    <b>【A】Musoe 水芹菜烤肉 (聖水店)：</b>招牌豬五花搭配香氣濃郁的水芹菜，但現場通常排隊較久。<br>
+                                    <b>【B】曹曹刀削麵：</b>幾乎不用排隊！滿滿的蛤蜊刀削麵與海鮮煎餅湯頭鮮美，清爽不油膩，極度推薦喜愛海鮮與清淡口味的旅客！
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <!-- Day 3 Content -->
+            <div id="day-d3" class="day-detail">
+                <a href="#" target="_blank" class="weather-card" id="weather-d3">
+                    <div class="weather-icon-box"><i class="fas fa-spinner fa-spin weather-icon"></i></div>
+                    <div class="weather-temp-box">--°</div>
+                    <div class="weather-metrics-box">
+                        <div class="metric-item"><i class="fas fa-temperature-high"></i> <span class="val-feels">--°</span></div>
+                        <div class="metric-item"><i class="fas fa-umbrella"></i> <span class="val-rain">--%</span></div>
+                        <div class="metric-item"><i class="fas fa-sun"></i> <span class="val-uv">--</span></div>
+                    </div>
+                    <div class="weather-arrow"><i class="fas fa-chevron-right"></i></div>
+                </a>
+                
+                <div class="timeline-container">
+                    
+                    <!-- 10:00 樂天世界 -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">10:00</div><div class="timeline-line"></div></div>
+                        <div class="content-col">
+                            <img src="https://icrvb3jy.xinmedia.com/solomo/article/6/5/5/6551bf14-c3f8-405b-80ce-89dede8823e3.jpg" class="spot-image" onclick="toggleLightbox(this.src)">
+                            <div class="spot-body">
+                                <h3 class="spot-title">樂天世界</h3>
+                                <div class="tags-row"><span class="mini-tag green">楓之谷園區</span><span class="mini-tag">KidZone</span></div>
+                                <p class="spot-desc">首爾經典的冒險樂園！可先前往戶外最新的楓之谷園區打卡拍美照；室內 1 樓則設有適合低年齡層旅客的 KidZone，皆為溫和安全的遊樂設施。若同行旅伴累了，亦可隨時前往相連的樂天百貨內悠閒喝杯咖啡、稍作休息。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 15:00 望遠市場 -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">15:00</div><div class="timeline-line"></div></div>
+                        <div class="content-col">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjUwqFEe3pfMAyjA5DaKdUHQUono4m4UZcPg&s" class="spot-image" onclick="toggleLightbox(this.src)">
+                            <div class="spot-body">
+                                <h3 class="spot-title">望遠市場</h3>
+                                <div class="tags-row"><span class="mini-tag green">平坦路面</span><span class="mini-tag">在地小吃</span></div>
+                                <p class="spot-desc">路面平坦寬敞，步行或推車都非常輕鬆，適合悠閒散步。這裡有許多超人氣的排隊在地小吃，如炸辣椒、炸雞丁及各式煎餅，可在此輕鬆品嚐豐富點心。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 17:30 風川鰻魚 | 麻浦農水產物市場 -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">17:30</div><div class="timeline-line"></div></div>
+                        <div class="content-col">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS60kkqmIbqEkw61LIdC49RGy69obcINcBWYg&s" class="spot-image" onclick="toggleLightbox(this.src)">
+                            <div class="spot-body">
+                                <h3 class="spot-title">風川鰻魚 | 麻浦農水產物市場</h3>
+                                <div class="tags-row"><span class="mini-tag">晚餐雙提案</span></div>
+                                <p class="spot-desc">
+                                    <b>【A】風川鰻魚 (弘大/延南洞店)：</b>現點現烤、帶有迷人炭香的頂級烤鰻魚，肉質彈牙無細刺，補充滿滿活力。<br>
+                                    <b>【B】麻浦農水產物市場：</b>可現場挑選新鮮頂級的帝王蟹、鮮蝦與貝類並直接代客料理，享用最鮮美澎湃的海鮮饗宴！
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 19:30 E-Mart 往十里店 -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">19:30</div><div class="timeline-line" style="display:none;"></div></div>
+                        <div class="content-col">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRE7QJ_mrLg0ejw8ltyTn6tKnV0iJWwjEopVw&s" class="spot-image" onclick="toggleLightbox(this.src)">
+                            <div class="spot-body">
+                                <h3 class="spot-title">E-Mart 往十里店</h3>
+                                <div class="tags-row"><span class="mini-tag green">零食大掃貨</span><span class="mini-tag">計程車打包</span></div>
+                                <p class="spot-desc">大型超市零食總採買！大買特買 HBAF 堅果、海苔與各式熱門韓國泡麵。離飯店僅兩站距離，採購完可直接於超市門口搭乘計程車，舒適輕鬆載著戰利品返回飯店打包。</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <!-- Day 4 Content (5/25) -->
+            <div id="day-d4" class="day-detail">
+                <a href="#" target="_blank" class="weather-card" id="weather-d4">
+                    <div class="weather-icon-box"><i class="fas fa-spinner fa-spin weather-icon"></i></div>
+                    <div class="weather-temp-box">--°</div>
+                    <div class="weather-metrics-box">
+                        <div class="metric-item"><i class="fas fa-temperature-high"></i> <span class="val-feels">--°</span></div>
+                        <div class="metric-item"><i class="fas fa-umbrella"></i> <span class="val-rain">--%</span></div>
+                        <div class="metric-item"><i class="fas fa-sun"></i> <span class="val-uv">--</span></div>
+                    </div>
+                    <div class="weather-arrow"><i class="fas fa-chevron-right"></i></div>
+                </a>
+
+                <div class="timeline-container">
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">08:30</div><div class="timeline-line"></div></div>
+                        <div class="content-col">
+                            <div class="spot-body">
+                                <h3 class="spot-title">前往機場：機場巴士 6001</h3>
+                                <div class="tags-row"><span class="mini-tag">交通</span><span class="mini-tag green">車程約 1h</span></div>
+                                <p class="spot-desc">準備返家。搭乘 6001 號機場巴士前往仁川機場第一航廈。</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">09:30</div><div class="timeline-line"></div></div>
+                        <div class="content-col">
+                            <div class="spot-body">
+                                <h3 class="spot-title">抵達仁川機場 T1</h3>
+                                <div class="tags-row"><span class="mini-tag">報到</span><span class="mini-tag green">免稅店</span></div>
+                                <p class="spot-desc">辦理行李托運，可進行最後的機場購物與退稅。</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">12:00</div><div class="timeline-line"></div></div>
+                        <div class="content-col">
+                            <img src="https://img.freepik.com/free-photo/airplane_74190-463.jpg?semt=ais_hybrid&w=740&q=80" style="width:100%; height:160px; object-fit:cover;" class="spot-image" onclick="toggleLightbox(this.src)">
+                            <div class="spot-body">
+                                <h3 class="spot-title">仁川機場 T1 起飛</h3>
+                                <div class="tags-row"><span class="mini-tag green">BR 169</span></div>
+                                <p class="spot-desc">飛行時間 2h 35m。祝平安到家！</p>
+                                <div style="background: #F9FBF8; padding: 12px; border-radius: 10px; font-size: 0.85rem; border: 1px solid #F0F4EE;">
+                                    <div style="font-weight: 700; color: var(--primary-dark); margin-bottom: 4px;"><i class="fas fa-utensils"></i>餐點預訂</div>
+                                    <div style="padding-left: 20px;">• 兒童餐點（已預訂）</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><div class="timeline-time">13:35</div><div class="timeline-line"></div></div>
+                        <div class="content-col">
+                            <img src="https://plus.unsplash.com/premium_photo-1661955975506-04d3812be312?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" style="width:100%; height:160px; object-fit:cover;" class="spot-image" onclick="toggleLightbox(this.src)">
+                            <div class="spot-body">
+                                <h3 class="spot-title">抵達桃園機場 T2</h3>
+                                <div class="tags-row"><span class="mini-tag">入境</span></div>
+                                <p class="spot-desc">領取行李，平安返回溫暖的家。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 分頁 2: 資訊 (Info) -->
+        <div id="view-info" class="tab-content">
+            <div class="info-section">
+                <div class="info-header"><i class="fas fa-plane-departure"></i> 航班資訊</div>
+                <div style="margin-bottom:20px; background: #FDFCFB; height: 85px; display: flex; align-items: center; justify-content: center; border-radius: 16px; border: 1.5px dashed var(--accent-pink);">
+                    <div style="font-weight: 900; color: var(--primary-dark); font-size: 2.4rem; letter-spacing: 6px; font-family: 'Courier New', Courier, monospace; line-height: 1;">FD3UYP</div>
+                </div>
+                <div style="display: flex; gap: 15px;">
+                    <div style="flex: 1; border-left: 3px solid var(--accent-pink); padding-left: 10px;">
+                        <div style="font-size: 0.75rem; color: var(--text-sub);">去程 (5/22)</div>
+                        <div style="font-weight: 700;">BR 170</div>
+                        <div style="font-size: 0.85rem;">07:30 TPE (T2)</div>
+                        <div style="font-size: 0.85rem;">11:00 ICN (T1)</div>
+                    </div>
+                    <div style="flex: 1; border-left: 3px solid var(--primary); padding-left: 10px;">
+                        <div style="font-size: 0.75rem; color: var(--text-sub);">回程 (5/25)</div>
+                        <div style="font-weight: 700;">BR 169</div>
+                        <div style="font-size: 0.85rem;">12:00 ICN (T1)</div>
+                        <div style="font-size: 0.85rem;">13:35 TPE (T2)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="info-section">
+                <div class="info-header"><i class="fas fa-hotel"></i> 住宿資訊</div>
+                <div style="font-weight: 700; color: #333;">東橫 INN 首爾東大門 2 號店</div>
+                <div style="font-size: 0.85rem; color: var(--text-sub); margin-top: 4px;">地鐵東大門歷史文化公園站 4 號出口</div>
+            </div>
+            <div class="info-section">
+                <div class="info-header"><i class="fas fa-language"></i> 常用韓文</div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; padding-bottom:10px; border-bottom:1px solid #f9f9f9;">
+                    <div style="font-weight:700;">請問多少錢？ (얼마예요?)</div>
+                    <button onclick="speakKorean('얼마예요?')" class="bud-green-btn" style="width:40px; height:40px; border-radius:50%; margin-top:0;"><i class="fas fa-volume-up" style="margin:0"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 分頁 3: 購物 (Shopping) -->
+        <div id="view-shopping" class="tab-content">
+            <!-- 二級分類切換按鈕 (Sub-tabs) -->
+            <div class="shop-nav-container">
+                <div class="shop-nav">
+                    <button class="shop-tab active" onclick="filterShopping('all', this)">全部</button>
+                    <button class="shop-tab" onclick="filterShopping('beauty', this)">美妝</button>
+                    <button class="shop-tab" onclick="filterShopping('skincare', this)">保養</button>
+                    <button class="shop-tab" onclick="filterShopping('medicine', this)">藥品</button>
+                    <button class="shop-tab" onclick="filterShopping('snacks', this)">零食</button>
+                </div>
+            </div>
+
+            <div class="shopping-list">
+                
+                <!-- === 零食區 (Snacks) === -->
+                
+                <!-- 1. 韓國杜拜巧克力 -->
+                <div class="shopping-item" data-category="snacks">
+                    <img src="https://instagram.ftpe9-1.fna.fbcdn.net/v/t51.82787-15/656404904_17932587876235533_1739042419491746453_n.jpg?stp=cp6_dst-jpg_e35_tt6&_nc_cat=100&ig_cache_key=Mzg2MTg3NDgwMjE2NDMyNTUyOQ%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTQ0MC5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=-sBzPHhopaoQ7kNvwEi5hZa&_nc_oc=AdqjONfSibVC8axAQFdy1BoI-oNfexHVJPRt8YKnrOvLBHE0F-KS25MV-dMatxtggmU&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.ftpe9-1.fna&_nc_gid=pFy6SV-bRdPbhQV7IK9MAQ&_nc_ss=7a22e&oh=00_Af6aUqv-ob0qUEUtQOaOYGkjPxLHEkfNok6zQ6dn9s6tRQ&oe=6A0F4539" class="shopping-img" alt="韓國杜拜巧克力" onerror="this.src='https://placehold.co/150?text=Dubai+Chocolate'" onclick="toggleLightbox(this.src)">
+                    <div class="shopping-info">
+                        <h4 class="shopping-title-text">韓國杜拜巧克力</h4>
+                        <p class="shopping-desc-text">首爾目前最火的話題甜點！香濃巧克力外皮包覆香脆開心果與卡達伊夫麵線，多層次的脆甜滋味！</p>
+                        <div class="shopping-meta">
+                            <div><i class="fas fa-store"></i> <span>CU 便利商店</span></div>
+                            <div><i class="fas fa-tag"></i> <span>約 ₩3,300 - ₩5,900</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. HBAF系列堅果 -->
+                <div class="shopping-item" data-category="snacks">
+                    <img src="https://cdn.imweb.me/upload/S20230608b5e61128f1cc9/17a94fcbae394.jpg" class="shopping-img" alt="HBAF堅果系列" onerror="this.src='https://placehold.co/150?text=HBAF+Almonds'" onclick="toggleLightbox(this.src)">
+                    <div class="shopping-info">
+                        <h4 class="shopping-title-text">HBAF 系列堅果</h4>
+                        <p class="shopping-desc-text">韓國最經典的伴手禮！蜂蜜奶油、芥末、烤玉米、大蒜麵包等多款超人氣口味，香脆順口。</p>
+                        <div class="shopping-meta">
+                            <div><i class="fas fa-store"></i> <span>明洞 HBAF 旗艦店 / Lotte Mart / 一般超市</span></div>
+                            <div><i class="fas fa-tag"></i> <span>大包 ₩7,900 / 綜合分享包 ₩12,900</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. HBAF蒜香奶油蝦口味海苔 -->
+                <div class="shopping-item" data-category="snacks">
+                    <img src="https://thumbnail.coupangcdn.com/thumbnails/remote/492x492ex/image/rs_quotation_api/voqxnybt/3e7e23a9b1624cb09c5fa6b37822e403.jpg" class="shopping-img" alt="HBAF海苔" onerror="this.src='https://placehold.co/150?text=HBAF+Seaweed'" onclick="toggleLightbox(this.src)">
+                    <div class="shopping-info">
+                        <h4 class="shopping-title-text">HBAF 蒜香奶油蝦口味海苔</h4>
+                        <p class="shopping-desc-text">人氣新品！將香濃蒜香奶油結合鮮甜蝦仁風味，融入酥脆的海苔之中，下酒與配飯的極佳零食。</p>
+                        <div class="shopping-meta">
+                            <div><i class="fas fa-store"></i> <span>明洞 HBAF 旗艦店 / 韓國各大超市</span></div>
+                            <div><i class="fas fa-tag"></i> <span>約 ₩4,500</span></div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- === 藥品區 (Medicine) === -->
+
+                <!-- 4. aclean水楊酸去痘凝膠 -->
+                <div class="shopping-item" data-category="medicine">
+                    <img src="https://down-tw.img.susercontent.com/file/sg-11134207-7rbkf-lmlbgbferymd09" class="shopping-img" alt="aclean" onerror="this.src='https://placehold.co/150?text=Aclean'" onclick="toggleLightbox(this.src)">
+                    <div class="shopping-info">
+                        <h4 class="shopping-title-text">Aclean 水楊酸去痘凝膠</h4>
+                        <p class="shopping-desc-text">針對閉口粉刺、黑頭、毛孔老廢角質與白頭粉刺。含有水楊酸成分可代謝頑固的毛孔角質。</p>
+                        <div class="shopping-meta">
+                            <div><i class="fas fa-store"></i> <span>韓國一般藥局</span></div>
+                            <div><i class="fas fa-tag"></i> <span>約 ₩10,000 - ₩12,000</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. acnon cream 去豆 -->
+                <div class="shopping-item" data-category="medicine">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTT-a9AC-oO83AxxMEtfmEA3TFjw0o8iejn2w&s" class="shopping-img" alt="acnon cream" onerror="this.src='https://placehold.co/150?text=Acnon+Cream'" onclick="toggleLightbox(this.src)">
+                    <div class="shopping-info">
+                        <h4 class="shopping-title-text">Acnon Cream 祛痘消炎膏</h4>
+                        <p class="shopping-desc-text">特別針對紅腫發炎、按壓會刺痛的無頭大痘。具優良消炎殺菌功效，質地不乾裂、不刺激。</p>
+                        <div class="shopping-meta">
+                            <div><i class="fas fa-store"></i> <span>韓國一般藥局</span></div>
+                            <div><i class="fas fa-tag"></i> <span>約 ₩12,000 - ₩15,000</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. noscarna 去豆除八 -->
+                <div class="shopping-item" data-category="medicine">
+                    <img src="https://www.maskqueen.com/_uploads/Product/2026/01/21/2026012121420378_600x600.jpg" class="shopping-img" alt="noscarna" onerror="this.src='https://placehold.co/150?text=Noscarna'" onclick="toggleLightbox(this.src)">
+                    <div class="shopping-info">
+                        <h4 class="shopping-title-text">Noscarna 祛痘除疤修復膏</h4>
+                        <p class="shopping-desc-text">韓國藥界最知名的除疤膏！有效針對色素沉澱的紅褐色新生痘疤或外傷傷疤，修復痕跡更快速。</p>
+                        <div class="shopping-meta">
+                            <div><i class="fas fa-store"></i> <span>韓國一般藥局</span></div>
+                            <div><i class="fas fa-tag"></i> <span>約 ₩15,000 - ₩22,000</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7. 熊貓家族 B5 修復再生軟膏系列 (四色合併) -->
+                <div class="shopping-item" data-category="medicine">
+                    <img src="https://instagram.ftpe9-1.fna.fbcdn.net/v/t51.82787-15/627666310_17923903581218915_2872909008392210486_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=103&ig_cache_key=MzgyNjU4NDQ1NzYyMTYzMTMwMA%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuNjkzLnNkci5yZWd1bGFyX3Bob3RvLkMzIn0%3D&_nc_ohc=LZ0GRNcR6yQQ7kNvwEPy85I&_nc_oc=AdrJua74AK53mwIAWML1Q3bh8zyg2Iy7jzqQGf8uXk4FcKIJ_5ZqCs0Rdl8LnBBS2wY&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.ftpe9-1.fna&_nc_gid=pFy6SV-bRdPbhQV7IK9MAQ&_nc_ss=7a22e&oh=00_Af5QQnz-XRU4mv6micwTspB-yhLksFGlV0XdLDTymbWzAQ&oe=6A0F4498" class="shopping-img" alt="熊貓家族軟膏" onerror="this.src='https://placehold.co/150?text=Panda+Ointment'" onclick="toggleLightbox(this.src)">
+                    <div class="shopping-info">
+                        <h4 class="shopping-title-text">熊貓家族 B5 修復再生軟膏系列</h4>
+                        <p class="shopping-desc-text">主要成分為維他命原B5 (D-泛醇)。<br>
+                        <b>• 藍色 (保濕修復)：</b>換季乾癢、醫美修復、尿布疹等。<br>
+                        <b>• 綠色 (鎮靜止癢)：</b>蟲咬或皮膚瘙癢。<br>
+                        <b>• 橘色 (抗菌修護)：</b>各式割傷擦傷，消炎防感染。<br>
+                        <b>• 粉色 (針對過敏)：</b>過敏性炎與刺激，含弱效類固醇。</p>
+                        <div class="shopping-meta">
+                            <div><i class="fas fa-store"></i> <span>韓國一般藥局</span></div>
+                            <div><i class="fas fa-tag"></i> <span>單支約 ₩6,000 - ₩8,000</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 8. Domina 美白霜 -->
+                <div class="shopping-item" data-category="medicine">
+                    <img src="https://doinklab.com/wp-content/uploads/2025/12/Domina-Cream-Light-2-%E6%B7%A1%E6%96%91%E7%A5%9B%E9%BB%91%E8%89%B2%E7%B4%A0-40g-.png" class="shopping-img" alt="Domina 美白霜" onerror="this.src='https://placehold.co/150?text=Domina+Cream'" onclick="toggleLightbox(this.src)">
+                    <div class="shopping-info">
+                        <h4 class="shopping-title-text">Domina 經典美白淡斑霜</h4>
+                        <p class="shopping-desc-text">泰康製藥出品，名氣極高。含對苯二酚成分，需睡前點塗使用，能高效淡化黑色素、黑斑 and 深層色斑。</p>
+                        <div class="shopping-meta">
+                            <div><i class="fas fa-store"></i> <span>韓國一般藥局</span></div>
+                            <div><i class="fas fa-tag"></i> <span>約 ₩40,000</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 9. 褪黑外用去斑膏 (Dominas / 美美白霜) -->
+                <div class="shopping-item" data-category="medicine">
+                    <img src="https://images.unsplash.com/photo-1617897903246-719242758050?q=80&w=300&auto=format&fit=crop" class="shopping-img" alt="dominas" onerror="this.src='https://placehold.co/150?text=Dominas+Cream'" onclick="toggleLightbox(this.src)">
+                    <div class="shopping-info">
+                        <h4 class="shopping-title-text">Dominas Cream 美白乳霜 (Domina 姐妹款)</h4>
+                        <p class="shopping-desc-text">溫和提亮全臉，適合日常夜間保養淡化微小斑點與暗沉。</p>
+                        <div class="shopping-meta">
+                            <div><i class="fas fa-store"></i> <span>韓國一般藥局 / Olive Young</span></div>
+                            <div><i class="fas fa-tag"></i> <span>約 ₩38,000</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 10. 褪黑激素軟糖 cj welcare -->
+                <div class="shopping-item" data-category="medicine">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6GPT8icFPzzcL-dMrSUcCBSvOm2DgGWRC1w&s" class="shopping-img" alt="CJ 軟糖" onerror="this.src='https://placehold.co/150?text=CJ+Gummy'" onclick="toggleLightbox(this.src)">
+                    <div class="shopping-info">
+                        <h4 class="shopping-title-text">CJ Wellcare 褪黑激素舒眠軟糖</h4>
+                        <p class="shopping-desc-text">蘊含天然溫和配方的舒眠小軟糖，能放鬆神經緊繃，助眠效果溫和無負擔。</p>
+                        <div class="shopping-meta">
+                            <div><i class="fas fa-store"></i> <span>Olive Young / 一般藥局</span></div>
+                            <div><i class="fas fa-tag"></i> <span>約 ₩16,000 - ₩20,000</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 11. GC 韓國硬十字口腔軟膏 -->
+                <div class="shopping-item" data-category="medicine">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBurD5-vkmIgl46dF2fSl_JESKU18vSNMt8Q&s" class="shopping-img" alt="綠十字口腔膏" onerror="this.src='https://placehold.co/150?text=GC+Ointment'" onclick="toggleLightbox(this.src)">
+                    <div class="shopping-info">
+                        <h4 class="shopping-title-text">GC 韓國綠十字口腔口內軟膏</h4>
+                        <p class="shopping-desc-text">針對嘴破、口腔黏膜紅腫發炎。塗抹後可形成黏性極高保護層，加速口內潰瘍的修復速度。</p>
+                        <div class="shopping-meta">
+                            <div><i class="fas fa-store"></i> <span>韓國一般藥局</span></div>
+                            <div><i class="fas fa-tag"></i> <span>約 ₩6,000</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 12. 葡萄糖營養防乾澀眼藥水 -->
+                <div class="shopping-item" data-category="medicine">
+                    <img src="https://instagram.ftpe9-1.fna.fbcdn.net/v/t51.82787-15/588493468_17863696320532839_845603638860360413_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=101&ig_cache_key=Mzc3NjI4NDU0NTEyNjQ5MjQ2OQ%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5Navigate_tagI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTA4MC5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=g6SGA1fell0Q7kNvwHeI4HI&_nc_oc=AdrqlqaGtRJsa1lFWdAwUuKNVvD16WW7i25dQEZloIpUcvs_q9ldz0GZMLdL4clnwYI&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.ftpe9-1.fna&_nc_gid=qzmQYgpL75NRUz3IK8wBXw&_nc_ss=7a22e&oh=00_Af5pDoUr3EzmdZrSJpdi9Ye685XcuDQOyUG34vwqXscVDA&oe=6A0F40AF" class="shopping-img" alt="葡萄糖眼藥水" onerror="this.src='https://placehold.co/150?text=Glucose+Eye+Drop'" onclick="toggleLightbox(this.src)">
+                    <div class="shopping-info">
+                        <h4 class="shopping-title-text">葡萄糖營養防乾澀眼藥水</h4>
+                        <p class="shopping-desc-text">熱銷滋養眼藥水！富含水分與葡萄糖營養成分，滋養乾燥角膜，舒緩長時間佩戴隱形眼鏡的疲勞澀感。</p>
+                        <div class="shopping-meta">
+                            <div><i class="fas fa-store"></i> <span>韓國一般藥局</span></div>
+                            <div><i class="fas fa-tag"></i> <span>約 ₩5,000 - ₩7,000</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 13. 肌肉酸痛舒緩乳液滾輪 -->
+                <div class="shopping-item" data-category="medicine">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4fli_sO7zwHfuCAFezvEymiWwhHA_Vv85pQ&s" class="shopping-img" alt="痠痛舒緩滾輪" onerror="this.src='https://placehold.co/150?text=Antiphlamine'" onclick="toggleLightbox(this.src)">
+                    <div class="shopping-info">
+                        <h4 class="shopping-title-text">肌肉痠痛舒緩乳液滾輪</h4>
+                        <p class="shopping-desc-text">肌肉痠痛舒緩乳液滾輪，自帶物理按摩珠不沾手，快速緩解肌肉、肩頸疲勞痠痛。</p>
+                        <div class="shopping-meta">
+                            <div><i class="fas fa-store"></i> <span>韓國一般藥局</span></div>
+                            <div><i class="fas fa-tag"></i> <span>約 ₩7,000</span></div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- === 保養區 (Skincare) === -->
+
+                <!-- 14. Dominas Cream 美美白淡斑霜 -->
+                <div class="shopping-item" data-category="skincare">
+                    <img src="https://doinklab.com/wp-content/uploads/2025/12/Domina-Cream-Light-2-%E6%B7%A1%E6%96%91%E7%A5%9B%E9%BB%91%E8%89%B2%E7%B4%A0-40g-.png" class="shopping-img" alt="Dominas美美白淡斑霜" onerror="this.src='https://placehold.co/150?text=Dominas+Cream'" onclick="toggleLightbox(this.src)">
+                    <div class="shopping-info">
+                        <h4 class="shopping-title-text">Dominas Cream 美美白淡斑霜</h4>
+                        <p class="shopping-desc-text">泰康與東亞製藥主力面部祛斑霜。含高效淡化黑色素、黑斑和深層色斑成分，重現全臉勻淨透白膚色。</p>
+                        <div class="shopping-meta">
+                            <div><i class="fas fa-store"></i> <span>韓國一般藥局 / Olive Young</span></div>
+                            <div><i class="fas fa-tag"></i> <span>約 ₩38,000 - ₩40,000</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 15. 麗珠蘭專業修護護膚系列 -->
+                <div class="shopping-item" data-category="skincare">
+                    <img src="https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?q=80&w=300&auto=format&fit=crop" class="shopping-img" alt="麗珠蘭專業修護護膚系列" onclick="toggleLightbox(this.src)">
+                    <div class="shopping-info">
+                        <h4 class="shopping-title-text">麗珠蘭專業修護護膚系列</h4>
+                        <p class="shopping-desc-text">頂級醫美專用 PDRN 成份。有效修補肌膚受損細胞，提升肌膚膠原再生，雷射術後極力推薦！</p>
+                        <div class="shopping-meta">
+                            <div><i class="fas fa-store"></i> <span>各大醫美 / Olive Young / 免稅店</span></div>
+                            <div><i class="fas fa-link"></i> <a href="https://www.instagram.com/p/DNfgPRCSGWf/?img_index=1" target="_blank" style="color: var(--primary-dark); text-decoration: underline; font-weight: 700;">IG 介紹超連結</a></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 16. 麗珠蘭 PDRN 三效合一全效面霜 -->
+                <div class="shopping-item" data-category="skincare">
+                    <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=300&auto=format&fit=crop" class="shopping-img" alt="麗珠蘭面霜" onclick="toggleLightbox(this.src)">
+                    <div class="shopping-info">
+                        <h4 class="shopping-title-text">麗珠蘭 PDRN 三效合一全效面霜</h4>
+                        <p class="shopping-desc-text">與童顏水光針同源鮭魚 PDRN 因子！深層滋養緊實，提亮暗沉並全面撫平因膠原流失導致的肌膚細紋。</p>
+                        <div class="shopping-meta">
+                            <div><i class="fas fa-store"></i> <span>Olive Young / 機場免稅店</span></div>
+                            <div><i class="fas fa-tag"></i> <span>約 ₩45,000</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 17. Pro Calm Red X CREAM 維生素K乳霜 -->
+                <div class="shopping-item" data-category="skincare">
+                    <img src="https://instagram.ftpe9-1.fna.fbcdn.net/v/t51.82787-15/545324640_17854350030532839_5262707692403562875_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=106&ig_cache_key=MzcxOTY4MTQ2ODMwNjkxMTcwMA%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTA4MC5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=Zu_q3_BV_AAQ7kNvwHaCH_-&_nc_oc=AdrF-w9GiUhItUYSlY44C1dekjTOVkKM1TNRVlipce3UEZ9Qxoa2iMCh0HwWD3QPASk&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.ftpe9-1.fna&_nc_gid=qxJ0-4xYuoX4FvLq09Q2xg&_nc_ss=7a22e&oh=00_Af7m96CPg7pXOyObjNMvsOP7OldeO2-kmyby6SxduVOt5w&oe=6A0F4BC8" class="shopping-img" alt="維生素K乳霜" onerror="this.src='https://placehold.co/150?text=Pro+Calm+Red'" onclick="toggleLightbox(this.src)">
+                    <div class="shopping-info">
+                        <h4 class="shopping-title-text">Pro Calm Red X CREAM 維生素K乳霜</h4>
+                        <p class="shopping-desc-text">韓美製藥旗下。特別添加維他命K與高純益生菌複方，強效收縮面部微血管、褪紅並修復肌膚屏障。</p>
+                        <div class="shopping-meta">
+                            <div><i class="fas fa-store"></i> <span>配合藥局 / Olive Young</span></div>
+                            <div><i class="fas fa-tag"></i> <span>約 ₩25,000</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 18. CuLip 雙效高滋潤保濕護唇膏 -->
+                <div class="shopping-item" data-category="skincare">
+                    <img src="https://down-tw.img.susercontent.com/file/sg-11134207-7reoc-m8lke132mwd571" class="shopping-img" alt="CuLip護唇膏" onerror="this.src='https://placehold.co/150?text=CuLip'" onclick="toggleLightbox(this.src)">
+                    <div class="shopping-info">
+                        <h4 class="shopping-title-text">CuLip 雙效高滋潤保濕護唇膏</h4>
+                        <p class="shopping-desc-text">保濕力特強、不油膩！深層鎖水，預防因乾燥產生的乾裂、粗糙與老廢嘴唇死皮堆積。</p>
+                        <div class="shopping-meta">
+                            <div><i class="fas fa-store"></i> <span>Olive Young 各大分店</span></div>
+                            <div><i class="fas fa-tag"></i> <span>約 ₩12,000</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 19. Bring Green 玻尿酸保濕護唇膏 -->
+                <div class="shopping-item" data-category="skincare">
+                    <img src="https://thumbnail.coupangcdn.com/thumbnails/remote/492x492ex/image/TW_vendor_inventory/9b69/fabb2f1344713d5feaa3d4bbc76ec1e8de8c020869056d4b58c68c494adf.png" class="shopping-img" alt="Bring Green護唇膏" onerror="this.src='https://placehold.co/150?text=Bring+Green'" onclick="toggleLightbox(this.src)">
+                    <div class="shopping-info">
+                        <h4 class="shopping-title-text">Bring Green 玻尿酸保濕護唇膏</h4>
+                        <p class="shopping-desc-text">高濃度玻尿酸植萃精華，滋潤透氣。溫和改善嘴唇起屑，令唇部保持水潤柔滑。</p>
+                        <div class="shopping-meta">
+                            <div><i class="fas fa-store"></i> <span>Olive Young 各大門市</span></div>
+                            <div><i class="fas fa-tag"></i> <span>約 ₩6,000</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 20. BioHeal BOH Probioderm 3D緊緻精華液 -->
+                <div class="shopping-item" data-category="skincare">
+                    <img src="https://img.skmonline.com.tw/App_Images/727/ERPItem/2025/0906/0ca86730-7f58-4bda-8e7c-258ab66a915b_7288986.webp" class="shopping-img" alt="BOH精華" onerror="this.src='https://placehold.co/150?text=BOH+3D+Serum'" onclick="toggleLightbox(this.src)">
+                    <div class="shopping-info">
+                        <h4 class="shopping-title-text">BioHeal BOH Probioderm 3D緊緻精華液</h4>
+                        <p class="shopping-desc-text">熱銷緊緻精華！專利益生菌成分配合胜肽複合因子，深度提拉、立體飽滿臉部肌膚輪廓。</p>
+                        <div class="shopping-meta">
+                            <div><i class="fas fa-store"></i> <span>Olive Young 獨家銷售</span></div>
+                            <div><i class="fas fa-tag"></i> <span>約 ₩38,000</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 21. LILYEVE 防脫育髮外泌體精華 -->
+                <div class="shopping-item" data-category="skincare">
+                    <img src="https://cdn-media.hktvmall.com/hktv-mms/HKTV/mms/uploadProductImage/d2b7/c996/6195/ZGREjrmJrX20250915221047_515.jpg" class="shopping-img" alt="LILYEVE精華" onerror="this.src='https://placehold.co/150?text=Lilyeve'" onclick="toggleLightbox(this.src)">
+                    <div class="shopping-info">
+                        <h4 class="shopping-title-text">LILYEVE 防脫育髮外泌體精華</h4>
+                        <p class="shopping-desc-text">高科技外泌體技術！專注強韌髮根、調理頭皮皮脂環境，預防落髮並養護豐盈健康的秀髮。</p>
+                        <div class="shopping-meta">
+                            <div><i class="fas fa-store"></i> <span>Olive Young 部分大分店</span></div>
+                            <div><i class="fas fa-tag"></i> <span>約 ₩48,000</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 22. Mediheal 雙效保濕舒緩爽膚水棉片 -->
+                <div class="shopping-item" data-category="skincare">
+                    <img src="https://down-tw.img.susercontent.com/file/sg-11134207-824gz-mf0zhxdc153f6c" class="shopping-img" alt="Mediheal棉片" onerror="this.src='https://placehold.co/150?text=Mediheal+Pads'" onclick="toggleLightbox(this.src)">
+                    <div class="shopping-info">
+                        <h4 class="shopping-title-text">Mediheal 雙效保濕舒緩爽膚水棉片</h4>
+                        <p class="shopping-desc-text">人氣第一濕敷棉片！綠色(茶樹控油)、藍色(積雪草舒緩)、紫色(冰河水保濕)、粉色(膠原彈力)、黃色(維他命亮白)、棕色(視黃醇抗皺)。</p>
+                        <div class="shopping-meta">
+                            <div><i class="fas fa-store"></i> <span>Olive Young 各大分店</span></div>
+                            <div><i class="fas fa-tag"></i> <span>約 ₩22,000 / 盒</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 23. BIOHEAL BOH 積雪草保濕乳霜噴霧 -->
+                <div class="shopping-item" data-category="skincare">
+                    <img src="https://down-tw.img.susercontent.com/file/tw-11134207-81ztg-mg4ogn470vt56a" class="shopping-img" alt="BOH噴霧" onerror="this.src='https://placehold.co/150?text=BOH+Mist'" onclick="toggleLightbox(this.src)">
+                    <div class="shopping-info">
+                        <h4 class="shopping-title-text">BIOHEAL BOH 積雪草保濕乳霜噴霧</h4>
+                        <p class="shopping-desc-text">特調積雪草乳霜精華化為極細緻水霧，一噴保濕退紅，為乾燥、不穩定的膚況迅速注入滋潤屏障。</p>
+                        <div class="shopping-meta">
+                            <div><i class="fas fa-store"></i> <span>Olive Young 各大分店</span></div>
+                            <div><i class="fas fa-tag"></i> <span>約 ₩15,000</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 24. Torriden 玻尿酸保濕精華 -->
+                <div class="shopping-item" data-category="skincare">
+                    <img src="https://down-tw.img.susercontent.com/file/tw-11134207-81ztm-mil9f65gdjia67" class="shopping-img" alt="Torriden精華" onerror="this.src='https://placehold.co/150?text=Torriden+Serum'" onclick="toggleLightbox(this.src)">
+                    <div class="shopping-info">
+                        <h4 class="shopping-title-text">Torriden 玻尿酸保濕精華</h4>
+                        <p class="shopping-desc-text">連續多年霸榜！超清爽強效保濕，極速深層補水、不黏膩，是韓國補水必備保養品。</p>
+                        <div class="shopping-meta">
+                            <div><i class="fas fa-store"></i> <span>Olive Young 各大門市</span></div>
+                            <div><i class="fas fa-tag"></i> <span>約 ₩22,000 (雙瓶組)</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 25. Dr. Reju-All 神經醯胺屏障修護霜 -->
+                <div class="shopping-item" data-category="skincare">
+                    <img src="https://images.unsplash.com/photo-1629732047847-50b7ecf0cbf1?q=80&w=300&auto=format&fit=crop" class="shopping-img" alt="Dr Reju-all" onclick="toggleLightbox(this.src)">
+                    <div class="shopping-info">
+                        <h4 class="shopping-title-text">Dr. Reju-All 神經醯胺屏障修護霜</h4>
+                        <p class="shopping-desc-text">高修復神經醯胺面霜，溫和重塑皮脂膜。極適合乾燥、脫皮或醫美項目後受損的脆弱肌膚。</p>
+                        <div class="shopping-meta">
+                            <div><i class="fas fa-store"></i> <span>配合皮膚科 / 連鎖醫美沙龍</span></div>
+                            <div><i class="fas fa-tag"></i> <span>約 ₩32,000</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 26. Reju de Vie 奇蹟重塑修復霜 -->
+                <div class="shopping-item" data-category="skincare">
+                    <img src="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?q=80&w=300&auto=format&fit=crop" class="shopping-img" alt="Reju de Vie" onclick="toggleLightbox(this.src)">
+                    <div class="shopping-info">
+                        <h4 class="shopping-title-text">Reju de Vie 奇蹟重塑修復霜</h4>
+                        <p class="shopping-desc-text">強效退紅、鎮定受損肌膚。特別推薦雷射美容 or 面部角質破損時的高效護理。</p>
+                        <div class="shopping-meta">
+                            <div><i class="fas fa-store"></i> <span>首爾合作醫美診所專供</span></div>
+                            <div><i class="fas fa-tag"></i> <span>約 ₩38,000</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 27. Rejuvuster 細胞多效修復面霜 -->
+                <div class="shopping-item" data-category="skincare">
+                    <img src="https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?q=80&w=300&auto=format&fit=crop" class="shopping-img" alt="rejuvuster" onclick="toggleLightbox(this.src)">
+                    <div class="shopping-info">
+                        <h4 class="shopping-title-text">Rejuvuster 細胞多效修復面霜</h4>
+                        <p class="shopping-desc-text">提拉、抗老、撫平粗糙。能深度修復疲憊乾癟的角質層，重現細緻緊緻的水亮彈性。</p>
+                        <div class="shopping-meta">
+                            <div><i class="fas fa-store"></i> <span>高端醫美沙龍 / 專門免稅店</span></div>
+                            <div><i class="fas fa-tag"></i> <span>約 ₩42,000</span></div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- === 美妝與工具區 (Beauty) === -->
+
+                <!-- 28. Narka 雙頭硬挺瀏海定型梳 -->
+                <div class="shopping-item" data-category="beauty">
+                    <img src="https://shoplineimg.com/67dfa2cd52ac34008636104a/689ed9b7f26098000c8a9f6a/800x.jpg?" class="shopping-img" alt="Narka瀏海定型梳" onerror="this.src='https://placehold.co/150?text=Narka+Mascara'" onclick="toggleLightbox(this.src)">
+                    <div class="shopping-info">
+                        <h4 class="shopping-title-text">Narka 雙頭硬挺瀏海定型梳</h4>
+                        <p class="shopping-desc-text">人氣推薦！特製細密刷頭能輕鬆整理雜亂碎髮、瀏海或睫毛，完美定型且完全不黏、不起白屑。</p>
+                        <div class="shopping-meta">
+                            <div><i class="fas fa-store"></i> <span>Olive Young 指定概念店 / Narka專櫃</span></div>
+                            <div><i class="fas fa-tag"></i> <span>約 ₩18,000</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 29. TIRTIR 紅色持妝氣墊粉餅 -->
+                <div class="shopping-item" data-category="beauty">
+                    <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=300&auto=format&fit=crop" class="shopping-img" alt="TIRTIR氣墊粉餅" onerror="this.src='https://placehold.co/150?text=TIRTIR'" onclick="toggleLightbox(this.src)">
+                    <div class="shopping-info">
+                        <h4 class="shopping-title-text">TIRTIR 紅色持妝氣墊粉餅</h4>
+                        <p class="shopping-desc-text">持妝控油效果極佳！高遮瑕且貼合肌膚，全天不易暗沉脫妝。蛋型包裝非常小巧好攜帶。</p>
+                        <div class="shopping-meta">
+                            <div><i class="fas fa-store"></i> <span>Olive Young, 機場免稅店</span></div>
+                            <div><i class="fas fa-tag"></i> <span>約 ₩27,000</span></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 分頁 4: 準備 (Prep) -->
+        <div id="view-prep" class="tab-content">
+            <div class="info-section">
+                <div class="info-header"><i class="fas fa-list-check"></i> 行前準備</div>
+                <div class="checklist-item"><input type="checkbox"> 護照 (效期6個月以上)</div>
+                <div class="checklist-item"><input type="checkbox"> 韓國專用轉接頭 (4.8mm 圓頭)</div>
+                <div class="checklist-item"><input type="checkbox"> T-money / WOWPASS</div>
+                <div class="checklist-item"><input type="checkbox"> 下載 Naver Map</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Nav -->
+    <nav class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('itinerary', this)"><i class="fas fa-calendar-alt"></i><span>行程</span></div>
+        <div class="nav-item" onclick="switchTab('info', this)"><i class="fas fa-info-circle"></i><span>資訊</span></div>
+        <div class="nav-item" onclick="switchTab('shopping', this)"><i class="fas fa-shopping-bag"></i><span>購物</span></div>
+        <div class="nav-item" onclick="switchTab('prep', this)"><i class="fas fa-suitcase"></i><span>準備</span></div>
+    </nav>
+
+    <!-- Rate Modal -->
+    <div id="rate-modal" class="modal-overlay" onclick="toggleCalculator()">
+        <div class="calc-card" onclick="event.stopPropagation()">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <span style="font-weight:800; color:var(--primary-dark); font-size:1.1rem;">匯率試算</span>
+                <i class="fas fa-times" style="color:#CCC; cursor:pointer;" onclick="toggleCalculator()"></i>
+            </div>
+            <div style="position:relative;">
+                <span style="position:absolute; left:12px; top:12px; font-size:0.75rem; font-weight:700; color:var(--text-sub);">韓元 ₩</span>
+                <input type="number" id="input-krw" class="calc-input" placeholder="0" oninput="calculate('krw')">
+            </div>
+            <div style="position:relative;">
+                <span style="position:absolute; left:12px; top:12px; font-size:0.75rem; font-weight:700; color:var(--text-sub);">台幣 $</span>
+                <input type="number" id="input-twd" class="calc-input" placeholder="0" oninput="calculate('twd')">
+            </div>
+            <p style="text-align:center; font-size:0.75rem; color:#AAA; margin-top:10px;">目前匯率: 1 TWD ≈ <span id="modal-rate">...</span> KRW</p>
+        </div>
+    </div>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox-modal" class="modal-overlay" onclick="toggleLightbox()" style="background: rgba(0,0,0,0.8); z-index: 3000; backdrop-filter: blur(8px);">
+        <div style="position: relative; max-width: 90%; max-height: 80%; display: flex; align-items: center; justify-content: center;" onclick="event.stopPropagation()">
+            <img id="lightbox-img" src="" alt="放大圖片" style="max-width: 100%; max-height: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); object-fit: contain;">
+            <i class="fas fa-times" style="position: absolute; top: -35px; right: 0; color: white; font-size: 1.5rem; cursor: pointer;" onclick="toggleLightbox()"></i>
+        </div>
+    </div>
+
+    <script>
+        const LAT = 37.5639, LON = 126.9850;
+        const TRIP_DATES = ["2026-05-22", "2026-05-23", "2026-05-24", "2026-05-25"];
+
+        // 手動數據備援 (5/16 數據預設)
+        const MANUAL_FORECAST = {
+            'weather-d1': { temp: 28, realFeel: 33, rain: 2, uv: "高", code: 0 },
+            'weather-d2': { temp: 25, realFeel: 27, rain: 25, uv: "中", code: 1 },
+            'weather-d3': { temp: 30, realFeel: 33, rain: 1, uv: "高", code: 1 },
+            'weather-d4': { temp: 30, realFeel: 35, rain: 0, uv: "高", code: 1 }
+        };
+
+        let currentRate = 47.28;
+
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('app-header');
+            if (window.scrollY > 50) header.classList.add('scrolled');
+            else header.classList.remove('scrolled');
+        });
+
+        function switchTab(viewId, navEl) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            const target = document.getElementById('view-' + viewId);
+            if (target) target.classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            navEl.classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        function switchDay(dayId, tabEl) {
+            document.querySelectorAll('.day-detail').forEach(el => el.classList.remove('active'));
+            const targetDay = document.getElementById('day-' + dayId);
+            if (targetDay) targetDay.classList.add('active');
+            document.querySelectorAll('.day-tab').forEach(el => el.classList.remove('active'));
+            tabEl.classList.add('active');
+        }
+
+        // 購物頁面二級分類過濾邏輯
+        function filterShopping(category, btnEl) {
+            // 更新切換鈕啟用狀態
+            document.querySelectorAll('.shop-tab').forEach(el => el.classList.remove('active'));
+            btnEl.classList.add('active');
+
+            // 根據屬性過濾卡片
+            const items = document.querySelectorAll('.shopping-item');
+            items.forEach(item => {
+                if (category === 'all' || item.getAttribute('data-category') === category) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        function toggleCalculator() {
+            const modal = document.getElementById('rate-modal');
+            if (modal.classList.contains('show')) {
+                modal.classList.remove('show');
+                setTimeout(() => { modal.style.display = 'none'; }, 200);
+            } else {
+                modal.style.display = 'flex';
+                setTimeout(() => { modal.classList.add('show'); }, 10);
+                document.getElementById('input-krw').focus();
+            }
+        }
+
+        // 圖片燈箱開關邏輯
+        function toggleLightbox(src) {
+            const modal = document.getElementById('lightbox-modal');
+            const img = document.getElementById('lightbox-img');
+            if (modal.classList.contains('show')) {
+                modal.classList.remove('show');
+                setTimeout(() => { modal.style.display = 'none'; }, 200);
+            } else {
+                if (src) {
+                    img.src = src;
+                }
+                modal.style.display = 'flex';
+                setTimeout(() => { modal.classList.add('show'); }, 10);
+            }
+        }
+
+        function calculate(source) {
+            const krwIn = document.getElementById('input-krw');
+            const twdIn = document.getElementById('input-twd');
+            if (source === 'krw') {
+                const val = parseFloat(krwIn.value);
+                twdIn.value = !isNaN(val) ? (val / currentRate).toFixed(0) : '';
+            } else {
+                const val = parseFloat(twdIn.value);
+                krwIn.value = !isNaN(val) ? (val * currentRate).toFixed(0) : '';
+            }
+        }
+
+        async function fetchRate() {
+            try {
+                const response = await fetch('https://open.er-api.com/v6/latest/TWD');
+                const data = await response.json();
+                if (data && data.rates && data.rates.KRW) {
+                    currentRate = data.rates.KRW;
+                    document.getElementById('rate-text').innerText = '₩1k = NT$' + (1000/currentRate).toFixed(1);
+                    document.getElementById('modal-rate').innerText = currentRate.toFixed(2);
+                }
+            } catch (e) {
+                document.getElementById('rate-text').innerText = '₩1k = NT$21.2';
+            }
+        }
+
+        async function fetchRealWeather() {
+            const weatherCodes = {
+                0: "fa-sun", 1: "fa-cloud-sun", 2: "fa-cloud-sun", 3: "fa-cloud",
+                45: "fa-smog", 51: "fa-cloud-rain", 61: "fa-umbrella", 71: "fa-snowflake"
+            };
+            const uvText = (val) => val >= 6 ? "高" : (val >= 3 ? "中" : "低");
+
+            try {
+                const url = `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&daily=weather_code,temperature_2m_max,apparent_temperature_max,precipitation_probability_max,uv_index_max&timezone=Asia%2FSeoul&start_date=${TRIP_DATES[0]}&end_date=${TRIP_DATES[3]}`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data && data.daily) {
+                    TRIP_DATES.forEach((date, i) => {
+                        const id = `weather-d${i+1}`;
+                        const linkEl = document.getElementById(id);
+                        if (!linkEl) return;
+
+                        const code = data.daily.weather_code[i];
+                        const temp = Math.round(data.daily.temperature_2m_max[i]);
+                        const feels = Math.round(data.daily.apparent_temperature_max[i]);
+                        const rain = data.daily.precipitation_probability_max[i];
+                        const uvIdx = data.daily.uv_index_max[i];
+
+                        linkEl.href = `https://www.accuweather.com/zh/kr/myeong-dong/3430003/daily-weather-forecast/3430003?day=${7+i}`;
+                        linkEl.querySelector('.weather-icon').className = `fas ${weatherCodes[code] || "fa-cloud"} weather-icon`;
+                        linkEl.querySelector('.weather-temp-box').innerText = `${temp}°`;
+                        linkEl.querySelector('.val-feels').innerText = `${feels}°`;
+                        linkEl.querySelector('.val-rain').innerText = `${rain}%`;
+                        linkEl.querySelector('.val-uv').innerText = uvText(uvIdx);
+                    });
+                }
+            } catch (e) {
+                Object.keys(MANUAL_FORECAST).forEach((id) => {
+                    const el = document.getElementById(id);
+                    if (!el) return;
+                    const d = MANUAL_FORECAST[id];
+                    el.querySelector('.weather-icon').className = `fas ${weatherCodes[d.code] || "fa-sun"} weather-icon`;
+                    el.querySelector('.weather-temp-box').innerText = `${d.temp}°`;
+                    el.querySelector('.val-feels').innerText = `${d.realFeel}°`;
+                    el.querySelector('.val-rain').innerText = `${d.rain}%`;
+                    el.querySelector('.val-uv').innerText = d.uv;
+                });
+            }
+        }
+
+        function speakKorean(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'ko-KR';
+                window.speechSynthesis.cancel();
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        fetchRate();
+        fetchRealWeather();
+    </script>
+</body>
+</html>
